@@ -400,8 +400,7 @@
             },
             currentEnemy: null,
             inCombat: false,
-            defending: false,
-            bossesDefeated: 0
+            defending: false
         };
 
         // Enemy templates
@@ -481,8 +480,9 @@
 
         // Explore dungeon
         function explore() {
-            // Random encounter
-            const enemyTemplate = enemies[Math.floor(Math.random() * Math.min(enemies.length, gameState.player.level + 1))];
+            // Random encounter - select enemy based on player level but ensure we don't exceed array bounds
+            const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
+            const enemyTemplate = enemies[Math.floor(Math.random() * (maxEnemyIndex + 1))];
             
             gameState.currentEnemy = {
                 ...enemyTemplate,
@@ -753,8 +753,7 @@
                     },
                     currentEnemy: null,
                     inCombat: false,
-                    defending: false,
-                    bossesDefeated: 0
+                    defending: false
                 };
                 saveGame();
                 document.getElementById('nameInput').value = '';
