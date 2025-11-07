@@ -510,9 +510,6 @@ input[type="text"]:focus {
 }
 
 /* Characteristics Group Styling */
-.characteristics-group {
-    grid-column: span 1;
-}
 
 .characteristics-grid {
     display: grid;
@@ -793,7 +790,7 @@ input[type="text"]:focus {
 /* Default/Standard Desktops (1200px - 1919px) use base styles with 900px container */
 @media screen and (min-width: 1200px) and (max-width: 1919px) {
     .game-stats {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .stat-group-character {
@@ -805,6 +802,10 @@ input[type="text"]:focus {
     }
 
     .stat-group-progression {
+        grid-column: span 1;
+    }
+
+    .characteristics-group {
         grid-column: span 1;
     }
 }

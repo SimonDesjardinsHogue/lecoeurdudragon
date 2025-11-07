@@ -45,7 +45,7 @@ export function updateUI() {
     const raceDisplay = p.raceIcon ? `${p.raceIcon} ${p.raceName || p.race}` : (p.raceName || p.race);
     document.getElementById('playerRace').textContent = raceDisplay;
     
-    const genderDisplay = p.gender === 'male' ? '♂️ Masculin' : '♀️ Féminin';
+    const genderDisplay = p.gender === 'female' ? '♀️ Féminin' : '♂️ Masculin';
     document.getElementById('playerGender').textContent = genderDisplay;
     
     // Update health bar
