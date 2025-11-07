@@ -270,7 +270,9 @@ input[type="text"]:focus {
 }
 
 .class-option input[type="radio"] {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
 }
 
 .class-option input[type="radio"]:checked + .class-label {
