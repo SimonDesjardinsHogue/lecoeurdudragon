@@ -1,8 +1,17 @@
 // Keyboard Handler Module
 import { gameState } from './game-state.js';
 
-// Configuration: List of game keys that should prevent default browser behavior
-const GAME_KEYS = ['a', 'd', 'f', 'escape', '1', '2', '3', '4', '5', '6'];
+// Configuration: Combat action keys
+const COMBAT_KEYS = ['a', 'd', 'f'];
+
+// Configuration: Main menu navigation keys
+const MENU_KEYS = ['1', '2', '3', '4', '5', '6'];
+
+// Configuration: Universal navigation keys
+const UNIVERSAL_KEYS = ['escape'];
+
+// Configuration: All game keys that should prevent default browser behavior
+const GAME_KEYS = [...COMBAT_KEYS, ...MENU_KEYS, ...UNIVERSAL_KEYS];
 
 // Configuration: Screens where ESC key should not return to main menu
 const ESC_DISABLED_SCREENS = ['startScreen', 'mainScreen', 'victoryScreen'];
@@ -31,7 +40,7 @@ export function handleKeyPress(event) {
     // ESC key - Return to main menu from any screen
     if (key === 'escape') {
         if (!ESC_DISABLED_SCREENS.includes(currentScreen)) {
-            // If in combat, don't allow escape (player must flee instead)
+            // Prevent ESC during combat - players must use 'F' to flee instead
             if (gameState.inCombat) {
                 return;
             }
