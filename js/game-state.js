@@ -103,7 +103,7 @@ export const npcs = [
     { 
         name: 'Vieux Guerrier',
         icon: '🛡️',
-        dialogue: 'La défense est tout aussi importante que l\'attaque. N\'oublie jamais cela !',
+        dialogue: 'La classe d\'armure est tout aussi importante que l\'attaque. N\'oublie jamais cela !',
         reward: null
     }
 ];
