@@ -2,20 +2,33 @@
 import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard } from './game-logic.js';
 import { explore, attack, defend, flee } from './combat.js';
 import { exportSave, importSave } from './save-load.js';
-import { initKeyboardHandler } from './keyboard-handler.js';
+
 
 // Initialize game on load
 window.addEventListener('load', () => {
     init();
-    initKeyboardHandler();
-});
 
 // Expose functions to global scope for onclick handlers
-window.startGame = startGame;
-window.explore = explore;
-window.attack = attack;
-window.defend = defend;
-window.flee = flee;
+window.startGame = function() {
+    initAudio();
+    startGame();
+};
+window.explore = function() {
+    initAudio();
+    explore();
+};
+window.attack = function() {
+    initAudio();
+    attack();
+};
+window.defend = function() {
+    initAudio();
+    defend();
+};
+window.flee = function() {
+    initAudio();
+    flee();
+};
 window.rest = rest;
 window.showShop = showShop;
 window.buyItem = buyItem;
