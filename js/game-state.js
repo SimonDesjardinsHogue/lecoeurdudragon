@@ -25,7 +25,14 @@ export const gameState = {
         energy: 100,
         maxEnergy: 100,
         lastSleepTime: null,
-        bossesDefeated: 0
+        bossesDefeated: 0,
+        // Metal inventory (in ounces)
+        metals: {
+            or: 0,        // Gold
+            platine: 0,   // Platinum
+            argent: 0,    // Silver
+            cuivre: 0     // Copper
+        }
     },
     currentEnemy: null,
     inCombat: false,
@@ -190,6 +197,38 @@ export const rareItems = [
     { name: 'Grimoire Ancien', icon: '📖', description: '+10 Intelligence, +200 XP', cost: 400, category: 'exp', effect: null }
 ];
 
+// Metals - precious metals for exchange at the jeweler
+export const metals = {
+    or: {
+        name: 'Or',
+        icon: '🥇',
+        relativeValue: 100,
+        cadPerOz: 5700,
+        description: 'Métal précieux de grande valeur'
+    },
+    platine: {
+        name: 'Platine',
+        icon: '⚪',
+        relativeValue: 20,
+        cadPerOz: 1300,
+        description: 'Métal rare et précieux'
+    },
+    argent: {
+        name: 'Argent',
+        icon: '⚙️',
+        relativeValue: 1,
+        cadPerOz: 68,
+        description: 'Métal précieux commun'
+    },
+    cuivre: {
+        name: 'Cuivre',
+        icon: '🟤',
+        relativeValue: 0.01,
+        cadPerOz: 0.4,
+        description: 'Métal de base utile'
+    }
+};
+
 // NPCs
 export const npcs = [
     { 
@@ -228,6 +267,13 @@ export const npcs = [
         dialogue: 'Psst... J\'ai des objets rares à vendre. Intéressé ?',
         reward: null,
         special: 'wandering_merchant'
+    },
+    {
+        name: 'Bijoutier',
+        icon: '💎',
+        dialogue: 'Bienvenue dans ma bijouterie ! J\'achète et vends des métaux précieux. Mes prix varient selon le marché du jour...',
+        reward: null,
+        special: 'jeweler'
     }
 ];
 
