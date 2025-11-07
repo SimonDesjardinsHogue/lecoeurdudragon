@@ -274,6 +274,9 @@ export function attack() {
     const enemyInfoElement = document.getElementById('enemyInfo');
     if (enemyInfoElement) {
         particleSystem.createAttackEffect(enemyInfoElement);
+        // Add shake animation
+        enemyInfoElement.classList.add('shake');
+        setTimeout(() => enemyInfoElement.classList.remove('shake'), 500);
     }
     
     // Player attacks
@@ -304,6 +307,8 @@ export function attack() {
         audioManager.playSound('victory');
         if (enemyInfoElement) {
             particleSystem.createVictoryEffect(enemyInfoElement);
+            // Add fade-out animation
+            enemyInfoElement.classList.add('fade-out');
         }
         
         // Check if boss was defeated
