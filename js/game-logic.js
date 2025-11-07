@@ -297,31 +297,50 @@ export function checkLevelUp() {
 }
 
 // Show shop
-export function showShop(filterCategory = 'all') {
+export function showShop(filterCategory = 'all', filterByClass = false) {
     showScreen('shopScreen');
     const shopDiv = document.getElementById('shopItems');
     shopDiv.innerHTML = '';
     
-    // Add filter dropdown
+    // Add filter dropdown and checkbox
     const filterContainer = document.createElement('div');
     filterContainer.style.marginBottom = '20px';
+    filterContainer.style.display = 'flex';
+    filterContainer.style.flexWrap = 'wrap';
+    filterContainer.style.gap = '15px';
+    filterContainer.style.alignItems = 'center';
     filterContainer.innerHTML = `
-        <label for="categoryFilter" style="color: #DAA520; margin-right: 10px;">Type de produit :</label>
-        <select id="categoryFilter" onchange="window.showShop(this.value)" style="padding: 8px; background: rgba(0, 0, 0, 0.7); color: #f0f0f0; border: 2px solid #8B4513; border-radius: 5px; font-family: 'Courier New', monospace; cursor: pointer;">
-            <option value="all" ${filterCategory === 'all' ? 'selected' : ''}>🏪 Tous les produits</option>
-            <option value="heal" ${filterCategory === 'heal' ? 'selected' : ''}>❤️ Soin</option>
-            <option value="damage" ${filterCategory === 'damage' ? 'selected' : ''}>⚔️ Force</option>
-            <option value="energy" ${filterCategory === 'energy' ? 'selected' : ''}>⚡ Énergie</option>
-            <option value="exp" ${filterCategory === 'exp' ? 'selected' : ''}>✨ Expérience</option>
-            <option value="equipment" ${filterCategory === 'equipment' ? 'selected' : ''}>🛡️ Équipement</option>
-        </select>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="categoryFilter" style="color: #DAA520;">Type de produit :</label>
+            <select id="categoryFilter" onchange="window.showShop(this.value, document.getElementById('classFilter').checked)" style="padding: 8px; background: rgba(0, 0, 0, 0.7); color: #f0f0f0; border: 2px solid #8B4513; border-radius: 5px; font-family: 'Courier New', monospace; cursor: pointer;">
+                <option value="all" ${filterCategory === 'all' ? 'selected' : ''}>🏪 Tous les produits</option>
+                <option value="heal" ${filterCategory === 'heal' ? 'selected' : ''}>❤️ Soin</option>
+                <option value="damage" ${filterCategory === 'damage' ? 'selected' : ''}>⚔️ Force</option>
+                <option value="energy" ${filterCategory === 'energy' ? 'selected' : ''}>⚡ Énergie</option>
+                <option value="exp" ${filterCategory === 'exp' ? 'selected' : ''}>✨ Expérience</option>
+                <option value="equipment" ${filterCategory === 'equipment' ? 'selected' : ''}>🛡️ Équipement</option>
+            </select>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="classFilter" ${filterByClass ? 'checked' : ''} onchange="window.showShop(document.getElementById('categoryFilter').value, this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
+            <label for="classFilter" style="color: #DAA520; cursor: pointer;">Objets pour ma classe uniquement</label>
+        </div>
     `;
     shopDiv.appendChild(filterContainer);
     
     // Filter items based on category
-    const filteredItems = filterCategory === 'all' 
+    let filteredItems = filterCategory === 'all' 
         ? shopItems 
         : shopItems.filter(item => item.category === filterCategory);
+    
+    // Additional filter by class compatibility if checkbox is checked
+    if (filterByClass) {
+        filteredItems = filteredItems.filter(item => {
+            // Show item if it has no class restriction (usable by all)
+            // OR if the class restriction matches the player's class
+            return !item.classRestriction || item.classRestriction === gameState.player.class;
+        });
+    }
     
     if (filteredItems.length === 0) {
         const emptyMsg = document.createElement('p');
@@ -392,7 +411,13 @@ export function buyItem(index) {
         saveGame();
         updateUI();
         alert(`Vous avez acheté ${item.name} !`);
-        showShop(); // Refresh shop
+        
+        // Refresh shop with current filter state
+        const categoryFilter = document.getElementById('categoryFilter');
+        const classFilter = document.getElementById('classFilter');
+        const currentCategory = categoryFilter ? categoryFilter.value : 'all';
+        const currentClassFilter = classFilter ? classFilter.checked : false;
+        showShop(currentCategory, currentClassFilter);
     } else {
         alert(`Vous n'avez pas assez d'or ! (Coût: ${item.cost} or)`);
     }
