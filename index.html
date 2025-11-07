@@ -894,17 +894,40 @@
                     }
                 }
                 
-                // Validate property types
+                // Validate property types for all player properties
                 if (typeof loadedState.player.name !== 'string' || 
                     typeof loadedState.player.level !== 'number' ||
                     typeof loadedState.player.health !== 'number' ||
-                    typeof loadedState.player.maxHealth !== 'number') {
+                    typeof loadedState.player.maxHealth !== 'number' ||
+                    typeof loadedState.player.strength !== 'number' ||
+                    typeof loadedState.player.defense !== 'number' ||
+                    typeof loadedState.player.gold !== 'number' ||
+                    typeof loadedState.player.xp !== 'number' ||
+                    typeof loadedState.player.xpToLevel !== 'number' ||
+                    typeof loadedState.player.kills !== 'number' ||
+                    typeof loadedState.player.gamesPlayed !== 'number') {
                     throw new Error('Invalid player data types');
                 }
                 
-                // Validate required state properties
-                if (!('inCombat' in loadedState) || !('defending' in loadedState)) {
-                    throw new Error('Missing state properties');
+                // Validate required state properties and their types
+                if (typeof loadedState.inCombat !== 'boolean' || 
+                    typeof loadedState.defending !== 'boolean') {
+                    throw new Error('Invalid state property types');
+                }
+                
+                // Validate currentEnemy if present
+                if (loadedState.currentEnemy !== null) {
+                    if (typeof loadedState.currentEnemy !== 'object' ||
+                        typeof loadedState.currentEnemy.name !== 'string' ||
+                        typeof loadedState.currentEnemy.health !== 'number' ||
+                        typeof loadedState.currentEnemy.strength !== 'number' ||
+                        typeof loadedState.currentEnemy.defense !== 'number' ||
+                        typeof loadedState.currentEnemy.gold !== 'number' ||
+                        typeof loadedState.currentEnemy.xp !== 'number') {
+                        // If enemy data is invalid, clear it
+                        loadedState.currentEnemy = null;
+                        loadedState.inCombat = false;
+                    }
                 }
                 
                 // Restore the game state
