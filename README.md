@@ -176,6 +176,14 @@ Le jeu est conçu pour être facilement extensible avec l'aide de l'IA :
 - ✅ Système de donjons procéduraux
 - ✅ Musique et effets sonores
 
+### 📋 Liste Complète d'Améliorations
+
+Pour une liste détaillée de 30 optimisations et améliorations proposées, consultez :
+- **[OPTIMISATIONS.md](OPTIMISATIONS.md)** - Version française 🇫🇷
+- **[OPTIMIZATIONS_EN.md](OPTIMIZATIONS_EN.md)** - English version 🇬🇧
+
+Ces documents comprennent des suggestions organisées par catégorie (UX, Performance, Gameplay, Technique) avec des priorités et un plan d'implémentation.
+
 ## 📜 Licence
 
 MIT License - Libre d'utilisation et de modification
