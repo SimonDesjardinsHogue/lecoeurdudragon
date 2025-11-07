@@ -1,5 +1,5 @@
 // Game Logic Module
-import { gameState, shopItems, rareItems, npcs, rarities, generateRandomStats, statNames } from './game-state.js';
+import { gameState, shopItems, rareItems, npcs, rarities, generateRandomStats, statNames, hasRandomStats } from './game-state.js';
 import { updateUI, addCombatLog, showScreen } from './ui.js';
 import { saveGame, loadGame } from './save-load.js';
 import { characterClasses, applyCharacterClass } from './character-classes.js';
@@ -385,7 +385,7 @@ export function showShop(filterCategory = 'all', filterByClass = false) {
             const originalIndex = shopItems.indexOf(item);
             
             // Generate random stats for preview (not applied until purchase)
-            const previewStats = item.rarity && item.rarity !== 'commun' ? generateRandomStats(item.rarity) : null;
+            const previewStats = hasRandomStats(item) ? generateRandomStats(item.rarity) : null;
             
             // Check if item has rarity and apply styling
             let rarityInfo = '';
@@ -454,7 +454,7 @@ export function buyItem(index) {
         item.effect();
         
         // Generate and apply random stats for rare+ items at purchase time
-        const randomStats = item.rarity && item.rarity !== 'commun' ? generateRandomStats(item.rarity) : null;
+        const randomStats = hasRandomStats(item) ? generateRandomStats(item.rarity) : null;
         if (randomStats && Object.keys(randomStats).length > 0) {
             Object.entries(randomStats).forEach(([stat, value]) => {
                 if (p[stat] !== undefined) {

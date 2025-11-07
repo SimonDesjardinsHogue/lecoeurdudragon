@@ -290,6 +290,10 @@ button:disabled {
 }
 
 /* Rarity glow effects */
+.shop-item.rarity-commun {
+    /* Common items use default styling */
+}
+
 .shop-item.rarity-rare {
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }

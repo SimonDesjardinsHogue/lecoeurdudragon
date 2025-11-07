@@ -65,6 +65,11 @@ export const statNames = {
     charisma: 'Charisme'
 };
 
+// Check if item has random stats based on rarity
+export function hasRandomStats(item) {
+    return item.rarity && item.rarity !== 'commun';
+}
+
 // Generate random bonus stats for rare+ items
 export function generateRandomStats(rarity) {
     if (rarity === 'commun') return null;
