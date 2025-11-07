@@ -1,5 +1,5 @@
 // Game Logic Module
-import { gameState, shopItems, rareItems, npcs } from './game-state.js';
+import { gameState, shopItems, rareItems, npcs, rarities } from './game-state.js';
 import { updateUI, addCombatLog, showScreen } from './ui.js';
 import { saveGame, loadGame } from './save-load.js';
 import { characterClasses, applyCharacterClass } from './character-classes.js';
@@ -384,6 +384,35 @@ export function showShop(filterCategory = 'all', filterByClass = false) {
             // Find the original index in shopItems array
             const originalIndex = shopItems.indexOf(item);
             
+            // Check if item has rarity and apply styling
+            let rarityInfo = '';
+            let rarityColor = '#f0f0f0';
+            if (item.rarity && rarities[item.rarity]) {
+                const rarityData = rarities[item.rarity];
+                rarityColor = rarityData.color;
+                rarityInfo = `<span style="color: ${rarityColor}; font-weight: bold;">[${rarityData.name}]</span><br>`;
+                itemDiv.style.borderColor = rarityColor;
+                itemDiv.style.borderWidth = '2px';
+            }
+            
+            // Build random stats description
+            let randomStatsInfo = '';
+            if (item.randomStats && Object.keys(item.randomStats).length > 0) {
+                const statNames = {
+                    strength: 'Force',
+                    defense: 'Défense',
+                    dexterity: 'Dextérité',
+                    constitution: 'Constitution',
+                    intelligence: 'Intelligence',
+                    wisdom: 'Sagesse',
+                    charisma: 'Charisme'
+                };
+                const statsText = Object.entries(item.randomStats)
+                    .map(([stat, value]) => `+${value} ${statNames[stat]}`)
+                    .join(', ');
+                randomStatsInfo = `<br><small style="color: ${rarityColor};">✨ ${statsText}</small>`;
+            }
+            
             // Check if item has class restriction
             let classInfo = '';
             let isDisabled = false;
@@ -400,8 +429,9 @@ export function showShop(filterCategory = 'all', filterByClass = false) {
             
             itemDiv.innerHTML = `
                 <div class="shop-item-info">
-                    <strong>${icon} ${item.name}</strong><br>
-                    <small>${item.description}</small>${classInfo}
+                    <strong style="color: ${rarityColor};">${icon} ${item.name}</strong><br>
+                    ${rarityInfo}
+                    <small>${item.description}</small>${randomStatsInfo}${classInfo}
                 </div>
                 <div class="shop-item-price">${item.cost} 💰</div>
                 <button onclick="window.buyItem(${originalIndex})" ${isDisabled ? 'disabled' : ''}>Acheter</button>
@@ -427,6 +457,15 @@ export function buyItem(index) {
         p.gold -= item.cost;
         item.effect();
         
+        // Apply random stats if item has them
+        if (item.randomStats && Object.keys(item.randomStats).length > 0) {
+            Object.entries(item.randomStats).forEach(([stat, value]) => {
+                if (p[stat] !== undefined) {
+                    p[stat] += value;
+                }
+            });
+        }
+        
         // Play purchase sound
         audioManager.playSound('purchase');
         
@@ -439,7 +478,25 @@ export function buyItem(index) {
         
         saveGame();
         updateUI();
-        alert(`Vous avez acheté ${item.name} !`);
+        
+        // Build confirmation message with random stats
+        let message = `Vous avez acheté ${item.name} !`;
+        if (item.randomStats && Object.keys(item.randomStats).length > 0) {
+            const statNames = {
+                strength: 'Force',
+                defense: 'Défense',
+                dexterity: 'Dextérité',
+                constitution: 'Constitution',
+                intelligence: 'Intelligence',
+                wisdom: 'Sagesse',
+                charisma: 'Charisme'
+            };
+            const statsText = Object.entries(item.randomStats)
+                .map(([stat, value]) => `+${value} ${statNames[stat]}`)
+                .join(', ');
+            message += `\n✨ Bonus: ${statsText}`;
+        }
+        alert(message);
         
         // Refresh shop with current filter state
         // Null checks are needed because this function may be called when shop screen is not active
