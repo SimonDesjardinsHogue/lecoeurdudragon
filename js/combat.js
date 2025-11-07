@@ -6,6 +6,8 @@ import { checkLevelUp, meetNPC } from './game-logic.js';
 import { audioManager } from './audio.js';
 import { particleSystem } from './particles.js';
 import { updateQuestProgress } from './daily-quests.js';
+import { updateSkillBuffs, applyShieldBuff, checkDodge, clearSkillBuffs, resetCombatState } from './skills.js';
+import { trackAchievementProgress, checkAchievements } from './achievements.js';
 
 // Check if player should face a boss (every 5 levels)
 function shouldFaceBoss() {
@@ -206,6 +208,9 @@ export function explore() {
     // Update quest progress for exploring
     updateQuestProgress('explore', 1);
     
+    // Track exploration for achievements
+    trackAchievementProgress('exploration', 1);
+    
     // Check for boss encounter first
     if (shouldFaceBoss()) {
         gameState.currentEnemy = createBossEnemy();
@@ -269,6 +274,9 @@ export function attack() {
     const enemyInfoElement = document.getElementById('enemyInfo');
     if (enemyInfoElement) {
         particleSystem.createAttackEffect(enemyInfoElement);
+        // Add shake animation
+        enemyInfoElement.classList.add('shake');
+        setTimeout(() => enemyInfoElement.classList.remove('shake'), 500);
     }
     
     // Player attacks
@@ -291,10 +299,16 @@ export function attack() {
         updateQuestProgress('collect_gold', goldEarned);
         updateQuestProgress('survive', 1);
         
+        // Track combat win for achievements
+        trackAchievementProgress('combat_win', 1);
+        checkAchievements();
+        
         // Play victory sound and show particles
         audioManager.playSound('victory');
         if (enemyInfoElement) {
             particleSystem.createVictoryEffect(enemyInfoElement);
+            // Add fade-out animation
+            enemyInfoElement.classList.add('fade-out');
         }
         
         // Check if boss was defeated
@@ -310,6 +324,10 @@ export function attack() {
         }
         
         checkLevelUp();
+        
+        // Clear skill buffs when combat ends
+        clearSkillBuffs();
+        resetCombatState();
         
         // Return to main screen after victory
         setTimeout(() => {
@@ -334,6 +352,16 @@ export function attack() {
 export function enemyAttack() {
     const p = gameState.player;
     const e = gameState.currentEnemy;
+    
+    // Update skill buffs at start of enemy turn
+    updateSkillBuffs();
+    
+    // Check for dodge from smoke bomb
+    if (checkDodge()) {
+        addCombatLog(`💨 Vous esquivez l'attaque grâce à la Bombe Fumigène !`, 'special');
+        updateUI();
+        return;
+    }
     
     let defense = p.defense;
     if (gameState.defending) {
@@ -433,7 +461,11 @@ export function enemyAttack() {
     }
     
     // Normal attack
-    const enemyDamage = Math.max(1, e.strength - defense + Math.floor(Math.random() * 5));
+    let enemyDamage = Math.max(1, e.strength - defense + Math.floor(Math.random() * 5));
+    
+    // Apply mana shield buff if active
+    enemyDamage = applyShieldBuff(enemyDamage);
+    
     p.health -= enemyDamage;
     addCombatLog(`Le ${e.name} vous inflige ${enemyDamage} dégâts !`, 'damage');
     
@@ -457,6 +489,13 @@ function handleDefeat() {
     const p = gameState.player;
     p.health = 0;
     addCombatLog('Vous avez été vaincu...', 'damage');
+    
+    // Track combat loss for achievements (resets consecutive wins)
+    trackAchievementProgress('combat_loss');
+    
+    // Clear skill buffs when combat ends
+    clearSkillBuffs();
+    resetCombatState();
     
     // Reset survive quest progress since player died
     if (gameState.dailyQuests && gameState.dailyQuests.active) {
@@ -504,6 +543,10 @@ export function flee() {
     const fleeChance = Math.random();
     if (fleeChance > 0.5) {
         addCombatLog('Vous fuyez le combat !', 'info');
+        
+        // Track successful escape for achievements
+        trackAchievementProgress('successful_escape', 1);
+        checkAchievements();
         
         // Play flee sound
         audioManager.playSound('flee');

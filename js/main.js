@@ -1,9 +1,11 @@
 // Main Entry Point Module
-import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard, buyRareItem, showDailyQuestsScreen } from './game-logic.js';
-import { explore, attack, defend, flee } from './combat.js';
+import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard, buyRareItem, showDailyQuestsScreen, showAchievements } from './game-logic.js';
+import { explore, attack, defend, flee, enemyAttack } from './combat.js';
 import { exportSave, importSave } from './save-load.js';
 import { audioManager } from './audio.js';
 import { initKeyboardHandler } from './keyboard-handler.js';
+import { useSkill as useSkillFn } from './skills.js';
+import { updateUI, updateEnemyUI, updateSkillsUI } from './ui.js';
 
 // Initialize audio context after user interaction
 function initAudio() {
@@ -18,6 +20,30 @@ function toggleAudio() {
         audioToggle.textContent = isMuted ? '🔇' : '🔊';
         audioToggle.classList.toggle('muted', isMuted);
     }
+}
+
+// Register Service Worker for offline support (PWA)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('[PWA] Service Worker registered:', registration.scope);
+                
+                // Check for updates
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New version available
+                            console.log('[PWA] New version available');
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.log('[PWA] Service Worker registration failed:', error);
+            });
+    });
 }
 
 // Initialize game on load
@@ -76,3 +102,21 @@ window.meetNPC = meetNPC;
 window.showLeaderboard = showLeaderboard;
 window.toggleAudio = toggleAudio;
 window.showDailyQuests = showDailyQuestsScreen;
+
+// Expose useSkill function
+window.useSkill = function(skillId) {
+    initAudio();
+    const success = useSkillFn(skillId);
+    if (success) {
+        updateEnemyUI();
+        updateUI();
+        updateSkillsUI();
+        
+        // Enemy attacks after skill use
+        setTimeout(() => {
+            enemyAttack();
+            updateSkillsUI();
+        }, 1000);
+    }
+};
+window.showAchievements = showAchievements;

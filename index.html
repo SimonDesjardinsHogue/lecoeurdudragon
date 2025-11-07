@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Coeur du Dragon</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8B4513">
+    <meta name="description" content="Un conte médiéval et fantastique inspiré par Legend of the Red Dragon">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Coeur du Dragon">
 </head>
 <body>
     <div class="game-container">
@@ -197,6 +203,7 @@
                     <button onclick="showStats()">📊 Voir Statistiques (5)</button>
                     <button onclick="showLeaderboard()">🏆 Classement (6)</button>
                     <button onclick="showDailyQuests()">📜 Défis Quotidiens (7)</button>
+                    <button onclick="showAchievements()">🏅 Succès (8)</button>
                 </div>
             </div>
 
@@ -210,6 +217,7 @@
                     </div>
                 </div>
                 <div class="combat-log" id="combatLog"></div>
+                <div id="skillsContainer" style="margin: 15px 0;"></div>
                 <div class="game-actions">
                     <button onclick="attack()">⚔️ Attaquer (A)</button>
                     <button onclick="defend()">🛡️ Défendre (D)</button>
@@ -290,6 +298,18 @@
                     <h3>🏆 Classement des Héros</h3>
                     <p>Les plus grands héros du royaume de Valoria :</p>
                     <div id="leaderboardList"></div>
+                </div>
+                <div class="game-actions">
+                    <button onclick="showMain()">🚪 Retour (ESC)</button>
+                </div>
+            </div>
+
+            <!-- Achievements Screen -->
+            <div id="achievementsScreen" class="game-screen">
+                <div class="story-text">
+                    <h3>🏅 Succès et Accomplissements</h3>
+                    <p>Débloquez des succès pour gagner des récompenses permanentes !</p>
+                    <div id="achievementsContainer" style="max-height: 500px; overflow-y: auto;"></div>
                 </div>
                 <div class="game-actions">
                     <button onclick="showMain()">🚪 Retour (ESC)</button>
