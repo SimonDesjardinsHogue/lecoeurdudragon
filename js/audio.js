@@ -199,44 +199,57 @@ class AudioManager {
         if (this.music) return; // Already playing
         
         const playMusicLoop = () => {
-            if (this.isMuted || !this.audioContext) return;
+            if (!this.audioContext) return;
             
-            // Create a simple medieval-style melody
+            // Only schedule audio nodes if not muted
+            if (!this.isMuted) {
+                // Create a simple medieval-style melody
+                const melody = [
+                    { freq: 392, duration: 0.5 },  // G
+                    { freq: 440, duration: 0.5 },  // A
+                    { freq: 392, duration: 0.5 },  // G
+                    { freq: 349, duration: 0.5 },  // F
+                    { freq: 330, duration: 1.0 },  // E
+                    { freq: 294, duration: 0.5 },  // D
+                    { freq: 330, duration: 0.5 },  // E
+                    { freq: 349, duration: 1.0 },  // F
+                ];
+                
+                let currentTime = this.audioContext.currentTime;
+                
+                melody.forEach(note => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.musicGainNode);
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(note.freq, currentTime);
+                    
+                    gainNode.gain.setValueAtTime(0, currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.08, currentTime + 0.05);
+                    gainNode.gain.linearRampToValueAtTime(0.06, currentTime + note.duration * 0.8);
+                    gainNode.gain.linearRampToValueAtTime(0, currentTime + note.duration);
+                    
+                    oscillator.start(currentTime);
+                    oscillator.stop(currentTime + note.duration);
+                    
+                    currentTime += note.duration;
+                });
+            }
+            
+            // Always schedule next loop, regardless of mute state
             const melody = [
-                { freq: 392, duration: 0.5 },  // G
-                { freq: 440, duration: 0.5 },  // A
-                { freq: 392, duration: 0.5 },  // G
-                { freq: 349, duration: 0.5 },  // F
-                { freq: 330, duration: 1.0 },  // E
-                { freq: 294, duration: 0.5 },  // D
-                { freq: 330, duration: 0.5 },  // E
-                { freq: 349, duration: 1.0 },  // F
+                { freq: 392, duration: 0.5 },
+                { freq: 440, duration: 0.5 },
+                { freq: 392, duration: 0.5 },
+                { freq: 349, duration: 0.5 },
+                { freq: 330, duration: 1.0 },
+                { freq: 294, duration: 0.5 },
+                { freq: 330, duration: 0.5 },
+                { freq: 349, duration: 1.0 },
             ];
-            
-            let currentTime = this.audioContext.currentTime;
-            
-            melody.forEach(note => {
-                const oscillator = this.audioContext.createOscillator();
-                const gainNode = this.audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(this.musicGainNode);
-                
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(note.freq, currentTime);
-                
-                gainNode.gain.setValueAtTime(0, currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.08, currentTime + 0.05);
-                gainNode.gain.linearRampToValueAtTime(0.06, currentTime + note.duration * 0.8);
-                gainNode.gain.linearRampToValueAtTime(0, currentTime + note.duration);
-                
-                oscillator.start(currentTime);
-                oscillator.stop(currentTime + note.duration);
-                
-                currentTime += note.duration;
-            });
-            
-            // Schedule next loop
             const totalDuration = melody.reduce((sum, note) => sum + note.duration, 0);
             this.music = setTimeout(playMusicLoop, totalDuration * 1000);
         };

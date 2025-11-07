@@ -65,6 +65,3 @@ window.resetGame = resetGame;
 window.restoreSaveFromStart = restoreSaveFromStart;
 window.meetNPC = meetNPC;
 window.showLeaderboard = showLeaderboard;
-
-// Export for use in other modules
-export { audioManager, particleSystem };

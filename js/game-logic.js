@@ -3,7 +3,8 @@ import { gameState, shopItems, npcs } from './game-state.js';
 import { updateUI, addCombatLog, showScreen } from './ui.js';
 import { saveGame, loadGame } from './save-load.js';
 import { characterClasses, applyCharacterClass } from './character-classes.js';
-import { audioManager, particleSystem } from './main.js';
+import { audioManager } from './audio.js';
+import { particleSystem } from './particles.js';
 
 // Set up shop item effects
 export function initializeShopItems() {

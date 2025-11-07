@@ -3,7 +3,8 @@ import { gameState, enemies } from './game-state.js';
 import { updateUI, updateEnemyUI, addCombatLog, showScreen } from './ui.js';
 import { saveGame } from './save-load.js';
 import { checkLevelUp, meetNPC } from './game-logic.js';
-import { audioManager, particleSystem } from './main.js';
+import { audioManager } from './audio.js';
+import { particleSystem } from './particles.js';
 
 // Start exploring the dungeon
 export function explore() {
