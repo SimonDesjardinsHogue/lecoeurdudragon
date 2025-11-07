@@ -15,8 +15,15 @@ export function loadGame() {
         try {
             const loadedState = JSON.parse(saved);
             
-            // Copy properties to gameState
-            Object.assign(gameState, loadedState);
+            // Copy properties to gameState, ensuring we maintain the object reference
+            // Copy player properties individually
+            if (loadedState.player) {
+                Object.assign(gameState.player, loadedState.player);
+            }
+            // Copy other state properties
+            gameState.currentEnemy = loadedState.currentEnemy;
+            gameState.inCombat = loadedState.inCombat;
+            gameState.defending = loadedState.defending;
             
             // Add energy properties if they don't exist (for backwards compatibility)
             if (!gameState.player.hasOwnProperty('energy')) {
@@ -193,8 +200,16 @@ export function importSave() {
             }
         }
         
-        // Restore the game state
-        Object.assign(gameState, loadedState);
+        // Restore the game state, maintaining object references
+        // Copy player properties individually
+        if (loadedState.player) {
+            Object.assign(gameState.player, loadedState.player);
+        }
+        // Copy other state properties
+        gameState.currentEnemy = loadedState.currentEnemy;
+        gameState.inCombat = loadedState.inCombat;
+        gameState.defending = loadedState.defending;
+        
         saveGame();
         updateUI();
         
@@ -203,14 +218,11 @@ export function importSave() {
         successMsg.textContent = `✓ Sauvegarde restaurée avec succès ! Bienvenue, ${gameState.player.name} !`;
         resultDiv.innerHTML = '';
         resultDiv.appendChild(successMsg);
-        
-        return true;
     } catch (e) {
         const errorMsg = document.createElement('p');
         errorMsg.style.color = '#ff6b6b';
         errorMsg.textContent = '❌ Code invalide ou corrompu. Veuillez vérifier et réessayer.';
         resultDiv.innerHTML = '';
         resultDiv.appendChild(errorMsg);
-        return false;
     }
 }
