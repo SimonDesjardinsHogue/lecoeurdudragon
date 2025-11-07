@@ -163,20 +163,35 @@ export function showStats() {
     showScreen('statsScreen');
     const p = gameState.player;
     const statsDiv = document.getElementById('detailedStats');
-    statsDiv.innerHTML = `
-        <div class="shop-item" style="display: block;">
-            <p><strong>Nom:</strong> ${p.name}</p>
-            <p><strong>Niveau:</strong> ${p.level}</p>
-            <p><strong>Santé:</strong> ${p.health}/${p.maxHealth}</p>
-            <p><strong>Énergie:</strong> ${p.energy}/${p.maxEnergy}</p>
-            <p><strong>Force:</strong> ${p.strength}</p>
-            <p><strong>Défense:</strong> ${p.defense}</p>
-            <p><strong>Or:</strong> ${p.gold}</p>
-            <p><strong>Expérience:</strong> ${p.xp}/${p.xpToLevel}</p>
-            <p><strong>Ennemis vaincus:</strong> ${p.kills}</p>
-            <p><strong>Parties jouées:</strong> ${p.gamesPlayed}</p>
-        </div>
-    `;
+    
+    // Create elements safely to avoid XSS
+    const container = document.createElement('div');
+    container.className = 'shop-item';
+    container.style.display = 'block';
+    
+    // Helper function to create a stat paragraph
+    const createStatParagraph = (label, value) => {
+        const para = document.createElement('p');
+        const strong = document.createElement('strong');
+        strong.textContent = label + ':';
+        para.appendChild(strong);
+        para.appendChild(document.createTextNode(' ' + value));
+        return para;
+    };
+    
+    container.appendChild(createStatParagraph('Nom', p.name));
+    container.appendChild(createStatParagraph('Niveau', p.level));
+    container.appendChild(createStatParagraph('Santé', `${p.health}/${p.maxHealth}`));
+    container.appendChild(createStatParagraph('Énergie', `${p.energy}/${p.maxEnergy}`));
+    container.appendChild(createStatParagraph('Force', p.strength));
+    container.appendChild(createStatParagraph('Défense', p.defense));
+    container.appendChild(createStatParagraph('Or', p.gold));
+    container.appendChild(createStatParagraph('Expérience', `${p.xp}/${p.xpToLevel}`));
+    container.appendChild(createStatParagraph('Ennemis vaincus', p.kills));
+    container.appendChild(createStatParagraph('Parties jouées', p.gamesPlayed));
+    
+    statsDiv.innerHTML = '';
+    statsDiv.appendChild(container);
 }
 
 // Show save options
