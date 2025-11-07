@@ -1,5 +1,5 @@
 // Game Logic Module
-import { gameState, shopItems, rareItems, npcs, rarities } from './game-state.js';
+import { gameState, shopItems, rareItems, npcs, rarities, generateRandomStats, statNames } from './game-state.js';
 import { updateUI, addCombatLog, showScreen } from './ui.js';
 import { saveGame, loadGame } from './save-load.js';
 import { characterClasses, applyCharacterClass } from './character-classes.js';
@@ -384,6 +384,9 @@ export function showShop(filterCategory = 'all', filterByClass = false) {
             // Find the original index in shopItems array
             const originalIndex = shopItems.indexOf(item);
             
+            // Generate random stats for preview (not applied until purchase)
+            const previewStats = item.rarity && item.rarity !== 'commun' ? generateRandomStats(item.rarity) : null;
+            
             // Check if item has rarity and apply styling
             let rarityInfo = '';
             let rarityColor = '#f0f0f0';
@@ -393,21 +396,14 @@ export function showShop(filterCategory = 'all', filterByClass = false) {
                 rarityInfo = `<span style="color: ${rarityColor}; font-weight: bold;">[${rarityData.name}]</span><br>`;
                 itemDiv.style.borderColor = rarityColor;
                 itemDiv.style.borderWidth = '2px';
+                // Add CSS class for rarity-based styling
+                itemDiv.classList.add(`rarity-${item.rarity}`);
             }
             
             // Build random stats description
             let randomStatsInfo = '';
-            if (item.randomStats && Object.keys(item.randomStats).length > 0) {
-                const statNames = {
-                    strength: 'Force',
-                    defense: 'Défense',
-                    dexterity: 'Dextérité',
-                    constitution: 'Constitution',
-                    intelligence: 'Intelligence',
-                    wisdom: 'Sagesse',
-                    charisma: 'Charisme'
-                };
-                const statsText = Object.entries(item.randomStats)
+            if (previewStats && Object.keys(previewStats).length > 0) {
+                const statsText = Object.entries(previewStats)
                     .map(([stat, value]) => `+${value} ${statNames[stat]}`)
                     .join(', ');
                 randomStatsInfo = `<br><small style="color: ${rarityColor};">✨ ${statsText}</small>`;
@@ -457,9 +453,10 @@ export function buyItem(index) {
         p.gold -= item.cost;
         item.effect();
         
-        // Apply random stats if item has them
-        if (item.randomStats && Object.keys(item.randomStats).length > 0) {
-            Object.entries(item.randomStats).forEach(([stat, value]) => {
+        // Generate and apply random stats for rare+ items at purchase time
+        const randomStats = item.rarity && item.rarity !== 'commun' ? generateRandomStats(item.rarity) : null;
+        if (randomStats && Object.keys(randomStats).length > 0) {
+            Object.entries(randomStats).forEach(([stat, value]) => {
                 if (p[stat] !== undefined) {
                     p[stat] += value;
                 }
@@ -481,17 +478,8 @@ export function buyItem(index) {
         
         // Build confirmation message with random stats
         let message = `Vous avez acheté ${item.name} !`;
-        if (item.randomStats && Object.keys(item.randomStats).length > 0) {
-            const statNames = {
-                strength: 'Force',
-                defense: 'Défense',
-                dexterity: 'Dextérité',
-                constitution: 'Constitution',
-                intelligence: 'Intelligence',
-                wisdom: 'Sagesse',
-                charisma: 'Charisme'
-            };
-            const statsText = Object.entries(item.randomStats)
+        if (randomStats && Object.keys(randomStats).length > 0) {
+            const statsText = Object.entries(randomStats)
                 .map(([stat, value]) => `+${value} ${statNames[stat]}`)
                 .join(', ');
             message += `\n✨ Bonus: ${statsText}`;

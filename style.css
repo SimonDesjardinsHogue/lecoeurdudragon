@@ -290,15 +290,15 @@ button:disabled {
 }
 
 /* Rarity glow effects */
-.shop-item[style*="border-color: #3B82F6"] {
+.shop-item.rarity-rare {
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
-.shop-item[style*="border-color: #A855F7"] {
+.shop-item.rarity-epique {
     box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
 }
 
-.shop-item[style*="border-color: #F59E0B"] {
+.shop-item.rarity-legendaire {
     box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
