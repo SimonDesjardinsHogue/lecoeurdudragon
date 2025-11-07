@@ -130,7 +130,7 @@ Si vous forkez ce projet, suivez ces étapes détaillées pour activer GitHub Pa
    - Cliquez sur **Pages**
    - Sous **Build and deployment** (Construction et déploiement) :
      - Pour **Source**, sélectionnez **GitHub Actions** dans le menu déroulant
-     - (Ne sélectionnez pas l'option de déploiement depuis une branche - utilisez bien "GitHub Actions")
+     - (Ne sélectionnez PAS l'option "Deploy from a branch" - choisissez bien "GitHub Actions")
 
 3. **Premier déploiement**
    - Le workflow se déclenchera automatiquement au prochain push sur la branche `main`
@@ -151,7 +151,7 @@ Si vous forkez ce projet, suivez ces étapes détaillées pour activer GitHub Pa
 #### Dépannage
 
 - **Le workflow ne se déclenche pas** : Vérifiez que vous avez bien sélectionné "GitHub Actions" comme source dans les paramètres Pages
-- **Erreur de permissions** : Assurez-vous que GitHub Actions a les permissions nécessaires dans Settings → Actions → General → Workflow permissions (choisir "Read and write permissions")
+- **Erreur de permissions** : Les permissions nécessaires sont normalement configurées automatiquement par le workflow (`contents: read`, `pages: write`, `id-token: write`). Si vous rencontrez des erreurs de permissions, vérifiez que GitHub Actions est activé dans Settings → Actions → General
 - **Page 404** : Attendez quelques minutes après le premier déploiement, le DNS peut prendre un peu de temps à se propager
 
 ### Test Local
