@@ -209,21 +209,21 @@ export const metals = {
     platine: {
         name: 'Platine',
         icon: '⚪',
-        relativeValue: 23,
+        relativeValue: 20,
         cadPerOz: 1300,
         description: 'Métal rare et précieux'
     },
     argent: {
         name: 'Argent',
         icon: '⚙️',
-        relativeValue: 1.2,
+        relativeValue: 1,
         cadPerOz: 68,
         description: 'Métal précieux commun'
     },
     cuivre: {
         name: 'Cuivre',
         icon: '🟤',
-        relativeValue: 0.007,
+        relativeValue: 0.01,
         cadPerOz: 0.4,
         description: 'Métal de base utile'
     }
