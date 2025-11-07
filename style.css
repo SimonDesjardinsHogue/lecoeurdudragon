@@ -427,4 +427,415 @@ input[type="text"]:focus {
     font-size: 16px;
 }
 
+/* ======================================
+   RESPONSIVE DESIGN - MEDIA QUERIES
+   ====================================== */
+
+/* Landscape Mode Optimization for Mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+    }
+    
+    .game-header {
+        padding: 10px 15px;
+    }
+    
+    .game-header h1 {
+        font-size: 1.3em;
+        margin-bottom: 2px;
+    }
+    
+    .game-header .subtitle {
+        font-size: 0.75em;
+    }
+    
+    .audio-toggle {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+        top: 8px;
+        right: 8px;
+    }
+    
+    .game-stats {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .stat-box {
+        padding: 8px;
+    }
+    
+    .game-content {
+        padding: 15px;
+        min-height: 200px;
+    }
+    
+    .story-text {
+        line-height: 1.5;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+    
+    .game-actions {
+        gap: 8px;
+        margin-top: 15px;
+    }
+    
+    button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+        min-width: 120px;
+    }
+    
+    .game-footer {
+        padding: 10px;
+        font-size: 0.7em;
+    }
+    
+    .class-option {
+        padding: 10px;
+    }
+    
+    input[type="text"] {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+}
+
+/* Tablet and Medium Screens */
+@media screen and (max-width: 768px) {
+    .game-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .characteristics-group {
+        grid-column: span 2;
+    }
+}
+
+/* Small Screens (400px - 599px) */
+@media screen and (max-width: 599px) {
+    body {
+        padding: 10px;
+    }
+    
+    .game-container {
+        border-width: 2px;
+    }
+    
+    .game-header {
+        padding: 15px 10px;
+    }
+    
+    .game-header h1 {
+        font-size: 1.5em;
+        margin-bottom: 3px;
+    }
+    
+    .game-header .subtitle {
+        font-size: 0.8em;
+    }
+    
+    .audio-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        top: 8px;
+        right: 8px;
+    }
+    
+    .game-stats {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .characteristics-group {
+        grid-column: span 1;
+    }
+    
+    .stat-box {
+        padding: 8px;
+    }
+    
+    .stat-label {
+        font-size: 0.75em;
+    }
+    
+    .stat-value {
+        font-size: 1.1em;
+    }
+    
+    .game-content {
+        padding: 15px;
+    }
+    
+    .story-text {
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+    
+    button {
+        padding: 10px 18px;
+        font-size: 0.95em;
+        min-width: 130px;
+    }
+    
+    .game-footer {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+        font-size: 0.75em;
+    }
+    
+    input[type="text"] {
+        font-size: 0.95em;
+        max-width: 100%;
+    }
+}
+
+/* Very Small Screens (< 400px) */
+@media screen and (max-width: 399px) {
+    body {
+        padding: 5px;
+    }
+    
+    .game-container {
+        border-width: 2px;
+        border-radius: 8px;
+    }
+    
+    .game-header {
+        padding: 12px 8px;
+        padding-right: 50px; /* Make room for audio toggle */
+    }
+    
+    .game-header h1 {
+        font-size: 1.2em;
+        margin-bottom: 2px;
+        word-wrap: break-word;
+    }
+    
+    .game-header .subtitle {
+        font-size: 0.7em;
+    }
+    
+    .audio-toggle {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+        top: 5px;
+        right: 5px;
+    }
+    
+    .game-stats {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .stat-box {
+        padding: 8px;
+    }
+    
+    .stat-label {
+        font-size: 0.7em;
+    }
+    
+    .stat-value {
+        font-size: 1em;
+    }
+    
+    .characteristics-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+    
+    .characteristic {
+        padding: 4px;
+    }
+    
+    .char-label {
+        font-size: 0.65em;
+    }
+    
+    .char-value {
+        font-size: 0.9em;
+    }
+    
+    .game-content {
+        padding: 12px;
+        min-height: 250px;
+    }
+    
+    .story-text {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+    
+    .story-text h3 {
+        font-size: 1.1em;
+    }
+    
+    .game-actions {
+        gap: 8px;
+        margin-top: 15px;
+    }
+    
+    button {
+        padding: 10px 16px;
+        font-size: 0.85em;
+        min-width: 100%;
+        flex: 1 1 100%;
+    }
+    
+    .game-footer {
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px;
+        font-size: 0.7em;
+        text-align: center;
+    }
+    
+    .save-indicator {
+        font-size: 0.85em;
+    }
+    
+    input[type="text"] {
+        padding: 8px;
+        font-size: 0.9em;
+        max-width: 100%;
+    }
+    
+    .class-option {
+        padding: 10px;
+    }
+    
+    .class-label strong {
+        font-size: 1em;
+    }
+    
+    .class-label small {
+        font-size: 0.8em;
+    }
+    
+    .enemy-info {
+        padding: 12px;
+    }
+    
+    .combat-log {
+        padding: 10px;
+        max-height: 150px;
+        font-size: 0.9em;
+    }
+    
+    .shop-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .shop-item button {
+        width: 100%;
+    }
+    
+    .module-error-dialog {
+        padding: 20px;
+        max-width: 90%;
+    }
+    
+    .module-error-dialog h2 {
+        font-size: 1.2em;
+    }
+    
+    .module-error-dialog ol {
+        font-size: 0.9em;
+        padding-left: 20px;
+    }
+}
+
+/* Extra Small Screens and Landscape Mobile (combined optimization) */
+@media screen and (max-width: 360px) {
+    .game-header h1 {
+        font-size: 1.1em;
+    }
+    
+    .game-header .subtitle {
+        font-size: 0.65em;
+    }
+    
+    .audio-toggle {
+        width: 35px;
+        height: 35px;
+        font-size: 15px;
+    }
+    
+    button {
+        padding: 9px 14px;
+        font-size: 0.8em;
+    }
+    
+    .game-content {
+        padding: 10px;
+    }
+    
+    .story-text {
+        font-size: 0.85em;
+    }
+}
+
+/* Ultra Small Screens (< 320px) */
+@media screen and (max-width: 319px) {
+    .game-header {
+        padding: 10px 6px;
+        padding-right: 45px;
+    }
+    
+    .game-header h1 {
+        font-size: 1em;
+    }
+    
+    .game-header .subtitle {
+        font-size: 0.6em;
+    }
+    
+    .audio-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        top: 4px;
+        right: 4px;
+    }
+    
+    .stat-label {
+        font-size: 0.65em;
+    }
+    
+    .stat-value {
+        font-size: 0.9em;
+    }
+    
+    button {
+        padding: 8px 12px;
+        font-size: 0.75em;
+    }
+    
+    .game-content {
+        padding: 8px;
+    }
+    
+    .story-text {
+        font-size: 0.8em;
+    }
+    
+    .game-footer {
+        font-size: 0.65em;
+    }
+}
+
 
