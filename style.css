@@ -591,7 +591,9 @@ input[type="text"]:focus {
     }
 }
 
-/* Large Desktops and 24" Monitors (≥1920px) */
+/* Default/Standard Desktops (1200px - 1919px) use base styles with 900px container */
+
+/* Large Desktops and High-Resolution Displays (≥1920px) */
 @media screen and (min-width: 1920px) {
     body {
         padding: 40px;
