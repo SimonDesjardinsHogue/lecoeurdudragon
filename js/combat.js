@@ -616,3 +616,41 @@ export function flee() {
         }, 1000);
     }
 }
+
+// Use potion from inventory during combat
+export function useCombatPotion(inventoryIndex) {
+    if (!gameState.inCombat) return;
+    
+    const p = gameState.player;
+    if (!p.inventory || inventoryIndex < 0 || inventoryIndex >= p.inventory.length) {
+        return;
+    }
+    
+    const inventoryItem = p.inventory[inventoryIndex];
+    
+    // Import shopItems directly from game-state to access the effect
+    import('./game-state.js').then(module => {
+        const shopItem = module.shopItems[inventoryItem.shopIndex];
+        
+        if (shopItem && shopItem.effect) {
+            // Use the potion
+            shopItem.effect();
+            
+            // Remove from inventory
+            p.inventory.splice(inventoryIndex, 1);
+            
+            // Log the action
+            addCombatLog(`Vous utilisez ${inventoryItem.name} !`, 'special');
+            
+            saveGame();
+            updateUI();
+            
+            // Enemy attacks after player uses potion
+            setTimeout(() => {
+                if (gameState.inCombat) {
+                    enemyAttack();
+                }
+            }, 1000);
+        }
+    });
+}

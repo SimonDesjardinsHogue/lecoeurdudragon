@@ -18,6 +18,12 @@ export function showScreen(screenId) {
     // Update skills UI when showing combat screen
     if (screenId === 'combatScreen') {
         updateSkillsUI();
+        updateCombatInventoryUI();
+    }
+    
+    // Update inventory UI when showing shop screen
+    if (screenId === 'shopScreen') {
+        updateShopInventoryUI();
     }
 }
 
@@ -166,5 +172,68 @@ export function updateSkillsUI() {
         };
         
         skillsContainer.appendChild(button);
+    });
+}
+
+// Update inventory UI in combat screen
+export function updateCombatInventoryUI() {
+    const container = document.getElementById('combatInventoryContainer');
+    if (!container) return;
+    
+    const p = gameState.player;
+    if (!p.inventory || p.inventory.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    container.innerHTML = '<div style="margin-bottom: 10px; color: #DAA520; font-weight: bold;">🎒 Sac (Potions):</div>';
+    const inventoryDiv = document.createElement('div');
+    inventoryDiv.style.cssText = 'display: flex; flex-wrap: wrap; gap: 5px;';
+    
+    p.inventory.forEach((item, index) => {
+        const button = document.createElement('button');
+        button.style.cssText = 'padding: 8px 12px; font-size: 0.9em;';
+        button.textContent = `${item.icon} ${item.name}`;
+        button.title = item.description;
+        button.onclick = () => {
+            if (window.useCombatPotion) {
+                window.useCombatPotion(index);
+            }
+        };
+        inventoryDiv.appendChild(button);
+    });
+    
+    container.appendChild(inventoryDiv);
+}
+
+// Update inventory UI in shop screen (for selling)
+export function updateShopInventoryUI() {
+    const container = document.getElementById('shopInventoryContainer');
+    if (!container) return;
+    
+    const p = gameState.player;
+    if (!p.inventory || p.inventory.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    container.innerHTML = '<div class="story-text"><h3>🎒 Votre Sac</h3><p style="font-style: italic; color: #888;">Le marchand achète vos objets à 50% de leur valeur.</p></div>';
+    
+    p.inventory.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'shop-item';
+        
+        const sellPrice = Math.floor(item.cost * 0.5);
+        
+        itemDiv.innerHTML = `
+            <div class="shop-item-info">
+                <strong>${item.icon} ${item.name}</strong><br>
+                <small>${item.description}</small>
+            </div>
+            <div class="shop-item-price">${sellPrice} 💰 (50%)</div>
+            <button onclick="window.sellInventoryItem(${index})">Vendre</button>
+        `;
+        
+        container.appendChild(itemDiv);
     });
 }
