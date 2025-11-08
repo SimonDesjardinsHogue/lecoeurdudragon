@@ -197,7 +197,7 @@
                             <input type="radio" name="characterClass" value="guerrier" checked>
                             <span class="class-label">
                                 <strong>⚔️ Guerrier</strong><br>
-                                <small>PV: 120 | FOR: 12 | CA: 8</small><br>
+                                <small>PV: 120 | FOR: 12 | CA: 9</small><br>
                                 <small style="color: #999;">Robuste et résistant</small>
                             </span>
                         </label>
@@ -205,7 +205,7 @@
                             <input type="radio" name="characterClass" value="magicien">
                             <span class="class-label">
                                 <strong>🧙 Magicien</strong><br>
-                                <small>PV: 80 | FOR: 15 | CA: 3</small><br>
+                                <small>PV: 84 | FOR: 15 | CA: 3</small><br>
                                 <small style="color: #999;">Puissant mais fragile</small>
                             </span>
                         </label>
@@ -213,7 +213,7 @@
                             <input type="radio" name="characterClass" value="archer">
                             <span class="class-label">
                                 <strong>🏹 Archer</strong><br>
-                                <small>PV: 100 | FOR: 13 | CA: 5</small><br>
+                                <small>PV: 100 | FOR: 13 | CA: 6</small><br>
                                 <small style="color: #999;">Équilibré et précis</small>
                             </span>
                         </label>
@@ -221,7 +221,7 @@
                             <input type="radio" name="characterClass" value="rogue">
                             <span class="class-label">
                                 <strong>🗡️ Rogue</strong><br>
-                                <small>PV: 90 | FOR: 14 | CA: 4</small><br>
+                                <small>PV: 90 | FOR: 14 | CA: 5</small><br>
                                 <small style="color: #999;">Agile et furtif</small>
                             </span>
                         </label>
@@ -252,6 +252,7 @@
                         <button onclick="showLeaderboard()">🏆 Classement (6)</button>
                         <button onclick="showDailyQuests()">📜 Défis Quotidiens (7)</button>
                         <button onclick="showAchievements()">🏅 Succès (8)</button>
+                        <button onclick="showBalanceTest()">🧪 Test d'Équilibre (9)</button>
                     </div>
                 </div>
             </div>
@@ -359,6 +360,29 @@
                     <h3>🏅 Succès et Accomplissements</h3>
                     <p>Débloquez des succès pour gagner des récompenses permanentes !</p>
                     <div id="achievementsContainer" style="max-height: 500px; overflow-y: auto;"></div>
+                </div>
+                <div class="game-actions">
+                    <button onclick="showMain()">🚪 Retour (ESC)</button>
+                </div>
+            </div>
+
+            <!-- Balance Test Screen -->
+            <div id="balanceTestScreen" class="game-screen">
+                <div class="story-text">
+                    <h3>🧪 Test d'Équilibre du Jeu</h3>
+                    <p>Simulez 1000 parties par classe pour analyser l'équilibre du jeu.</p>
+                    <div id="balanceTestControls" style="margin: 20px 0;">
+                        <button onclick="runBalanceTest()" id="startBalanceTestBtn" style="font-size: 1.1em; padding: 15px 30px;">
+                            🧪 Lancer le Test d'Équilibre (1000 parties par classe)
+                        </button>
+                        <div id="balanceTestProgress" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 5px;">
+                            <p id="balanceTestStatus">Préparation...</p>
+                            <div class="health-bar" style="height: 25px; margin-top: 10px;">
+                                <div class="health-fill" id="balanceTestProgressBar" style="width: 0%; background: linear-gradient(90deg, #51cf66 0%, #2ecc71 100%);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="balanceTestResults" style="margin-top: 20px;"></div>
                 </div>
                 <div class="game-actions">
                     <button onclick="showMain()">🚪 Retour (ESC)</button>
