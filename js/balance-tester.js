@@ -148,9 +148,10 @@ function simulateCombat(player, enemy) {
         enemyCopy.health -= playerDamage;
         
         if (enemyCopy.health <= 0) {
-            // Victory
-            player.gold += enemy.gold;
-            player.totalGoldEarned += enemy.gold;
+            // Victory - Apply 5% gold bonus
+            const goldEarned = Math.round(enemy.gold * 1.05);
+            player.gold += goldEarned;
+            player.totalGoldEarned += goldEarned;
             player.xp += enemy.xp;
             player.kills++;
             player.combatsWon++;

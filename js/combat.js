@@ -288,7 +288,7 @@ export function attack() {
     
     if (e.health <= 0) {
         // Victory
-        const goldEarned = e.gold;
+        const goldEarned = Math.round(e.gold * 1.05);
         const xpEarned = e.xp;
         
         p.gold += goldEarned;
