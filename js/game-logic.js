@@ -493,16 +493,44 @@ export function buyItem(index) {
     
     if (p.gold >= finalCost) {
         p.gold -= finalCost;
-        item.effect();
         
-        // Generate and apply random stats for rare+ items at purchase time
-        const randomStats = hasRandomStats(item) ? generateRandomStats(item.rarity) : null;
-        if (randomStats && Object.keys(randomStats).length > 0) {
-            Object.entries(randomStats).forEach(([stat, value]) => {
-                if (p[stat] !== undefined) {
-                    p[stat] += value;
-                }
-            });
+        // Check if item is a potion that should go to inventory
+        const isPotionForInventory = item.type === 'potion' && (item.category === 'heal' || item.category === 'energy');
+        
+        if (isPotionForInventory) {
+            // Add to inventory if there's space
+            if (!p.inventory) {
+                p.inventory = [];
+            }
+            if (p.inventory.length < 4) {
+                // Store item with its shop index for later use
+                p.inventory.push({
+                    shopIndex: index,
+                    name: item.name,
+                    icon: item.icon,
+                    description: item.description,
+                    cost: item.cost,
+                    category: item.category,
+                    type: item.type
+                });
+            } else {
+                alert('Votre sac est plein ! (maximum 4 objets)');
+                p.gold += finalCost; // Refund
+                return;
+            }
+        } else {
+            // Use item immediately (equipment, damage potions, exp potions, etc.)
+            item.effect();
+            
+            // Generate and apply random stats for rare+ items at purchase time
+            const randomStats = hasRandomStats(item) ? generateRandomStats(item.rarity) : null;
+            if (randomStats && Object.keys(randomStats).length > 0) {
+                Object.entries(randomStats).forEach(([stat, value]) => {
+                    if (p[stat] !== undefined) {
+                        p[stat] += value;
+                    }
+                });
+            }
         }
         
         // Play purchase sound
@@ -518,17 +546,22 @@ export function buyItem(index) {
         saveGame();
         updateUI();
         
-        // Build confirmation message with random stats
-        let message = `Vous avez acheté ${item.name} !`;
+        // Build confirmation message
+        let message = isPotionForInventory ? 
+            `${item.name} ajouté à votre sac !` :
+            `Vous avez acheté ${item.name} !`;
         if (discount > 0) {
             const savedGold = item.cost - finalCost;
             message += ` (Réduction de ${Math.floor(discount * 100)}% grâce à votre charisme: -${savedGold} or)`;
         }
-        if (randomStats && Object.keys(randomStats).length > 0) {
-            const statsText = Object.entries(randomStats)
-                .map(([stat, value]) => `+${value} ${statNames[stat]}`)
-                .join(', ');
-            message += `\n✨ Bonus: ${statsText}`;
+        if (!isPotionForInventory) {
+            const randomStats = hasRandomStats(item) ? generateRandomStats(item.rarity) : null;
+            if (randomStats && Object.keys(randomStats).length > 0) {
+                const statsText = Object.entries(randomStats)
+                    .map(([stat, value]) => `+${value} ${statNames[stat]}`)
+                    .join(', ');
+                message += `\n✨ Bonus: ${statsText}`;
+            }
         }
         alert(message);
         
@@ -640,6 +673,7 @@ export function resetGame() {
             argent: 0,
             cuivre: 0
         };
+        gameState.player.inventory = [];
         
         // Reset combat state
         gameState.currentEnemy = null;
@@ -1301,6 +1335,48 @@ export async function runBalanceTest() {
         statusText.style.color = '#ff6b6b';
         startBtn.disabled = false;
     }
+}
+
+// Use item from inventory
+export function useInventoryItem(inventoryIndex) {
+    const p = gameState.player;
+    if (!p.inventory || inventoryIndex < 0 || inventoryIndex >= p.inventory.length) {
+        return;
+    }
+    
+    const inventoryItem = p.inventory[inventoryIndex];
+    const shopItem = shopItems[inventoryItem.shopIndex];
+    
+    if (shopItem && shopItem.effect) {
+        // Use the item
+        shopItem.effect();
+        
+        // Remove from inventory
+        p.inventory.splice(inventoryIndex, 1);
+        
+        saveGame();
+        updateUI();
+    }
+}
+
+// Sell item from inventory to merchant
+export function sellInventoryItem(inventoryIndex) {
+    const p = gameState.player;
+    if (!p.inventory || inventoryIndex < 0 || inventoryIndex >= p.inventory.length) {
+        return;
+    }
+    
+    const inventoryItem = p.inventory[inventoryIndex];
+    // Merchant buys at 50% of original value
+    const sellPrice = Math.floor(inventoryItem.cost * 0.5);
+    
+    p.gold += sellPrice;
+    p.inventory.splice(inventoryIndex, 1);
+    
+    alert(`Vous avez vendu ${inventoryItem.name} pour ${sellPrice} or !`);
+    
+    saveGame();
+    updateUI();
 }
 
 // Show daily quests (export for main.js)

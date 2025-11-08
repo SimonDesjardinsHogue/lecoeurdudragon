@@ -1,11 +1,11 @@
 // Main Entry Point Module
-import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard, buyRareItem, showDailyQuestsScreen, showAchievements, buyMetal, sellMetal, meetJeweler, showBalanceTest, runBalanceTest } from './game-logic.js';
-import { explore, attack, defend, flee, enemyAttack } from './combat.js';
+import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard, buyRareItem, showDailyQuestsScreen, showAchievements, buyMetal, sellMetal, meetJeweler, showBalanceTest, runBalanceTest, useInventoryItem, sellInventoryItem } from './game-logic.js';
+import { explore, attack, defend, flee, enemyAttack, useCombatPotion } from './combat.js';
 import { exportSave, importSave } from './save-load.js';
 import { audioManager } from './audio.js';
 import { initKeyboardHandler } from './keyboard-handler.js';
 import { useSkill as useSkillFn } from './skills.js';
-import { updateUI, updateEnemyUI, updateSkillsUI } from './ui.js';
+import { updateUI, updateEnemyUI, updateSkillsUI, updateCombatInventoryUI, updateShopInventoryUI } from './ui.js';
 
 // Initialize audio context after user interaction
 function initAudio() {
@@ -125,3 +125,16 @@ window.sellMetal = sellMetal;
 window.meetJeweler = meetJeweler;
 window.showBalanceTest = showBalanceTest;
 window.runBalanceTest = runBalanceTest;
+
+// Expose inventory functions
+window.sellInventoryItem = function(inventoryIndex) {
+    initAudio();
+    sellInventoryItem(inventoryIndex);
+    updateShopInventoryUI();
+};
+
+window.useCombatPotion = function(inventoryIndex) {
+    initAudio();
+    useCombatPotion(inventoryIndex);
+    updateCombatInventoryUI();
+};

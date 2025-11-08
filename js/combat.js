@@ -1,6 +1,6 @@
 // Combat System Module
-import { gameState, enemies, bosses, legendaryItems, randomEvents, riddles, moralChoices, getStatModifier } from './game-state.js';
-import { updateUI, updateEnemyUI, addCombatLog, showScreen } from './ui.js';
+import { gameState, enemies, bosses, legendaryItems, randomEvents, riddles, moralChoices, getStatModifier, shopItems } from './game-state.js';
+import { updateUI, updateEnemyUI, addCombatLog, showScreen, updateCombatInventoryUI } from './ui.js';
 import { saveGame } from './save-load.js';
 import { checkLevelUp, meetNPC } from './game-logic.js';
 import { audioManager } from './audio.js';
@@ -613,6 +613,41 @@ export function flee() {
         addCombatLog('Vous ne parvenez pas à fuir !', 'damage');
         setTimeout(() => {
             enemyAttack();
+        }, 1000);
+    }
+}
+
+// Use potion from inventory during combat
+export function useCombatPotion(inventoryIndex) {
+    if (!gameState.inCombat) return;
+    
+    const p = gameState.player;
+    if (!p.inventory || inventoryIndex < 0 || inventoryIndex >= p.inventory.length) {
+        return;
+    }
+    
+    const inventoryItem = p.inventory[inventoryIndex];
+    const shopItem = shopItems[inventoryItem.shopIndex];
+    
+    if (shopItem && shopItem.effect) {
+        // Use the potion
+        shopItem.effect();
+        
+        // Remove from inventory
+        p.inventory.splice(inventoryIndex, 1);
+        
+        // Log the action
+        addCombatLog(`Vous utilisez ${inventoryItem.name} !`, 'special');
+        
+        saveGame();
+        updateUI();
+        updateCombatInventoryUI();
+        
+        // Enemy attacks after player uses potion
+        setTimeout(() => {
+            if (gameState.inCombat) {
+                enemyAttack();
+            }
         }, 1000);
     }
 }

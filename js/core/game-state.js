@@ -43,7 +43,9 @@ export const gameState = {
             platine: 0,   // Platinum
             argent: 0,    // Silver
             cuivre: 0     // Copper
-        }
+        },
+        // Item inventory - max 4 items (potions and other items)
+        inventory: []
     },
     currentEnemy: null,
     inCombat: false,
