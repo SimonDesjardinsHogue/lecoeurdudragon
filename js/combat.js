@@ -9,11 +9,14 @@ import { updateQuestProgress } from './daily-quests.js';
 import { updateSkillBuffs, applyShieldBuff, checkDodge, clearSkillBuffs, resetCombatState } from './skills.js';
 import { trackAchievementProgress, checkAchievements } from './achievements.js';
 
-// Check if player should face a boss (every 5 levels)
+// Check if player should face a boss (every 5 levels with probability)
 function shouldFaceBoss() {
     const p = gameState.player;
-    // Boss every 5 levels (5, 10, 15, 20, etc.)
-    return p.level % 5 === 0 && p.kills > 0 && (p.level / 5) > p.bossesDefeated;
+    // Boss possible at levels 5, 10, 15, 20, etc.
+    // 35% chance to encounter boss when at a boss level and haven't defeated this boss yet
+    const isAtBossLevel = p.level % 5 === 0 && p.kills > 0 && (p.level / 5) > p.bossesDefeated;
+    const bossSpawnChance = 0.35; // 35% chance
+    return isAtBossLevel && Math.random() < bossSpawnChance;
 }
 
 // Create boss enemy
