@@ -282,16 +282,31 @@
 
             <!-- Combat Screen -->
             <div id="combatScreen" class="game-screen">
-                <div class="enemy-info" id="enemyInfo">
-                    <div class="enemy-icon-container">
-                        <div class="enemy-icon" id="enemyIcon">👹</div>
+                <div id="enemiesContainer" style="display: flex; gap: 15px; margin-bottom: 20px; justify-content: center;">
+                    <div class="enemy-info" id="enemyInfo">
+                        <div class="enemy-icon-container">
+                            <div class="enemy-icon" id="enemyIcon">👹</div>
+                        </div>
+                        <div class="enemy-details">
+                            <h3 id="enemyName">Ennemi</h3>
+                            <div class="stat-value" id="enemyHealth">HP: 50/50</div>
+                            <div class="stat-value" id="enemyArmor" style="margin-top: 5px; color: #DAA520;">CA: 5 (+0)</div>
+                            <div class="health-bar">
+                                <div class="health-fill" id="enemyHealthFill" style="width: 100%;"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="enemy-details">
-                        <h3 id="enemyName">Ennemi</h3>
-                        <div class="stat-value" id="enemyHealth">HP: 50/50</div>
-                        <div class="stat-value" id="enemyArmor" style="margin-top: 5px; color: #DAA520;">CA: 5 (+0)</div>
-                        <div class="health-bar">
-                            <div class="health-fill" id="enemyHealthFill" style="width: 100%;"></div>
+                    <div class="enemy-info" id="enemyInfo2" style="display: none;">
+                        <div class="enemy-icon-container">
+                            <div class="enemy-icon" id="enemyIcon2">👹</div>
+                        </div>
+                        <div class="enemy-details">
+                            <h3 id="enemyName2">Ennemi</h3>
+                            <div class="stat-value" id="enemyHealth2">HP: 50/50</div>
+                            <div class="stat-value" id="enemyArmor2" style="margin-top: 5px; color: #DAA520;">CA: 5 (+0)</div>
+                            <div class="health-bar">
+                                <div class="health-fill" id="enemyHealthFill2" style="width: 100%;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

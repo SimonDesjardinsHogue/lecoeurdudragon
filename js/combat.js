@@ -249,6 +249,8 @@ export function explore() {
     // Check for boss encounter first
     if (shouldFaceBoss()) {
         gameState.currentEnemy = createBossEnemy();
+        gameState.currentEnemies = null;
+        gameState.isDualCombat = false;
         gameState.inCombat = true;
         gameState.defending = false;
         
@@ -277,26 +279,77 @@ export function explore() {
         // NPC encounter
         meetNPC();
     } else {
-        // Monster encounter - select enemy based on player level but ensure we don't exceed array bounds
-        const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
-        const enemyTemplate = enemies[Math.floor(Math.random() * (maxEnemyIndex + 1))];
+        // Monster encounter - 7% chance for dual monsters
+        const dualMonsterChance = Math.random() < 0.07;
         
-        gameState.currentEnemy = {
-            ...enemyTemplate,
-            maxHealth: enemyTemplate.health,
-            isBoss: false
-        };
-        
-        gameState.inCombat = true;
-        gameState.defending = false;
-        
-        // Switch to combat music for monster encounter
-        audioManager.startMusic('combat');
-        
-        showScreen('combatScreen');
-        document.getElementById('combatLog').innerHTML = '';
-        addCombatLog(`Vous rencontrez un ${gameState.currentEnemy.name} !`, 'info');
-        updateEnemyUI();
+        if (dualMonsterChance) {
+            // Dual monster encounter - select two different enemies
+            const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
+            
+            // Get two different random indices
+            const index1 = Math.floor(Math.random() * (maxEnemyIndex + 1));
+            let index2 = Math.floor(Math.random() * (maxEnemyIndex + 1));
+            while (index2 === index1 && maxEnemyIndex > 0) {
+                index2 = Math.floor(Math.random() * (maxEnemyIndex + 1));
+            }
+            
+            const enemy1Template = enemies[index1];
+            const enemy2Template = enemies[index2];
+            
+            // Create enemy objects
+            const enemy1 = {
+                ...enemy1Template,
+                maxHealth: enemy1Template.health,
+                isBoss: false
+            };
+            const enemy2 = {
+                ...enemy2Template,
+                maxHealth: enemy2Template.health,
+                isBoss: false
+            };
+            
+            // Sort by strength - stronger on left (index 0)
+            const sortedEnemies = [enemy1, enemy2].sort((a, b) => b.strength - a.strength);
+            
+            // Store both enemies
+            gameState.currentEnemies = sortedEnemies;
+            gameState.currentEnemy = sortedEnemies[0]; // Primary target
+            gameState.isDualCombat = true;
+            
+            gameState.inCombat = true;
+            gameState.defending = false;
+            
+            // Switch to combat music for monster encounter
+            audioManager.startMusic('combat');
+            
+            showScreen('combatScreen');
+            document.getElementById('combatLog').innerHTML = '';
+            addCombatLog(`Vous rencontrez ${sortedEnemies[0].name} et ${sortedEnemies[1].name} !`, 'info');
+            updateEnemyUI();
+        } else {
+            // Single monster encounter - select enemy based on player level but ensure we don't exceed array bounds
+            const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
+            const enemyTemplate = enemies[Math.floor(Math.random() * (maxEnemyIndex + 1))];
+            
+            gameState.currentEnemy = {
+                ...enemyTemplate,
+                maxHealth: enemyTemplate.health,
+                isBoss: false
+            };
+            gameState.currentEnemies = null;
+            gameState.isDualCombat = false;
+            
+            gameState.inCombat = true;
+            gameState.defending = false;
+            
+            // Switch to combat music for monster encounter
+            audioManager.startMusic('combat');
+            
+            showScreen('combatScreen');
+            document.getElementById('combatLog').innerHTML = '';
+            addCombatLog(`Vous rencontrez un ${gameState.currentEnemy.name} !`, 'info');
+            updateEnemyUI();
+        }
     }
     
     saveGame();
@@ -350,6 +403,31 @@ export function attack() {
     }
     
     if (e.health <= 0) {
+        // Check if this is dual combat and there's a second enemy
+        if (gameState.isDualCombat && gameState.currentEnemies && gameState.currentEnemies.length > 1) {
+            // Find the index of the defeated enemy
+            const defeatedIndex = gameState.currentEnemies.findIndex(enemy => enemy === e);
+            
+            // Remove defeated enemy
+            gameState.currentEnemies.splice(defeatedIndex, 1);
+            
+            // Switch to remaining enemy
+            gameState.currentEnemy = gameState.currentEnemies[0];
+            
+            addCombatLog(`${e.name} est vaincu !`, 'victory');
+            addCombatLog(`${gameState.currentEnemy.name} continue le combat !`, 'info');
+            
+            // Update UI to show remaining enemy
+            updateEnemyUI();
+            
+            // Continue combat with remaining enemy
+            setTimeout(() => {
+                enemyAttack();
+            }, 1000);
+            
+            return;
+        }
+        
         // Victory - Add randomness to rewards (80% to 120% of base values)
         const goldMultiplier = 0.80 + Math.random() * 0.40;
         const xpMultiplier = 0.80 + Math.random() * 0.40;
@@ -411,6 +489,8 @@ export function attack() {
         
         // Immediately end combat to prevent double rewards
         gameState.inCombat = false;
+        gameState.isDualCombat = false;
+        gameState.currentEnemies = null;
         
         // Restore default music after combat
         audioManager.startMusic('default');
