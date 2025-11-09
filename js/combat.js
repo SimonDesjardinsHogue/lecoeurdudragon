@@ -346,7 +346,7 @@ export function attack() {
     if (isCritical) {
         addCombatLog(`💥 COUP CRITIQUE ! Vous infligez ${playerDamage} dégâts au ${e.name} !`, 'victory');
     } else {
-        addCombatLog(`Vous infligez ${playerDamage} dégâts au ${e.name} !`, 'damage');
+        addCombatLog(`Vous infligez ${playerDamage} dégâts au ${e.name} !`, 'player-damage');
     }
     
     if (e.health <= 0) {

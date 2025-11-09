@@ -270,6 +270,10 @@ button:disabled {
     color: #ff6b6b;
 }
 
+.combat-log p.player-damage {
+    color: #ff8c00;
+}
+
 .combat-log p.victory {
     color: #51cf66;
 }
