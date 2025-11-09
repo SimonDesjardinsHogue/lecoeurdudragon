@@ -228,6 +228,24 @@ button:disabled {
     border: 2px solid #8B0000;
     margin-bottom: 20px;
     transition: all 0.3s ease;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.enemy-icon-container {
+    flex-shrink: 0;
+}
+
+.enemy-icon {
+    font-size: 4em;
+    line-height: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.enemy-details {
+    flex: 1;
+    min-width: 0;
 }
 
 .enemy-info.shake {

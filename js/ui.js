@@ -97,11 +97,77 @@ export function updateUI() {
     }
 }
 
+// Calculate difficulty indicator based on player vs enemy stats
+function getDifficultyIndicator(enemy) {
+    const p = gameState.player;
+    
+    // Calculate enemy power score
+    const enemyPower = (enemy.health || 0) + (enemy.strength || 0) * 5 + (enemy.defense || 0) * 3;
+    
+    // Calculate player power score
+    const playerPower = p.health + p.strength * 5 + p.defense * 3;
+    
+    // Calculate power ratio (enemy power relative to player power)
+    const powerRatio = enemyPower / playerPower;
+    
+    // Determine difficulty level and assign indicator
+    let indicator = '';
+    let color = '';
+    let title = '';
+    
+    if (powerRatio < 0.5) {
+        // Very easy - green
+        indicator = '●';
+        color = '#51cf66';
+        title = 'Très Facile';
+    } else if (powerRatio < 0.8) {
+        // Easy - light green
+        indicator = '●';
+        color = '#8ce99a';
+        title = 'Facile';
+    } else if (powerRatio < 1.2) {
+        // Normal - yellow
+        indicator = '●';
+        color = '#ffd43b';
+        title = 'Normal';
+    } else if (powerRatio < 1.5) {
+        // Hard - orange
+        indicator = '●';
+        color = '#ff922b';
+        title = 'Difficile';
+    } else if (powerRatio < 2.0) {
+        // Very hard - red
+        indicator = '●';
+        color = '#ff6b6b';
+        title = 'Très Difficile';
+    } else {
+        // Deadly - dark red
+        indicator = '●';
+        color = '#c92a2a';
+        title = 'Mortel';
+    }
+    
+    return { indicator, color, title };
+}
+
 // Update enemy UI
 export function updateEnemyUI() {
     const e = gameState.currentEnemy;
     const icon = e.icon || '👹';
-    document.getElementById('enemyName').textContent = `${icon} ${e.name}`;
+    
+    // Update enemy icon
+    const enemyIconElement = document.getElementById('enemyIcon');
+    if (enemyIconElement) {
+        enemyIconElement.textContent = icon;
+    }
+    
+    // Get difficulty indicator
+    const difficulty = getDifficultyIndicator(e);
+    
+    // Build enemy name with difficulty indicator (no icon in name anymore)
+    const enemyNameElement = document.getElementById('enemyName');
+    enemyNameElement.innerHTML = `${e.name} <span style="color: ${difficulty.color}; font-size: 1.2em; margin-left: 5px;" title="${difficulty.title}">${difficulty.indicator}</span>`;
+    
     document.getElementById('enemyHealth').textContent = `HP: ${e.health}/${e.maxHealth}`;
     
     // Add armor class display
