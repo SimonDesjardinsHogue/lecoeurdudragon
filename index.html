@@ -28,7 +28,7 @@
                 <div class="stat-label">Personnage 🔍</div>
                 <div class="character-info-compact">
                     <div><strong id="playerName">---</strong></div>
-                    <div style="font-size: 0.85em;"><span id="playerClass">⚔️ Guerrier</span> | <span id="playerRace">👤 Humain</span></div>
+                    <div style="font-size: 0.85em;"><span id="playerClass">🏹 Ranger</span> | <span id="playerRace">👤 Humain</span></div>
                     <div style="font-size: 0.85em;" id="playerGender">♂️ Masculin</div>
                     <div style="font-size: 0.85em; margin-top: 5px; display: flex; align-items: center; gap: 5px;">
                         <div class="char-compact" onclick="event.stopPropagation(); toggleInventoryPanel()" style="cursor: pointer; display: inline-flex; align-items: center; gap: 3px; padding: 3px 6px; background: rgba(0,0,0,0.3); border-radius: 3px;" title="Ouvrir/Fermer le sac">
@@ -210,32 +210,15 @@
                 </div>
                 <div style="margin: 20px 0;">
                     <label style="display: block; margin-bottom: 10px; font-weight: bold;">Choisissez votre classe :</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
                         <label class="class-option">
-                            <input type="radio" name="characterClass" value="guerrier" checked>
+                            <input type="radio" name="characterClass" value="ranger" checked>
                             <span class="class-label">
-                                <strong>⚔️ Guerrier</strong><br>
-                                <small>PV: 120 | FOR: 12 | CA: 9</small><br>
-                                <small style="color: #999;">Robuste et résistant</small>
+                                <strong>🏹 Ranger</strong><br>
+                                <small>PV: 115 | FOR: 14 | CA: 8</small><br>
+                                <small style="color: #999;">Aventurier polyvalent maîtrisant le combat et la magie</small>
                             </span>
                         </label>
-                        <label class="class-option">
-                            <input type="radio" name="characterClass" value="magicien">
-                            <span class="class-label">
-                                <strong>🧙 Magicien</strong><br>
-                                <small>PV: 84 | FOR: 15 | CA: 3</small><br>
-                                <small style="color: #999;">Puissant mais fragile</small>
-                            </span>
-                        </label>
-                        <label class="class-option">
-                            <input type="radio" name="characterClass" value="archer">
-                            <span class="class-label">
-                                <strong>🏹 Archer</strong><br>
-                                <small>PV: 100 | FOR: 13 | CA: 6</small><br>
-                                <small style="color: #999;">Équilibré et précis</small>
-                            </span>
-                        </label>
-
                     </div>
                 </div>
                 <div class="game-actions">
@@ -440,10 +423,10 @@
             <div id="balanceTestScreen" class="game-screen">
                 <div class="story-text">
                     <h3>🧪 Test d'Équilibre du Jeu</h3>
-                    <p>Simulez 100 parties par combinaison de classe, race et sexe (2 400 parties au total) pour analyser l'équilibre du jeu.</p>
+                    <p>Simulez 100 parties par combinaison de race et sexe (600 parties au total) pour analyser l'équilibre du jeu.</p>
                     <div id="balanceTestControls" style="margin: 20px 0;">
                         <button onclick="runBalanceTest()" id="startBalanceTestBtn" style="font-size: 1.1em; padding: 15px 30px;">
-                            🧪 Lancer le Test d'Équilibre (100 parties × 24 combinaisons = 2 400 parties)
+                            🧪 Lancer le Test d'Équilibre (100 parties × 6 combinaisons = 600 parties)
                         </button>
                         <div id="balanceTestProgress" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 5px;">
                             <p id="balanceTestStatus">Préparation...</p>

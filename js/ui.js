@@ -64,31 +64,22 @@ export function updateUI() {
     // Update weapon icon based on class or equipped weapon
     const weaponIconEl = document.getElementById('weaponIcon');
     if (weaponIconEl) {
-        let weaponIcon = '⚔️'; // default
+        let weaponIcon = '🏹'; // default for ranger
         if (p.currentWeapon && p.currentWeapon.icon) {
             weaponIcon = p.currentWeapon.icon;
         } else {
             // Use class-specific weapon icon
             switch(p.class) {
-                case 'guerrier': weaponIcon = '⚔️'; break;
-                case 'archer': weaponIcon = '🏹'; break;
-                case 'magicien': weaponIcon = '🔮'; break;
+                case 'ranger': weaponIcon = '🏹'; break;
             }
         }
         weaponIconEl.textContent = weaponIcon;
     }
     
-    // Show/hide mana bar for mages
+    // Hide mana bar for ranger (uses energy instead)
     const manaRow = document.getElementById('manaRow');
     if (manaRow) {
-        if (p.class === 'magicien') {
-            manaRow.style.display = 'flex';
-            document.getElementById('playerMana').textContent = `${p.mana}/${p.maxMana}`;
-            const manaPercent = (p.mana / p.maxMana) * 100;
-            document.getElementById('manaFill').style.width = manaPercent + '%';
-        } else {
-            manaRow.style.display = 'none';
-        }
+        manaRow.style.display = 'none';
     }
     
     document.getElementById('playerDexterity').textContent = `${p.dexterity} (${dexterityMod >= 0 ? '+' : ''}${dexterityMod})`;
@@ -444,18 +435,12 @@ export function updateEquipmentModal() {
     // Update character avatar based on gender and class
     const avatarEl = document.getElementById('characterAvatar');
     if (avatarEl) {
-        let avatar = '🧙'; // default
+        let avatar = '🏹'; // default
         const isFemale = p.gender === 'female';
         
         switch(p.class) {
-            case 'guerrier':
-                avatar = isFemale ? '👸' : '🤴';
-                break;
-            case 'magicien':
-                avatar = isFemale ? '🧙‍♀️' : '🧙‍♂️';
-                break;
-            case 'archer':
-                avatar = isFemale ? '🏹👩' : '🏹👨';
+            case 'ranger':
+                avatar = isFemale ? '🧝‍♀️' : '🧝‍♂️';
                 break;
         }
         avatarEl.textContent = avatar;

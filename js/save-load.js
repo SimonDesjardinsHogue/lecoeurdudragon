@@ -37,13 +37,13 @@ export function loadGame() {
             }
             // Add character class properties if they don't exist (for backwards compatibility)
             if (!gameState.player.hasOwnProperty('class')) {
-                gameState.player.class = 'guerrier';
+                gameState.player.class = 'ranger';
             }
             if (!gameState.player.hasOwnProperty('className')) {
-                gameState.player.className = 'Guerrier';
+                gameState.player.className = 'Ranger';
             }
             if (!gameState.player.hasOwnProperty('classIcon')) {
-                gameState.player.classIcon = '⚔️';
+                gameState.player.classIcon = '🏹';
             }
             // Add weapon damage property if it doesn't exist (for backwards compatibility)
             if (!gameState.player.hasOwnProperty('weaponDamage')) {
@@ -191,13 +191,13 @@ export function importSave() {
         }
         // Add character class properties if they don't exist (for backwards compatibility)
         if (!('class' in loadedState.player)) {
-            loadedState.player.class = 'guerrier';
+            loadedState.player.class = 'ranger';
         }
         if (!('className' in loadedState.player)) {
-            loadedState.player.className = 'Guerrier';
+            loadedState.player.className = 'Ranger';
         }
         if (!('classIcon' in loadedState.player)) {
-            loadedState.player.classIcon = '⚔️';
+            loadedState.player.classIcon = '🏹';
         }
         
         // Validate property types for all player properties

@@ -11,114 +11,7 @@ const skillCooldowns = {};
 
 // Skill definitions by class
 export const skills = {
-    guerrier: [
-        {
-            id: 'charge',
-            name: 'Charge Puissante',
-            icon: '💥',
-            description: 'Inflige 2x les dégâts normaux',
-            energyCost: 25,
-            cooldown: 3,
-            effect: (player, enemy) => {
-                const strengthMod = getStatModifier(player.strength);
-                const enemyDefenseMod = getStatModifier(enemy.defense);
-                const damage = Math.max(1, (player.strength * 2) + (strengthMod * 2) - (enemy.defense + enemyDefenseMod) + Math.floor(Math.random() * 10));
-                enemy.health -= damage;
-                addCombatLog(`💥 Charge Puissante ! Vous infligez ${damage} dégâts massifs !`, 'special');
-                audioManager.playSound('attack');
-                return { damage, type: 'damage' };
-            }
-        },
-        {
-            id: 'shield_bash',
-            name: 'Coup de Bouclier',
-            icon: '🛡️',
-            description: 'Inflige des dégâts et augmente la défense pour 2 tours',
-            energyCost: 20,
-            cooldown: 4,
-            effect: (player, enemy) => {
-                const strengthMod = getStatModifier(player.strength);
-                const enemyDefenseMod = getStatModifier(enemy.defense);
-                const damage = Math.max(1, player.strength + strengthMod - (enemy.defense + enemyDefenseMod) + Math.floor(Math.random() * 5));
-                enemy.health -= damage;
-                player.defense += 5;
-                gameState.skillBuffs = gameState.skillBuffs || {};
-                gameState.skillBuffs.shieldBash = 2;
-                addCombatLog(`🛡️ Coup de Bouclier ! ${damage} dégâts et +5 défense pour 2 tours !`, 'special');
-                audioManager.playSound('defend');
-                return { damage, type: 'damage_buff' };
-            }
-        }
-    ],
-    magicien: [
-        {
-            id: 'fireball',
-            name: 'Boule de Feu',
-            icon: '🔥',
-            description: 'Lance une boule de feu qui ignore la défense',
-            energyCost: 30,
-            cooldown: 3,
-            effect: (player, enemy) => {
-                const intelligenceMod = getStatModifier(player.intelligence);
-                const damage = Math.floor(player.intelligence * 1.5) + Math.floor(intelligenceMod * 1.5) + Math.floor(Math.random() * 15);
-                enemy.health -= damage;
-                addCombatLog(`🔥 Boule de Feu ! Dégâts magiques de ${damage} !`, 'special');
-                audioManager.playSound('attack');
-                return { damage, type: 'magic' };
-            }
-        },
-        {
-            id: 'mana_shield',
-            name: 'Bouclier de Mana',
-            icon: '✨',
-            description: 'Crée un bouclier qui absorbe les dégâts pendant 3 tours',
-            energyCost: 25,
-            cooldown: 5,
-            effect: (player, enemy) => {
-                const intelligenceMod = getStatModifier(player.intelligence);
-                gameState.skillBuffs = gameState.skillBuffs || {};
-                gameState.skillBuffs.manaShield = 3;
-                gameState.skillBuffs.manaShieldAmount = Math.floor(player.intelligence * 2) + (intelligenceMod * 2);
-                addCombatLog(`✨ Bouclier de Mana activé ! Absorbe jusqu'à ${gameState.skillBuffs.manaShieldAmount} dégâts.`, 'special');
-                audioManager.playSound('defend');
-                return { type: 'shield' };
-            }
-        },
-        {
-            id: 'lightning_bolt',
-            name: 'Éclair Foudroyant',
-            icon: '⚡',
-            description: 'Frappe l\'ennemi avec un éclair destructeur (utilise du mana)',
-            manaCost: 20,
-            cooldown: 2,
-            effect: (player, enemy) => {
-                const intelligenceMod = getStatModifier(player.intelligence);
-                const damage = Math.floor(player.intelligence * 1.8) + Math.floor(intelligenceMod * 2) + Math.floor(Math.random() * 12);
-                enemy.health -= damage;
-                addCombatLog(`⚡ Éclair Foudroyant ! Dégâts électriques de ${damage} !`, 'special');
-                audioManager.playSound('attack');
-                return { damage, type: 'magic' };
-            }
-        },
-        {
-            id: 'ice_lance',
-            name: 'Lance de Glace',
-            icon: '❄️',
-            description: 'Projette une lance de glace perçante (utilise du mana)',
-            manaCost: 25,
-            cooldown: 3,
-            effect: (player, enemy) => {
-                const intelligenceMod = getStatModifier(player.intelligence);
-                const wisdomMod = getStatModifier(player.wisdom);
-                const damage = Math.floor(player.intelligence * 1.6) + Math.floor(intelligenceMod * 1.5) + Math.floor(wisdomMod * 1.5) + Math.floor(Math.random() * 18);
-                enemy.health -= damage;
-                addCombatLog(`❄️ Lance de Glace ! Dégâts glacials de ${damage} !`, 'special');
-                audioManager.playSound('attack');
-                return { damage, type: 'magic' };
-            }
-        }
-    ],
-    archer: [
+    ranger: [
         {
             id: 'multi_shot',
             name: 'Tir Multiple',
@@ -156,6 +49,39 @@ export const skills = {
                 addCombatLog(`🎯 Tir Visé critique ! ${damage} dégâts précis !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'critical' };
+            }
+        },
+        {
+            id: 'nature_magic',
+            name: 'Magie Naturelle',
+            icon: '🌿',
+            description: 'Invoque la puissance de la nature pour infliger des dégâts',
+            energyCost: 28,
+            cooldown: 3,
+            effect: (player, enemy) => {
+                const intelligenceMod = getStatModifier(player.intelligence);
+                const wisdomMod = getStatModifier(player.wisdom);
+                const damage = Math.floor(player.intelligence * 1.2) + Math.floor(intelligenceMod * 1.2) + Math.floor(wisdomMod * 1.2) + Math.floor(Math.random() * 12);
+                enemy.health -= damage;
+                addCombatLog(`🌿 Magie Naturelle ! Dégâts mystiques de ${damage} !`, 'special');
+                audioManager.playSound('attack');
+                return { damage, type: 'magic' };
+            }
+        },
+        {
+            id: 'tactical_defense',
+            name: 'Défense Tactique',
+            icon: '🛡️',
+            description: 'Augmente la défense pour 2 tours',
+            energyCost: 20,
+            cooldown: 4,
+            effect: (player, enemy) => {
+                player.defense += 4;
+                gameState.skillBuffs = gameState.skillBuffs || {};
+                gameState.skillBuffs.tacticalDefense = 2;
+                addCombatLog(`🛡️ Défense Tactique ! +4 défense pour 2 tours !`, 'special');
+                audioManager.playSound('defend');
+                return { type: 'buff' };
             }
         }
     ]

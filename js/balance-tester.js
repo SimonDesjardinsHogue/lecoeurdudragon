@@ -357,9 +357,7 @@ function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxCombats 
 export function runBalanceTests(iterations = 2500) {
     const results = {
         byClass: {
-            guerrier: [],
-            magicien: [],
-            archer: []
+            ranger: []
         },
         byRace: {
             humain: [],
@@ -373,7 +371,7 @@ export function runBalanceTests(iterations = 2500) {
         byCombination: {}
     };
     
-    const classes = ['guerrier', 'magicien', 'archer'];
+    const classes = ['ranger'];
     const races = ['humain', 'elfe', 'nain'];
     const sexes = ['male', 'female'];
     
@@ -417,9 +415,7 @@ export function runBalanceTests(iterations = 2500) {
 export async function runBalanceTestsAsync(iterations = 100, progressCallback = null) {
     const results = {
         byClass: {
-            guerrier: [],
-            magicien: [],
-            archer: []
+            ranger: []
         },
         byRace: {
             humain: [],
@@ -433,7 +429,7 @@ export async function runBalanceTestsAsync(iterations = 100, progressCallback = 
         byCombination: {}
     };
     
-    const classes = ['guerrier', 'magicien', 'archer'];
+    const classes = ['ranger'];
     const races = ['humain', 'elfe', 'nain'];
     const sexes = ['male', 'female'];
     
@@ -1128,7 +1124,7 @@ export function formatReportAsHTML(report) {
         const suggestionsByCategory = {
             game: [],
             economy: [],
-            class: { guerrier: [], magicien: [], archer: [] },
+            class: { ranger: [] },
             race: { humain: [], elfe: [], nain: [] },
             sex: { male: [], female: [] }
         };

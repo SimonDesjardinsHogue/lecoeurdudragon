@@ -80,9 +80,9 @@ body {
 
 .game-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-    padding: 15px;
+    grid-template-columns: minmax(200px, 1fr) minmax(180px, 0.9fr) minmax(220px, 1.1fr);
+    gap: 12px;
+    padding: 12px 15px;
     background: rgba(139, 69, 19, 0.2);
     border-bottom: 2px solid #8B4513;
 }
@@ -92,13 +92,17 @@ body {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #8B4513;
+    display: flex;
+    flex-direction: column;
 }
 
 .stat-label {
     color: #DAA520;
-    font-size: 0.8em;
-    margin-bottom: 5px;
+    font-size: 0.85em;
+    margin-bottom: 6px;
     text-decoration: underline;
+    font-weight: bold;
+    text-align: center;
 }
 
 .stat-value {
@@ -1222,32 +1226,35 @@ input[type="text"]:focus {
 .combat-stats-compact {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 8px;
+    gap: 5px;
+    margin-top: 6px;
     font-size: 0.9em;
 }
 
 .combat-stat-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .combat-icon-small {
-    font-size: 1.2em;
+    font-size: 1.1em;
     flex-shrink: 0;
+    width: 20px;
+    text-align: center;
 }
 
 .stat-value-small {
     flex: 1;
     font-weight: bold;
+    font-size: 0.85em;
 }
 
 .health-bar-small {
     width: 100%;
-    height: 12px;
+    height: 10px;
     background: rgba(0, 0, 0, 0.7);
-    border-radius: 6px;
+    border-radius: 5px;
     overflow: hidden;
     border: 1px solid #8B4513;
     flex: 2;
@@ -1256,13 +1263,13 @@ input[type="text"]:focus {
 .combat-stat-inline {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px 0;
+    gap: 3px;
+    padding: 2px 0;
 }
 
 .stat-label-inline {
     color: #DAA520;
-    font-size: 0.85em;
+    font-size: 0.8em;
 }
 
 /* Compact Progression and Characteristics */
@@ -1271,19 +1278,19 @@ input[type="text"]:focus {
 }
 
 .progression-compact {
-    margin-top: 8px;
+    margin-top: 6px;
 }
 
 .characteristics-grid-compact {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
     margin-top: 8px;
 }
 
 .char-compact {
     background: rgba(0, 0, 0, 0.3);
-    padding: 6px;
+    padding: 5px 4px;
     border-radius: 4px;
     text-align: center;
     border: 1px solid #8B4513;
@@ -1292,14 +1299,15 @@ input[type="text"]:focus {
 .char-label-small {
     display: block;
     color: #DAA520;
-    font-size: 0.75em;
+    font-size: 0.7em;
     margin-bottom: 2px;
+    font-weight: bold;
 }
 
 .char-value-small {
     display: block;
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 0.85em;
 }
 
 /* Equipment Modal */
