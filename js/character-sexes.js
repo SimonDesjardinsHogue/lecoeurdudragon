@@ -5,22 +5,22 @@ export const characterSexes = {
     male: {
         name: 'Masculin',
         icon: '♂️',
-        strength: 10,      // FOR
-        dexterity: 10,     // DEX
-        constitution: 11,  // CON
-        intelligence: 11,  // INT
-        wisdom: 9,         // SAG
-        charisma: 9        // CHA
+        strength: 15,      // FOR
+        dexterity: 16,     // DEX
+        constitution: 13,  // CON
+        intelligence: 18,  // INT
+        wisdom: 10,        // SAG
+        charisma: 11       // CHA
     },
     female: {
         name: 'Féminin',
         icon: '♀️',
-        strength: 9,       // FOR
-        dexterity: 11,     // DEX
-        constitution: 10,  // CON
-        intelligence: 10,  // INT
+        strength: 14,      // FOR
+        dexterity: 16,     // DEX
+        constitution: 13,  // CON
+        intelligence: 18,  // INT
         wisdom: 10,        // SAG
-        charisma: 10       // CHA
+        charisma: 12       // CHA
     }
 };
 

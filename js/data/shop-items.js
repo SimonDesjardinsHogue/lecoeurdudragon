@@ -62,16 +62,6 @@ export const shopItems = [
     { name: 'Bâton Légendaire', icon: '🪄', description: '12 de dégât\n✨ +1 Force', cost: 550, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 12, rarity: 'legendaire', effect: null },
     { name: 'Bâton de l\'Archimage', icon: '🪄', description: '15 de dégât\n✨ +1 Force', cost: 750, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 15, rarity: 'legendaire', effect: null },
     
-    // Weapons for Rogue - 8 tiers
-    { name: 'Dague Émoussée', icon: '🗡️', description: '1 de dégât\n✨ +1 Force', cost: 40, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 1, rarity: 'commun', effect: null },
-    { name: 'Dague Affûtée', icon: '🗡️', description: '3 de dégât\n✨ +1 Force', cost: 80, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 3, rarity: 'commun', effect: null },
-    { name: 'Dague en Acier', icon: '🗡️', description: '5 de dégât\n✨ +1 Force', cost: 130, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 5, rarity: 'rare', effect: null },
-    { name: 'Dague Empoisonnée', icon: '🗡️', description: '7 de dégât\n✨ +1 Force', cost: 200, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 7, rarity: 'rare', effect: null },
-    { name: 'Dague de l\'Ombre', icon: '🗡️', description: '9 de dégât\n✨ +1 Force', cost: 290, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 9, rarity: 'epique', effect: null },
-    { name: 'Dague Runique', icon: '🗡️', description: '10 de dégât\n✨ +1 Force', cost: 400, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 10, rarity: 'epique', effect: null },
-    { name: 'Dague Légendaire', icon: '🗡️', description: '12 de dégât\n✨ +1 Force', cost: 550, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 12, rarity: 'legendaire', effect: null },
-    { name: 'Dague de l\'Assassin Suprême', icon: '🗡️', description: '15 de dégât\n✨ +1 Force', cost: 750, category: 'equipment', type: 'weapon', classRestriction: 'rogue', bonus: 15, rarity: 'legendaire', effect: null },
-    
     // Armors (8 tiers)
     { name: 'Armure en Tissu', icon: '🛡️', description: '+1 Défense', cost: 35, category: 'equipment', type: 'armor', bonus: 1, rarity: 'commun', effect: null },
     { name: 'Armure de Cuir', icon: '🛡️', description: '+3 Défense', cost: 70, category: 'equipment', type: 'armor', bonus: 3, rarity: 'commun', effect: null },

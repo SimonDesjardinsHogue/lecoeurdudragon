@@ -42,20 +42,6 @@ export const characterClasses = {
         wisdom: 12,
         charisma: 10,
         maxEnergy: 100
-    },
-    rogue: {
-        name: 'Rogue',
-        icon: '🗡️',
-        description: 'Un assassin agile avec une force élevée mais peu de points de vie',
-        maxHealth: 112,
-        strength: 16,
-        defense: 7,
-        dexterity: 16,
-        constitution: 10,
-        intelligence: 12,
-        wisdom: 10,
-        charisma: 14,
-        maxEnergy: 100
     }
 };
 

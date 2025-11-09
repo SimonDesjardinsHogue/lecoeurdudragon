@@ -125,41 +125,6 @@ export const skills = {
                 return { damage, type: 'critical' };
             }
         }
-    ],
-    rogue: [
-        {
-            id: 'backstab',
-            name: 'Coup dans le Dos',
-            icon: '🗡️',
-            description: 'Attaque sournoise qui inflige 2.5x les dégâts',
-            energyCost: 30,
-            cooldown: 3,
-            effect: (player, enemy) => {
-                const strengthMod = getStatModifier(player.strength);
-                const enemyDefenseMod = getStatModifier(enemy.defense);
-                const damage = Math.max(1, Math.floor(player.strength * 2.5) + Math.floor(strengthMod * 2.5) - (enemy.defense + enemyDefenseMod) + Math.floor(Math.random() * 12));
-                enemy.health -= damage;
-                addCombatLog(`🗡️ Coup dans le Dos ! Attaque sournoise de ${damage} dégâts !`, 'special');
-                audioManager.playSound('attack');
-                return { damage, type: 'critical' };
-            }
-        },
-        {
-            id: 'smoke_bomb',
-            name: 'Bombe Fumigène',
-            icon: '💨',
-            description: 'Augmente l\'esquive pour 3 tours',
-            energyCost: 20,
-            cooldown: 5,
-            effect: (player, enemy) => {
-                gameState.skillBuffs = gameState.skillBuffs || {};
-                gameState.skillBuffs.smokeBomb = 3;
-                gameState.skillBuffs.dodgeChance = 0.4; // 40% esquive
-                addCombatLog(`💨 Bombe Fumigène ! +40% esquive pour 3 tours !`, 'special');
-                audioManager.playSound('defend');
-                return { type: 'dodge_buff' };
-            }
-        }
     ]
 };
 
