@@ -254,7 +254,10 @@ export function updateEnemyUI() {
     const e = gameState.currentEnemy;
     const icon = e.icon || '👹';
     
-    // Update enemy icon
+    // Check if this is dual combat
+    const isDual = gameState.isDualCombat && gameState.currentEnemies && gameState.currentEnemies.length > 1;
+    
+    // Update first enemy (primary target)
     const enemyIconElement = document.getElementById('enemyIcon');
     if (enemyIconElement) {
         enemyIconElement.textContent = icon;
@@ -291,6 +294,51 @@ export function updateEnemyUI() {
         const healthBarElement = healthFillElement.parentElement;
         if (healthBarElement) {
             healthBarElement.style.display = 'block';
+        }
+    }
+    
+    // Handle second enemy display
+    const enemyInfo2Element = document.getElementById('enemyInfo2');
+    if (isDual) {
+        // Show second enemy
+        const e2 = gameState.currentEnemies[1];
+        const icon2 = e2.icon || '👹';
+        
+        if (enemyInfo2Element) {
+            enemyInfo2Element.style.display = 'block';
+        }
+        
+        const enemyIcon2Element = document.getElementById('enemyIcon2');
+        if (enemyIcon2Element) {
+            enemyIcon2Element.textContent = icon2;
+        }
+        
+        const difficulty2 = getDifficultyIndicator(e2);
+        const enemyName2Element = document.getElementById('enemyName2');
+        if (enemyName2Element) {
+            enemyName2Element.innerHTML = `${e2.name} <span style="color: ${difficulty2.color}; font-size: 1.2em; margin-left: 5px;" title="${difficulty2.title}">${difficulty2.indicator}</span>`;
+        }
+        
+        const enemyHealth2Element = document.getElementById('enemyHealth2');
+        if (enemyHealth2Element) {
+            enemyHealth2Element.textContent = `HP: ${e2.health}/${e2.maxHealth}`;
+        }
+        
+        const enemyArmor2Element = document.getElementById('enemyArmor2');
+        if (enemyArmor2Element) {
+            const defenseMod2 = getStatModifier(e2.defense);
+            enemyArmor2Element.textContent = `CA: ${e2.defense} (${defenseMod2 >= 0 ? '+' : ''}${defenseMod2})`;
+        }
+        
+        const healthFill2Element = document.getElementById('enemyHealthFill2');
+        if (healthFill2Element && e2.maxHealth > 0) {
+            const healthPercent2 = Math.max(0, Math.min(100, (e2.health / e2.maxHealth) * 100));
+            healthFill2Element.style.width = healthPercent2 + '%';
+        }
+    } else {
+        // Hide second enemy
+        if (enemyInfo2Element) {
+            enemyInfo2Element.style.display = 'none';
         }
     }
 }

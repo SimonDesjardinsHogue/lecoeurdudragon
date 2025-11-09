@@ -270,6 +270,10 @@ button:disabled {
     color: #ff6b6b;
 }
 
+.combat-log p.player-damage {
+    color: #ff8c00;
+}
+
 .combat-log p.victory {
     color: #51cf66;
 }
@@ -297,6 +301,16 @@ button:disabled {
     display: flex;
     gap: 15px;
     align-items: stretch;
+    flex: 1;
+    min-width: 0;
+}
+
+#enemiesContainer {
+    flex-wrap: wrap;
+}
+
+#enemiesContainer .enemy-info {
+    margin-bottom: 0;
 }
 
 .enemy-icon-container {
