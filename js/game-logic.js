@@ -340,7 +340,7 @@ export function checkLevelUp() {
 }
 
 // Show shop
-export function showShop(filterCategory = 'all', filterByClass = false) {
+export function showShop(filterCategory = 'all', filterByClass = true) {
     showScreen('shopScreen');
     const shopDiv = document.getElementById('shopItems');
     shopDiv.innerHTML = '';
