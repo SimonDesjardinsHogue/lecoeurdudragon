@@ -318,8 +318,7 @@ export function runBalanceTests(iterations = 2500) {
         byClass: {
             guerrier: [],
             magicien: [],
-            archer: [],
-            rogue: []
+            archer: []
         },
         byRace: {
             humain: [],
@@ -333,7 +332,7 @@ export function runBalanceTests(iterations = 2500) {
         byCombination: {}
     };
     
-    const classes = ['guerrier', 'magicien', 'archer', 'rogue'];
+    const classes = ['guerrier', 'magicien', 'archer'];
     const races = ['humain', 'elfe', 'nain'];
     const sexes = ['male', 'female'];
     
@@ -379,8 +378,7 @@ export async function runBalanceTestsAsync(iterations = 100, progressCallback = 
         byClass: {
             guerrier: [],
             magicien: [],
-            archer: [],
-            rogue: []
+            archer: []
         },
         byRace: {
             humain: [],
@@ -394,7 +392,7 @@ export async function runBalanceTestsAsync(iterations = 100, progressCallback = 
         byCombination: {}
     };
     
-    const classes = ['guerrier', 'magicien', 'archer', 'rogue'];
+    const classes = ['guerrier', 'magicien', 'archer'];
     const races = ['humain', 'elfe', 'nain'];
     const sexes = ['male', 'female'];
     
@@ -1041,7 +1039,7 @@ export function formatReportAsHTML(report) {
         const suggestionsByCategory = {
             game: [],
             economy: [],
-            class: { guerrier: [], magicien: [], archer: [], rogue: [] },
+            class: { guerrier: [], magicien: [], archer: [] },
             race: { humain: [], elfe: [], nain: [] },
             sex: { male: [], female: [] }
         };
