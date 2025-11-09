@@ -1,4 +1,7 @@
 // Game Constants Module
+// Maximum level constant
+export const MAX_LEVEL = 20;
+
 // Rarity system definitions
 export const rarities = {
     commun: { name: 'Commun', color: '#9CA3AF', statBonus: 0 },
