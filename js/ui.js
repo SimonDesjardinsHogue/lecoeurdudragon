@@ -2,6 +2,53 @@
 import { gameState, getStatModifier } from './game-state.js';
 import { getPlayerSkills, isSkillOnCooldown, getSkillCooldown } from './skills.js';
 
+// Update event banner UI
+export function updateEventBanner() {
+    // This will be implemented when scheduled-events module is imported
+    if (!window.scheduledEventsModule) return;
+    
+    const { getNextEvent, getTimeUntilNextEvent, formatTimeRemaining, checkActiveEvent } = window.scheduledEventsModule;
+    
+    const banner = document.getElementById('eventBanner');
+    if (!banner) return;
+    
+    const activeEvent = checkActiveEvent();
+    const nextEvent = getNextEvent();
+    
+    if (activeEvent) {
+        // Event is currently active
+        banner.style.display = 'block';
+        banner.classList.add('active-event');
+        banner.classList.remove('upcoming-event');
+        
+        const timeRemaining = getTimeUntilNextEvent();
+        const timeStr = formatTimeRemaining(timeRemaining);
+        
+        document.getElementById('eventBannerIcon').textContent = activeEvent.icon;
+        document.getElementById('eventBannerText').textContent = `🎉 ÉVÉNEMENT ACTIF ! ${timeStr} restant`;
+        document.getElementById('eventBannerDetails').textContent = `${activeEvent.name} - ${activeEvent.benefit}`;
+    } else if (nextEvent) {
+        // Show next upcoming event
+        banner.style.display = 'block';
+        banner.classList.remove('active-event');
+        banner.classList.add('upcoming-event');
+        
+        const timeUntil = getTimeUntilNextEvent();
+        const timeStr = formatTimeRemaining(timeUntil);
+        
+        const startTime = new Date(nextEvent.startTime);
+        const hours = startTime.getHours().toString().padStart(2, '0');
+        const minutes = startTime.getMinutes().toString().padStart(2, '0');
+        
+        document.getElementById('eventBannerIcon').textContent = nextEvent.icon;
+        document.getElementById('eventBannerText').textContent = `Prochain événement dans ${timeStr}`;
+        document.getElementById('eventBannerDetails').textContent = `${nextEvent.name} à ${hours}:${minutes}`;
+    } else {
+        // No events remaining today
+        banner.style.display = 'none';
+    }
+}
+
 // Show specific screen
 export function showScreen(screenId) {
     document.querySelectorAll('.game-screen').forEach(screen => {

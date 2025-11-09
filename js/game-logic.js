@@ -12,6 +12,7 @@ import { initializeDailyQuests, checkDailyReset, updateQuestProgress, showDailyQ
 import { initAchievements, trackAchievementProgress, checkAchievements } from './achievements.js';
 import { runBalanceTests, runBalanceTestsAsync, formatReportAsHTML } from './balance-tester.js';
 import { submitScore, fetchLeaderboard, getNetworkState } from './network.js';
+import { hasEventEffect, getEventMultiplier } from './scheduled-events.js';
 
 // Helper function to get class display name
 function getClassDisplayName(classKey) {
@@ -359,15 +360,20 @@ export function addExperience(amount) {
 // Rest at the inn
 export function rest() {
     const p = gameState.player;
-    const cost = 20;
     
-    if (p.gold < cost) {
+    // Check if there's a free rest event active
+    const hasFreeRest = hasEventEffect('freeRest');
+    const cost = hasFreeRest ? 0 : 20;
+    
+    if (!hasFreeRest && p.gold < cost) {
         alert('Vous n\'avez pas assez d\'or pour dormir à l\'auberge ! (Coût: 20 or)');
         return;
     }
     
     // Build confirmation message
-    let confirmMessage = 'Voulez-vous dormir à l\'auberge pour 20 or ?\n\n';
+    let confirmMessage = hasFreeRest 
+        ? 'Le Sanctuaire de Guérison vous offre un repos gratuit !\n\n'
+        : 'Voulez-vous dormir à l\'auberge pour 20 or ?\n\n';
     confirmMessage += 'Vos points de vie seront restaurés.\n';
     
     // Add warning if player still has energy
@@ -381,8 +387,13 @@ export function rest() {
     }
     
     // Proceed with sleep
-    p.gold -= cost;
-    p.health = p.maxHealth;
+    if (!hasFreeRest) {
+        p.gold -= cost;
+    }
+    
+    // Apply healing bonus from event if active
+    const healingBonus = getEventMultiplier('healingBonus', 1);
+    p.health = Math.min(p.maxHealth, Math.floor(p.maxHealth * healingBonus));
     p.energy = 0;  // Set energy to 0 - player must wait until 6 AM Toronto time
     
     // Set last sleep time to current Toronto time
@@ -408,7 +419,9 @@ export function rest() {
     };
     const next6AMString = next6AM.toLocaleString('fr-FR', options);
     
-    alert(`Vous dormez à l'auberge jusqu'à demain 6h00 du matin (heure de Toronto). Vos points de vie sont restaurés ! Vous pourrez reprendre l'aventure à ${next6AMString}. (-20 or)`);
+    const costMessage = hasFreeRest ? '' : ' (-20 or)';
+    const bonusMessage = healingBonus > 1 ? ' 🎉 (Bonus de guérison événement)' : '';
+    alert(`Vous dormez à l'auberge jusqu'à demain 6h00 du matin (heure de Toronto). Vos points de vie sont restaurés !${bonusMessage} Vous pourrez reprendre l'aventure à ${next6AMString}.${costMessage}`);
 }
 
 // Check level up
@@ -677,15 +690,28 @@ export function showShop(filterCategory = 'all', filterByClass = true) {
             
             // Calculate discounted price based on charisma
             const charismaMod = getStatModifier(gameState.player.charisma);
-            const discount = Math.min(0.20, Math.max(0, charismaMod * 0.02));
-            const finalCost = Math.floor(item.cost * (1 - discount));
+            const charismaDiscount = Math.min(0.20, Math.max(0, charismaMod * 0.02));
+            
+            // Apply event shop discount
+            const eventDiscount = getEventMultiplier('shopDiscount', 0);
+            const totalDiscount = Math.min(0.50, charismaDiscount + eventDiscount); // Max 50% discount
+            
+            const finalCost = Math.floor(item.cost * (1 - totalDiscount));
             
             // Build price display with discount info
             let priceDisplay = `${finalCost} 💰`;
             if (disabledReason === 'unavailable') {
                 priceDisplay = `<span style="color: #888;">Indisponible</span>`;
-            } else if (discount > 0) {
-                priceDisplay = `<span style="text-decoration: line-through; color: #888;">${item.cost}</span> ${finalCost} 💰<br><small style="color: #51cf66;">-${Math.floor(discount * 100)}% (Charisme)</small>`;
+            } else if (totalDiscount > 0) {
+                let discountText = '';
+                if (charismaDiscount > 0 && eventDiscount > 0) {
+                    discountText = `-${Math.floor(totalDiscount * 100)}% (Charisme + Événement 🎉)`;
+                } else if (charismaDiscount > 0) {
+                    discountText = `-${Math.floor(charismaDiscount * 100)}% (Charisme)`;
+                } else if (eventDiscount > 0) {
+                    discountText = `-${Math.floor(eventDiscount * 100)}% (Événement 🎉)`;
+                }
+                priceDisplay = `<span style="text-decoration: line-through; color: #888;">${item.cost}</span> ${finalCost} 💰<br><small style="color: #51cf66;">${discountText}</small>`;
             }
             
             // Build button text based on disabled reason
@@ -735,8 +761,13 @@ export function buyItem(index) {
     
     // Charisma reduces shop prices: -2% per charisma modifier point (max 20% discount)
     const charismaMod = getStatModifier(p.charisma);
-    const discount = Math.min(0.20, Math.max(0, charismaMod * 0.02));
-    const finalCost = Math.floor(item.cost * (1 - discount));
+    const charismaDiscount = Math.min(0.20, Math.max(0, charismaMod * 0.02));
+    
+    // Apply event shop discount
+    const eventDiscount = getEventMultiplier('shopDiscount', 0);
+    const totalDiscount = Math.min(0.50, charismaDiscount + eventDiscount); // Max 50% discount
+    
+    const finalCost = Math.floor(item.cost * (1 - totalDiscount));
     
     if (p.gold >= finalCost) {
         p.gold -= finalCost;

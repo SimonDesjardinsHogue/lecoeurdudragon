@@ -5,9 +5,13 @@ import { exportSave, importSave } from './save-load.js';
 import { audioManager } from './audio.js';
 import { initKeyboardHandler } from './keyboard-handler.js';
 import { useSkill as useSkillFn } from './skills.js';
-import { updateUI, updateEnemyUI, updateSkillsUI, updateCombatInventoryUI, updateShopInventoryUI, toggleInventoryPanel, updateInventoryPanel, toggleEquipmentModal, updateEquipmentModal } from './ui.js';
+import { updateUI, updateEnemyUI, updateSkillsUI, updateCombatInventoryUI, updateShopInventoryUI, toggleInventoryPanel, updateInventoryPanel, toggleEquipmentModal, updateEquipmentModal, updateEventBanner } from './ui.js';
 import { initNetwork, configureServer, getNetworkState, submitScore, fetchLeaderboard, checkServerHealth, requestLeaderboardUpdate } from './network.js';
 import { showMultiplayerSettings, saveServerConfig, testServerConnection, disableMultiplayer } from './multiplayer-ui.js';
+import * as scheduledEventsModule from './scheduled-events.js';
+
+// Make scheduled events module available globally for UI updates
+window.scheduledEventsModule = scheduledEventsModule;
 
 // Initialize audio context after user interaction
 function initAudio() {
@@ -57,6 +61,18 @@ window.addEventListener('load', () => {
     
     // Initialize keyboard handler
     initKeyboardHandler();
+    
+    // Initialize scheduled events
+    scheduledEventsModule.initializeScheduledEvents();
+    
+    // Update event banner initially
+    updateEventBanner();
+    
+    // Update event banner every minute
+    setInterval(() => {
+        scheduledEventsModule.checkActiveEvent();
+        updateEventBanner();
+    }, 60000); // Update every minute
     
     // Update audio button state on load
     const isMuted = audioManager.isMuted;
