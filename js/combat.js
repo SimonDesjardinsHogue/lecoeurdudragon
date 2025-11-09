@@ -55,29 +55,36 @@ export function triggerRandomEvent() {
         const result = event.effect(gameState.player);
         
         showScreen('npcScreen');
-        const npcNameEl = document.getElementById('npcName');
-        const npcDialogueEl = document.getElementById('npcDialogue');
         
-        npcNameEl.textContent = `${event.icon} ${event.name}`;
+        // Show event info container and hide regular NPC content
+        const eventInfo = document.getElementById('eventInfo');
+        const npcContent = document.getElementById('npcContent');
+        eventInfo.style.display = 'flex';
+        npcContent.style.display = 'none';
         
-        const dialogueContainer = document.createElement('div');
-        dialogueContainer.className = 'shop-item';
-        dialogueContainer.style.display = 'block';
+        // Set the event icon
+        const eventIcon = document.getElementById('eventIcon');
+        eventIcon.textContent = event.icon;
+        
+        // Set the event name
+        const eventName = document.getElementById('eventName');
+        eventName.textContent = event.name;
+        
+        // Set the event description
+        const eventDescription = document.getElementById('eventDescription');
+        eventDescription.innerHTML = '';
         
         const desc = document.createElement('p');
         desc.textContent = event.description;
         desc.style.fontStyle = 'italic';
         desc.style.marginBottom = '15px';
-        dialogueContainer.appendChild(desc);
+        eventDescription.appendChild(desc);
         
         const resultPara = document.createElement('p');
         resultPara.textContent = `✨ ${result}`;
         resultPara.style.color = event.type === 'trap' ? '#ff6b6b' : '#51cf66';
         resultPara.style.fontWeight = 'bold';
-        dialogueContainer.appendChild(resultPara);
-        
-        npcDialogueEl.innerHTML = '';
-        npcDialogueEl.appendChild(dialogueContainer);
+        eventDescription.appendChild(resultPara);
         
         saveGame();
         updateUI();
@@ -89,20 +96,30 @@ function triggerRiddle() {
     const riddle = riddles[Math.floor(Math.random() * riddles.length)];
     
     showScreen('npcScreen');
-    const npcNameEl = document.getElementById('npcName');
-    const npcDialogueEl = document.getElementById('npcDialogue');
     
-    npcNameEl.textContent = '🧙‍♂️ Sphinx Énigmatique';
+    // Show event info container and hide regular NPC content
+    const eventInfo = document.getElementById('eventInfo');
+    const npcContent = document.getElementById('npcContent');
+    eventInfo.style.display = 'flex';
+    npcContent.style.display = 'none';
     
-    const dialogueContainer = document.createElement('div');
-    dialogueContainer.className = 'shop-item';
-    dialogueContainer.style.display = 'block';
+    // Set the event icon
+    const eventIcon = document.getElementById('eventIcon');
+    eventIcon.textContent = '🧙‍♂️';
+    
+    // Set the event name
+    const eventName = document.getElementById('eventName');
+    eventName.textContent = 'Sphinx Énigmatique';
+    
+    // Set the event description
+    const eventDescription = document.getElementById('eventDescription');
+    eventDescription.innerHTML = '';
     
     const question = document.createElement('p');
     question.textContent = riddle.question;
     question.style.fontStyle = 'italic';
     question.style.marginBottom = '15px';
-    dialogueContainer.appendChild(question);
+    eventDescription.appendChild(question);
     
     const input = document.createElement('input');
     input.type = 'text';
@@ -110,20 +127,17 @@ function triggerRiddle() {
     input.placeholder = 'Votre réponse...';
     input.style.width = '100%';
     input.style.marginBottom = '10px';
-    dialogueContainer.appendChild(input);
+    eventDescription.appendChild(input);
     
     const submitBtn = document.createElement('button');
     submitBtn.textContent = '✓ Répondre';
     submitBtn.onclick = () => checkRiddleAnswer(riddle);
-    dialogueContainer.appendChild(submitBtn);
+    eventDescription.appendChild(submitBtn);
     
     const resultDiv = document.createElement('div');
     resultDiv.id = 'riddleResult';
     resultDiv.style.marginTop = '15px';
-    dialogueContainer.appendChild(resultDiv);
-    
-    npcDialogueEl.innerHTML = '';
-    npcDialogueEl.appendChild(dialogueContainer);
+    eventDescription.appendChild(resultDiv);
 }
 
 // Check riddle answer
@@ -159,20 +173,30 @@ function triggerMoralChoice() {
     const choice = moralChoices[Math.floor(Math.random() * moralChoices.length)];
     
     showScreen('npcScreen');
-    const npcNameEl = document.getElementById('npcName');
-    const npcDialogueEl = document.getElementById('npcDialogue');
     
-    npcNameEl.textContent = '⚖️ Dilemme Moral';
+    // Show event info container and hide regular NPC content
+    const eventInfo = document.getElementById('eventInfo');
+    const npcContent = document.getElementById('npcContent');
+    eventInfo.style.display = 'flex';
+    npcContent.style.display = 'none';
     
-    const dialogueContainer = document.createElement('div');
-    dialogueContainer.className = 'shop-item';
-    dialogueContainer.style.display = 'block';
+    // Set the event icon
+    const eventIcon = document.getElementById('eventIcon');
+    eventIcon.textContent = '⚖️';
+    
+    // Set the event name
+    const eventName = document.getElementById('eventName');
+    eventName.textContent = 'Dilemme Moral';
+    
+    // Set the event description
+    const eventDescription = document.getElementById('eventDescription');
+    eventDescription.innerHTML = '';
     
     const situation = document.createElement('p');
     situation.textContent = choice.situation;
     situation.style.fontStyle = 'italic';
     situation.style.marginBottom = '15px';
-    dialogueContainer.appendChild(situation);
+    eventDescription.appendChild(situation);
     
     choice.choices.forEach((option, index) => {
         const btn = document.createElement('button');
@@ -180,12 +204,9 @@ function triggerMoralChoice() {
         btn.style.display = 'block';
         btn.style.marginBottom = '10px';
         btn.style.width = '100%';
-        btn.onclick = () => makeMoralChoice(option, dialogueContainer);
-        dialogueContainer.appendChild(btn);
+        btn.onclick = () => makeMoralChoice(option, eventDescription);
+        eventDescription.appendChild(btn);
     });
-    
-    npcDialogueEl.innerHTML = '';
-    npcDialogueEl.appendChild(dialogueContainer);
 }
 
 // Make moral choice

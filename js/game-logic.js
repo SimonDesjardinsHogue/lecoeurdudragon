@@ -757,20 +757,29 @@ export function meetNPC() {
     
     showScreen('npcScreen');
     
-    const npcNameEl = document.getElementById('npcName');
-    const npcDialogueEl = document.getElementById('npcDialogue');
+    // Show event info container and hide regular NPC content
+    const eventInfo = document.getElementById('eventInfo');
+    const npcContent = document.getElementById('npcContent');
+    eventInfo.style.display = 'flex';
+    npcContent.style.display = 'none';
     
-    npcNameEl.textContent = `${npc.icon} ${npc.name}`;
+    // Set the event icon
+    const eventIcon = document.getElementById('eventIcon');
+    eventIcon.textContent = npc.icon;
     
-    const dialogueContainer = document.createElement('div');
-    dialogueContainer.className = 'shop-item';
-    dialogueContainer.style.display = 'block';
+    // Set the event name
+    const eventName = document.getElementById('eventName');
+    eventName.textContent = npc.name;
+    
+    // Set the event description
+    const eventDescription = document.getElementById('eventDescription');
+    eventDescription.innerHTML = '';
     
     const dialogue = document.createElement('p');
     dialogue.textContent = `"${npc.dialogue}"`;
     dialogue.style.fontStyle = 'italic';
     dialogue.style.marginBottom = '15px';
-    dialogueContainer.appendChild(dialogue);
+    eventDescription.appendChild(dialogue);
     
     // Apply reward if any
     if (npc.reward) {
@@ -803,14 +812,11 @@ export function meetNPC() {
         rewardPara.textContent = `✨ ${rewardText}`;
         rewardPara.style.color = '#51cf66';
         rewardPara.style.fontWeight = 'bold';
-        dialogueContainer.appendChild(rewardPara);
+        eventDescription.appendChild(rewardPara);
         
         saveGame();
         updateUI();
     }
-    
-    npcDialogueEl.innerHTML = '';
-    npcDialogueEl.appendChild(dialogueContainer);
     
     // Save and update UI to reflect energy consumption
     saveGame();
