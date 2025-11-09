@@ -9,7 +9,7 @@ export const npcs = [
     { 
         name: 'Forgeron',
         icon: '⚒️',
-        dialogue: 'Mes armes sont les meilleures du royaume ! Visite ma boutique si tu as de l\'or.',
+        dialogue: 'Mes armes sont les meilleures du royaume de Valéria ! Visite ma boutique si tu as de l\'or.',
         reward: null
     },
     { 
@@ -43,5 +43,17 @@ export const npcs = [
         dialogue: 'Bienvenue dans ma bijouterie ! J\'achète et vends des métaux précieux. Mes prix varient selon le marché du jour...',
         reward: null,
         special: 'jeweler'
+    },
+    {
+        name: 'Le garçon M&M',
+        icon: '🔍',
+        dialogue: 'Salutations, aventurier ! Je suis le cadet des M&M. Ma sœur et moi explorons les mystères anciens de Valéria. Nous avons découvert qu\'un réseau de passages secrets traverse tout le donjon. Cherche les symboles gravés sur les murs... ils pourraient te sauver la vie !',
+        reward: { type: 'xp', amount: 50 }
+    },
+    {
+        name: 'La fille M&M',
+        icon: '📜',
+        dialogue: 'Ah, un nouveau héros ! Je suis l\'aînée des M&M. Mon frère et moi avons déchiffré d\'anciennes inscriptions. Savais-tu que le Cœur du Dragon fut autrefois divisé en trois fragments ? Les gardiens du donjon détiennent peut-être des indices sur les autres morceaux... Tiens, prends ceci pour t\'aider.',
+        reward: { type: 'gold', amount: 75 }
     }
 ];
