@@ -1,5 +1,5 @@
 // Main Entry Point Module
-import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard, buyRareItem, showDailyQuestsScreen, showAchievements, buyMetal, sellMetal, meetJeweler, showBalanceTest, runBalanceTest, useInventoryItem, sellInventoryItem } from './game-logic.js';
+import { init, startGame, rest, showShop, showStats, showSaveOptions, showMain, resetGame, buyItem, restoreSaveFromStart, meetNPC, showLeaderboard, buyRareItem, showDailyQuestsScreen, showAchievements, buyMetal, sellMetal, meetJeweler, showBalanceTest, runBalanceTest, useInventoryItem, sellInventoryItem, showAdminLogin, showAdminPanel, showServerHosting } from './game-logic.js';
 import { explore, attack, defend, flee, enemyAttack, useCombatPotion } from './combat.js';
 import { exportSave, importSave } from './save-load.js';
 import { audioManager } from './audio.js';
@@ -169,3 +169,8 @@ window.showMultiplayerSettings = showMultiplayerSettings;
 window.saveServerConfig = saveServerConfig;
 window.testServerConnection = testServerConnection;
 window.disableMultiplayer = disableMultiplayer;
+
+// Expose admin functions
+window.showAdminLogin = showAdminLogin;
+window.showAdminPanel = showAdminPanel;
+window.showServerHosting = showServerHosting;
