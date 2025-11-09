@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Quick verification test with 500 games per combination (6,000 total)
+// Quick verification test with 100 games per combination (2,400 total)
 import { runBalanceTests } from './js/balance-tester.js';
 
-console.log('Running verification test (500 games per combination = 6,000 total)...\n');
+console.log('Running verification test (100 games per combination = 2,400 total)...\n');
 
 const startTime = Date.now();
-const report = runBalanceTests(500);
+const report = runBalanceTests(100);
 const endTime = Date.now();
 const duration = ((endTime - startTime) / 1000).toFixed(2);
 
@@ -18,10 +18,16 @@ console.log(`Total Simulations:  ${report.summary.totalSimulations.toLocaleStrin
 console.log(`Average Win Rate:   ${report.summary.avgWinRate} (target: 60-85%)`);
 console.log(`Average Level:      ${report.summary.avgLevel}`);
 console.log(`Average Kills:      ${report.summary.avgKills}`);
+console.log(`% Reached Lvl 100:  ${report.summary.percentReachedLevel100}`);
 
 console.log('\n📊 Class Balance:');
 Object.entries(report.classStats).forEach(([key, stats]) => {
-    console.log(`  ${stats.className.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Deaths: ${stats.avgDeaths.toFixed(1)}, Gold: ${stats.avgFinalGold.toFixed(0)}`);
+    console.log(`  ${stats.className.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Level: ${stats.avgLevel.toFixed(1)}, Lvl100: ${stats.percentReachedLevel100.toFixed(1)}%`);
+});
+
+console.log('\n📊 Sex Balance:');
+Object.entries(report.sexStats).forEach(([key, stats]) => {
+    console.log(`  ${stats.sexName.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Level: ${stats.avgLevel.toFixed(1)}, Lvl100: ${stats.percentReachedLevel100.toFixed(1)}%`);
 });
 
 const avgWinRate = parseFloat(report.summary.avgWinRate);

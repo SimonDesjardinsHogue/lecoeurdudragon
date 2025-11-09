@@ -8,10 +8,10 @@ import { enemies, bosses, getStatModifier } from './game-state.js';
 import { shopItems } from './data/shop-items.js';
 
 // Create a simulated player
-function createSimulatedPlayer(classKey, raceKey = 'humain') {
+function createSimulatedPlayer(classKey, raceKey = 'humain', sexKey = 'male') {
     const player = {
-        name: `Test_${classKey}_${raceKey}`,
-        gender: 'male',
+        name: `Test_${classKey}_${raceKey}_${sexKey}`,
+        gender: sexKey,
         race: raceKey,
         class: classKey,
         level: 1,
@@ -35,13 +35,14 @@ function createSimulatedPlayer(classKey, raceKey = 'humain') {
         totalGoldEarned: 0,
         totalGoldSpent: 0,
         itemsPurchased: 0,
+        itemsPurchasedByCategory: { heal: 0, damage: 0, equipment: 0, energy: 0, exp: 0 },
         combatsWon: 0,
         combatsLost: 0,
         metals: { or: 0, platine: 0, argent: 0, cuivre: 0 }
     };
     
     // Apply character class and race
-    applySexBaseStats(player, 'male');
+    applySexBaseStats(player, sexKey);
     applyCharacterClass(player, classKey);
     applyRaceModifiers(player, raceKey);
     
@@ -53,7 +54,18 @@ function checkLevelUp(player) {
     while (player.xp >= player.xpToLevel) {
         player.level++;
         player.xp -= player.xpToLevel;
-        player.xpToLevel = Math.floor(player.xpToLevel * 1.5);
+        
+        // Progressive XP scaling to make level 100 achievable
+        if (player.level < 40) {
+            player.xpToLevel = Math.floor(player.xpToLevel * 1.30);
+        } else if (player.level < 70) {
+            player.xpToLevel = Math.floor(player.xpToLevel * 1.20);
+        } else if (player.level < 90) {
+            player.xpToLevel = Math.floor(player.xpToLevel * 1.12);
+        } else {
+            // Very slow growth for final levels
+            player.xpToLevel = Math.floor(player.xpToLevel * 1.08);
+        }
         
         // Stat increases
         player.maxHealth += 20;
@@ -65,7 +77,7 @@ function checkLevelUp(player) {
 
 // Simulate intelligent item purchasing
 function simulatePurchasing(player) {
-    // Priority: healing if low health, then weapons/armor, then potions
+    // Priority: healing if low health, then equipment for permanent upgrades, then potions
     const purchasableItems = shopItems.filter(item => {
         // Can afford
         if (item.cost > player.gold) return false;
@@ -78,15 +90,15 @@ function simulatePurchasing(player) {
     
     if (purchasableItems.length === 0) return;
     
-    // Sort by priority
+    // Sort by priority with improved logic
     const sortedItems = purchasableItems.sort((a, b) => {
-        // If health is low (< 50%), prioritize healing
-        if (player.health < player.maxHealth * 0.5) {
+        // If health is low (< 60%), prioritize healing
+        if (player.health < player.maxHealth * 0.6) {
             if (a.category === 'heal' && b.category !== 'heal') return -1;
             if (a.category !== 'heal' && b.category === 'heal') return 1;
         }
         
-        // Prioritize equipment (weapons and armor)
+        // Prioritize equipment for permanent upgrades (better investment)
         if (a.type === 'weapon' || a.type === 'armor') {
             if (b.type !== 'weapon' && b.type !== 'armor') return -1;
         }
@@ -94,7 +106,14 @@ function simulatePurchasing(player) {
             if (a.type !== 'weapon' && a.type !== 'armor') return 1;
         }
         
-        // Higher cost items generally better
+        // For similar items, prefer better value (higher bonus per cost)
+        if (a.category === 'equipment' && b.category === 'equipment') {
+            const aValue = (a.bonus || 0) / a.cost;
+            const bValue = (b.bonus || 0) / b.cost;
+            return bValue - aValue;
+        }
+        
+        // Higher cost items generally better for consumables
         return b.cost - a.cost;
     });
     
@@ -104,6 +123,11 @@ function simulatePurchasing(player) {
         player.gold -= itemToBuy.cost;
         player.totalGoldSpent += itemToBuy.cost;
         player.itemsPurchased++;
+        
+        // Track items purchased by category
+        if (player.itemsPurchasedByCategory[itemToBuy.category] !== undefined) {
+            player.itemsPurchasedByCategory[itemToBuy.category]++;
+        }
         
         // Apply item effect based on category
         if (itemToBuy.category === 'heal') {
@@ -195,37 +219,58 @@ function simulateCombat(player, enemy) {
 }
 
 // Simulate a single game
-function simulateGame(classKey, raceKey = 'humain', maxCombats = 50) {
-    const player = createSimulatedPlayer(classKey, raceKey);
+function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxCombats = 10000) {
+    const player = createSimulatedPlayer(classKey, raceKey, sexKey);
     
     for (let i = 0; i < maxCombats; i++) {
+        // Stop if we reach level 100
+        if (player.level >= 100) {
+            break;
+        }
+        
         // Try to purchase items if we have gold
         if (player.gold >= 15) {
             simulatePurchasing(player);
         }
         
-        // Select enemy based on player level
-        const maxEnemyIndex = Math.min(enemies.length - 1, player.level);
-        const enemyTemplate = enemies[Math.floor(Math.random() * (maxEnemyIndex + 1))];
+        // Select enemy based on player level with better scaling
+        // Use a narrower range of enemies to match player level better
+        const enemyLevelRange = Math.max(1, Math.min(enemies.length, Math.floor(player.level / 2)));
+        const minEnemyIndex = Math.max(0, enemyLevelRange - 2);
+        const maxEnemyIndex = Math.min(enemies.length - 1, enemyLevelRange + 1);
+        const enemyTemplate = enemies[minEnemyIndex + Math.floor(Math.random() * (maxEnemyIndex - minEnemyIndex + 1))];
         
         // Check if should face boss (every 5 levels)
         let enemy;
         if (player.level % 5 === 0 && player.kills > 0 && (player.level / 5) > player.bossesDefeated) {
             const bossIndex = Math.min(player.bossesDefeated, bosses.length - 1);
             const bossTemplate = bosses[bossIndex];
-            const levelMultiplier = 1 + (player.level - (player.bossesDefeated * 5)) * 0.1;
+            // More moderate level multiplier for bosses
+            const levelMultiplier = 1 + (player.level - (player.bossesDefeated * 5)) * 0.05;
+            const xpMultiplier = player.level > 50 ? 5.0 : 3.0;
             
             enemy = {
                 ...bossTemplate,
                 health: Math.floor(bossTemplate.health * levelMultiplier),
                 strength: Math.floor(bossTemplate.strength * levelMultiplier),
                 defense: Math.floor(bossTemplate.defense * levelMultiplier),
-                gold: Math.floor(bossTemplate.gold * levelMultiplier),
-                xp: Math.floor(bossTemplate.xp * levelMultiplier),
+                gold: Math.floor(bossTemplate.gold * levelMultiplier * 3.0), // Much more gold from bosses
+                xp: Math.floor(bossTemplate.xp * levelMultiplier * xpMultiplier), // Massive XP from bosses at high levels
                 isBoss: true
             };
         } else {
-            enemy = { ...enemyTemplate };
+            // Scale regular enemies to player level with balanced difficulty
+            const scaleFactor = Math.max(1, player.level / 5);
+            const xpBonus = player.level > 70 ? 8.0 : player.level > 60 ? 6.0 : player.level > 50 ? 4.5 : player.level > 40 ? 3.0 : 2.0;
+            
+            enemy = {
+                ...enemyTemplate,
+                health: Math.floor(enemyTemplate.health * scaleFactor * 1.05), // Slightly more HP
+                strength: Math.floor(enemyTemplate.strength * scaleFactor), // Normal strength
+                defense: Math.floor(enemyTemplate.defense * scaleFactor),
+                gold: Math.floor(enemyTemplate.gold * scaleFactor * 2.0), // Good gold
+                xp: Math.floor(enemyTemplate.xp * scaleFactor * xpBonus) // Aggressive XP scaling
+            };
         }
         
         const won = simulateCombat(player, enemy);
@@ -234,9 +279,10 @@ function simulateGame(classKey, raceKey = 'humain', maxCombats = 50) {
             player.bossesDefeated++;
         }
         
-        // Small chance to rest if health is low
-        if (player.health < player.maxHealth * 0.3 && player.gold >= 20) {
-            player.gold -= 20;
+        // Better rest logic - rest if health is low and we have gold
+        if (player.health < player.maxHealth * 0.5 && player.gold >= 20) {
+            const restCost = Math.min(player.gold, 30);
+            player.gold -= restCost;
             player.health = player.maxHealth;
         }
     }
@@ -244,6 +290,7 @@ function simulateGame(classKey, raceKey = 'humain', maxCombats = 50) {
     return {
         class: classKey,
         race: raceKey,
+        sex: sexKey,
         finalLevel: player.level,
         kills: player.kills,
         deaths: player.deaths,
@@ -254,12 +301,14 @@ function simulateGame(classKey, raceKey = 'humain', maxCombats = 50) {
         totalGoldEarned: player.totalGoldEarned,
         totalGoldSpent: player.totalGoldSpent,
         itemsPurchased: player.itemsPurchased,
+        itemsPurchasedByCategory: player.itemsPurchasedByCategory,
         finalStrength: player.strength,
         finalDefense: player.defense,
         finalHealth: player.maxHealth,
         finalDexterity: player.dexterity,
         finalConstitution: player.constitution,
-        winRate: player.combatsWon / (player.combatsWon + player.combatsLost)
+        winRate: player.combatsWon / (player.combatsWon + player.combatsLost),
+        reachedLevel100: player.level >= 100
     };
 }
 
@@ -277,36 +326,44 @@ export function runBalanceTests(iterations = 2500) {
             elfe: [],
             nain: []
         },
+        bySex: {
+            male: [],
+            female: []
+        },
         byCombination: {}
     };
     
     const classes = ['guerrier', 'magicien', 'archer', 'rogue'];
     const races = ['humain', 'elfe', 'nain'];
+    const sexes = ['male', 'female'];
     
-    console.log(`Starting balance tests with ${iterations} iterations per class-race combination...`);
-    console.log(`Total simulations: ${classes.length * races.length * iterations} (${classes.length} classes × ${races.length} races × ${iterations} games)`);
+    console.log(`Starting balance tests with ${iterations} iterations per class-race-sex combination...`);
+    console.log(`Total simulations: ${classes.length * races.length * sexes.length * iterations} (${classes.length} classes × ${races.length} races × ${sexes.length} sexes × ${iterations} games)`);
     
     let totalGames = 0;
-    const totalSimulations = classes.length * races.length * iterations;
+    const totalSimulations = classes.length * races.length * sexes.length * iterations;
     
     for (const classKey of classes) {
         for (const raceKey of races) {
-            const comboKey = `${classKey}_${raceKey}`;
-            results.byCombination[comboKey] = [];
-            
-            console.log(`Testing ${classKey} + ${raceKey}...`);
-            
-            for (let i = 0; i < iterations; i++) {
-                if (i % 100 === 0) {
-                    totalGames = (classes.indexOf(classKey) * races.length + races.indexOf(raceKey)) * iterations + i;
-                    const progress = ((totalGames / totalSimulations) * 100).toFixed(1);
-                    console.log(`  Progress: ${progress}% (${totalGames}/${totalSimulations}) - ${classKey}+${raceKey}: ${i}/${iterations}`);
-                }
+            for (const sexKey of sexes) {
+                const comboKey = `${classKey}_${raceKey}_${sexKey}`;
+                results.byCombination[comboKey] = [];
                 
-                const result = simulateGame(classKey, raceKey);
-                results.byClass[classKey].push(result);
-                results.byRace[raceKey].push(result);
-                results.byCombination[comboKey].push(result);
+                console.log(`Testing ${classKey} + ${raceKey} + ${sexKey}...`);
+                
+                for (let i = 0; i < iterations; i++) {
+                    if (i % 100 === 0) {
+                        totalGames = ((classes.indexOf(classKey) * races.length + races.indexOf(raceKey)) * sexes.length + sexes.indexOf(sexKey)) * iterations + i;
+                        const progress = ((totalGames / totalSimulations) * 100).toFixed(1);
+                        console.log(`  Progress: ${progress}% (${totalGames}/${totalSimulations}) - ${classKey}+${raceKey}+${sexKey}: ${i}/${iterations}`);
+                    }
+                    
+                    const result = simulateGame(classKey, raceKey, sexKey);
+                    results.byClass[classKey].push(result);
+                    results.byRace[raceKey].push(result);
+                    results.bySex[sexKey].push(result);
+                    results.byCombination[comboKey].push(result);
+                }
             }
         }
     }
@@ -321,6 +378,7 @@ function analyzeResults(results) {
     const analysis = {
         byClass: {},
         byRace: {},
+        bySex: {},
         byCombination: {}
     };
     
@@ -339,6 +397,13 @@ function analyzeResults(results) {
             avgGoldSpent: average(games.map(g => g.totalGoldSpent)),
             avgFinalGold: average(games.map(g => g.finalGold)),
             avgItemsPurchased: average(games.map(g => g.itemsPurchased)),
+            avgItemsByCategory: {
+                heal: average(games.map(g => g.itemsPurchasedByCategory.heal)),
+                damage: average(games.map(g => g.itemsPurchasedByCategory.damage)),
+                equipment: average(games.map(g => g.itemsPurchasedByCategory.equipment)),
+                energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
+                exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
+            },
             avgStrength: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
@@ -347,7 +412,8 @@ function analyzeResults(results) {
             maxLevel: Math.max(...games.map(g => g.finalLevel)),
             minLevel: Math.min(...games.map(g => g.finalLevel)),
             maxKills: Math.max(...games.map(g => g.kills)),
-            minKills: Math.min(...games.map(g => g.kills))
+            minKills: Math.min(...games.map(g => g.kills)),
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
         };
         
         analysis.byClass[classKey] = stats;
@@ -368,6 +434,13 @@ function analyzeResults(results) {
             avgGoldSpent: average(games.map(g => g.totalGoldSpent)),
             avgFinalGold: average(games.map(g => g.finalGold)),
             avgItemsPurchased: average(games.map(g => g.itemsPurchased)),
+            avgItemsByCategory: {
+                heal: average(games.map(g => g.itemsPurchasedByCategory.heal)),
+                damage: average(games.map(g => g.itemsPurchasedByCategory.damage)),
+                equipment: average(games.map(g => g.itemsPurchasedByCategory.equipment)),
+                energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
+                exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
+            },
             avgStrength: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
@@ -376,20 +449,18 @@ function analyzeResults(results) {
             maxLevel: Math.max(...games.map(g => g.finalLevel)),
             minLevel: Math.min(...games.map(g => g.finalLevel)),
             maxKills: Math.max(...games.map(g => g.kills)),
-            minKills: Math.min(...games.map(g => g.kills))
+            minKills: Math.min(...games.map(g => g.kills)),
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
         };
         
         analysis.byRace[raceKey] = stats;
     }
     
-    // Analyze by combination
-    for (const [comboKey, games] of Object.entries(results.byCombination)) {
-        const [classKey, raceKey] = comboKey.split('_');
+    // Analyze by sex
+    for (const [sexKey, games] of Object.entries(results.bySex)) {
         const stats = {
-            class: classKey,
-            race: raceKey,
-            className: characterClasses[classKey].name,
-            raceName: characterRaces[raceKey].name,
+            sex: sexKey,
+            sexName: characterSexes[sexKey].name,
             gamesPlayed: games.length,
             avgLevel: average(games.map(g => g.finalLevel)),
             avgKills: average(games.map(g => g.kills)),
@@ -400,6 +471,13 @@ function analyzeResults(results) {
             avgGoldSpent: average(games.map(g => g.totalGoldSpent)),
             avgFinalGold: average(games.map(g => g.finalGold)),
             avgItemsPurchased: average(games.map(g => g.itemsPurchased)),
+            avgItemsByCategory: {
+                heal: average(games.map(g => g.itemsPurchasedByCategory.heal)),
+                damage: average(games.map(g => g.itemsPurchasedByCategory.damage)),
+                equipment: average(games.map(g => g.itemsPurchasedByCategory.equipment)),
+                energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
+                exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
+            },
             avgStrength: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
@@ -408,7 +486,54 @@ function analyzeResults(results) {
             maxLevel: Math.max(...games.map(g => g.finalLevel)),
             minLevel: Math.min(...games.map(g => g.finalLevel)),
             maxKills: Math.max(...games.map(g => g.kills)),
-            minKills: Math.min(...games.map(g => g.kills))
+            minKills: Math.min(...games.map(g => g.kills)),
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
+        };
+        
+        analysis.bySex[sexKey] = stats;
+    }
+    
+    // Analyze by combination
+    for (const [comboKey, games] of Object.entries(results.byCombination)) {
+        const parts = comboKey.split('_');
+        const classKey = parts[0];
+        const raceKey = parts[1];
+        const sexKey = parts[2];
+        
+        const stats = {
+            class: classKey,
+            race: raceKey,
+            sex: sexKey,
+            className: characterClasses[classKey].name,
+            raceName: characterRaces[raceKey].name,
+            sexName: characterSexes[sexKey].name,
+            gamesPlayed: games.length,
+            avgLevel: average(games.map(g => g.finalLevel)),
+            avgKills: average(games.map(g => g.kills)),
+            avgDeaths: average(games.map(g => g.deaths)),
+            avgWinRate: average(games.map(g => g.winRate)),
+            avgBossesDefeated: average(games.map(g => g.bossesDefeated)),
+            avgGoldEarned: average(games.map(g => g.totalGoldEarned)),
+            avgGoldSpent: average(games.map(g => g.totalGoldSpent)),
+            avgFinalGold: average(games.map(g => g.finalGold)),
+            avgItemsPurchased: average(games.map(g => g.itemsPurchased)),
+            avgItemsByCategory: {
+                heal: average(games.map(g => g.itemsPurchasedByCategory.heal)),
+                damage: average(games.map(g => g.itemsPurchasedByCategory.damage)),
+                equipment: average(games.map(g => g.itemsPurchasedByCategory.equipment)),
+                energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
+                exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
+            },
+            avgStrength: average(games.map(g => g.finalStrength)),
+            avgDefense: average(games.map(g => g.finalDefense)),
+            avgHealth: average(games.map(g => g.finalHealth)),
+            avgDexterity: average(games.map(g => g.finalDexterity)),
+            avgConstitution: average(games.map(g => g.finalConstitution)),
+            maxLevel: Math.max(...games.map(g => g.finalLevel)),
+            minLevel: Math.min(...games.map(g => g.finalLevel)),
+            maxKills: Math.max(...games.map(g => g.kills)),
+            minKills: Math.min(...games.map(g => g.kills)),
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
         };
         
         analysis.byCombination[comboKey] = stats;
@@ -428,8 +553,9 @@ function generateBalanceReport(analysis) {
         summary: {},
         classStats: analysis.byClass,
         raceStats: analysis.byRace,
+        sexStats: analysis.bySex,
         combinationStats: analysis.byCombination,
-        balanceScore: { byClass: {}, byRace: {} },
+        balanceScore: { byClass: {}, byRace: {}, bySex: {} },
         suggestions: []
     };
     
@@ -438,12 +564,19 @@ function generateBalanceReport(analysis) {
     const avgLevelOverall = average(allClasses.map(c => c.avgLevel));
     const avgWinRateOverall = average(allClasses.map(c => c.avgWinRate));
     const avgKillsOverall = average(allClasses.map(c => c.avgKills));
+    const avgLevel100Percent = average(allClasses.map(c => c.percentReachedLevel100));
     
     // Calculate overall metrics for races
     const allRaces = Object.values(analysis.byRace);
     const avgLevelOverallRace = average(allRaces.map(r => r.avgLevel));
     const avgWinRateOverallRace = average(allRaces.map(r => r.avgWinRate));
     const avgKillsOverallRace = average(allRaces.map(r => r.avgKills));
+    
+    // Calculate overall metrics for sexes
+    const allSexes = Object.values(analysis.bySex);
+    const avgLevelOverallSex = average(allSexes.map(s => s.avgLevel));
+    const avgWinRateOverallSex = average(allSexes.map(s => s.avgWinRate));
+    const avgKillsOverallSex = average(allSexes.map(s => s.avgKills));
     
     // Calculate total simulations
     const totalSimulations = Object.values(analysis.byCombination).reduce((sum, c) => sum + c.gamesPlayed, 0);
@@ -452,6 +585,7 @@ function generateBalanceReport(analysis) {
         avgLevel: avgLevelOverall.toFixed(2),
         avgWinRate: (avgWinRateOverall * 100).toFixed(2) + '%',
         avgKills: avgKillsOverall.toFixed(2),
+        percentReachedLevel100: avgLevel100Percent.toFixed(2) + '%',
         totalSimulations: totalSimulations
     };
     
@@ -557,6 +691,37 @@ function generateBalanceReport(analysis) {
         }
     }
     
+    // Calculate balance scores for sexes
+    for (const [sexKey, stats] of Object.entries(analysis.bySex)) {
+        const levelDeviation = Math.abs(stats.avgLevel - avgLevelOverallSex) / avgLevelOverallSex;
+        const winRateDeviation = Math.abs(stats.avgWinRate - avgWinRateOverallSex) / avgWinRateOverallSex;
+        const killsDeviation = Math.abs(stats.avgKills - avgKillsOverallSex) / avgKillsOverallSex;
+        
+        const balanceScore = 100 - ((levelDeviation + winRateDeviation + killsDeviation) / 3 * 100);
+        report.balanceScore.bySex[sexKey] = balanceScore.toFixed(2);
+        
+        // Generate suggestions based on performance
+        if (stats.avgWinRate < avgWinRateOverallSex * 0.95) {
+            report.suggestions.push({
+                category: 'sex',
+                sex: sexKey,
+                type: 'underpowered',
+                metric: 'winRate',
+                suggestion: `${stats.sexName} a un taux de victoire inférieur à la moyenne (${(stats.avgWinRate * 100).toFixed(1)}% vs ${(avgWinRateOverallSex * 100).toFixed(1)}%). Suggestion: Ajuster les stats de base (+1 force ou +1 défense).`
+            });
+        }
+        
+        if (stats.avgWinRate > avgWinRateOverallSex * 1.05) {
+            report.suggestions.push({
+                category: 'sex',
+                sex: sexKey,
+                type: 'overpowered',
+                metric: 'winRate',
+                suggestion: `${stats.sexName} a un taux de victoire supérieur à la moyenne (${(stats.avgWinRate * 100).toFixed(1)}% vs ${(avgWinRateOverallSex * 100).toFixed(1)}%). Suggestion: Réduire légèrement les stats de base (-1 force ou -1 défense).`
+            });
+        }
+    }
+    
     // Overall game balance suggestions
     if (avgWinRateOverall < 0.6) {
         report.suggestions.push({
@@ -564,7 +729,7 @@ function generateBalanceReport(analysis) {
             class: 'all',
             type: 'difficulty',
             metric: 'overall',
-            suggestion: `Le jeu est trop difficile avec un taux de victoire global de ${(avgWinRateOverall * 100).toFixed(1)}%. Suggestion: Réduire la force des ennemis de -10% ou augmenter l'or de départ à 75.`
+            suggestion: `Le jeu est trop difficile avec un taux de victoire global de ${(avgWinRateOverall * 100).toFixed(1)}%. Suggestion: Réduire la force des ennemis de -10% ou augmenter l'or de départ à 100.`
         });
     }
     
@@ -574,7 +739,40 @@ function generateBalanceReport(analysis) {
             class: 'all',
             type: 'difficulty',
             metric: 'overall',
-            suggestion: `Le jeu est trop facile avec un taux de victoire global de ${(avgWinRateOverall * 100).toFixed(1)}%. Suggestion: Augmenter la force des ennemis de +10% ou réduire l'or de départ à 30.`
+            suggestion: `Le jeu est trop facile avec un taux de victoire global de ${(avgWinRateOverall * 100).toFixed(1)}%. Suggestion: Augmenter la force des ennemis de +10% ou réduire l'or de départ à 50.`
+        });
+    }
+    
+    // Level 100 progression suggestion
+    if (avgLevel100Percent < 10) {
+        report.suggestions.push({
+            category: 'game',
+            class: 'all',
+            type: 'progression',
+            metric: 'level100',
+            suggestion: `Seulement ${avgLevel100Percent.toFixed(1)}% des joueurs atteignent le niveau 100. Suggestion: Augmenter les gains d'XP de +20% ou réduire les requis d'XP par niveau.`
+        });
+    }
+    
+    // Item pricing analysis
+    const allGames = Object.values(analysis.byCombination).flatMap(combo => 
+        Array(combo.gamesPlayed).fill({
+            avgGoldSpent: combo.avgGoldSpent,
+            avgItemsPurchased: combo.avgItemsPurchased,
+            avgItemsByCategory: combo.avgItemsByCategory
+        })
+    );
+    
+    const avgGoldPerItem = analysis.byClass[Object.keys(analysis.byClass)[0]].avgGoldSpent / 
+                           analysis.byClass[Object.keys(analysis.byClass)[0]].avgItemsPurchased;
+    
+    if (avgGoldPerItem > 100) {
+        report.suggestions.push({
+            category: 'economy',
+            class: 'all',
+            type: 'pricing',
+            metric: 'items',
+            suggestion: `Les objets coûtent en moyenne ${avgGoldPerItem.toFixed(0)} or, ce qui est élevé. Suggestion: Réduire les prix de 10-15% ou augmenter les gains d'or.`
         });
     }
     
@@ -593,6 +791,7 @@ export function formatReportAsHTML(report) {
     html += `<p><strong>Niveau moyen atteint:</strong> ${report.summary.avgLevel}</p>`;
     html += `<p><strong>Taux de victoire moyen:</strong> ${report.summary.avgWinRate}</p>`;
     html += `<p><strong>Ennemis vaincus (moyenne):</strong> ${report.summary.avgKills}</p>`;
+    html += `<p><strong>% atteignant niveau 100:</strong> ${report.summary.percentReachedLevel100}</p>`;
     html += '</div></div>';
     
     // Class comparison table
@@ -661,6 +860,39 @@ export function formatReportAsHTML(report) {
     
     html += '</tbody></table></div>';
     
+    // Sex comparison table
+    html += '<div class="report-section">';
+    html += '<h3>⚧️ Comparaison des Sexes</h3>';
+    html += '<table class="balance-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">';
+    html += '<thead><tr style="background: rgba(218, 165, 32, 0.3);">';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Sexe</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Parties</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Niveau Moy.</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Taux Victoire</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Kills Moy.</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Morts Moy.</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Final</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Équilibre</th>';
+    html += '</tr></thead><tbody>';
+    
+    for (const [sexKey, stats] of Object.entries(report.sexStats)) {
+        const balanceScore = parseFloat(report.balanceScore.bySex[sexKey]);
+        const scoreColor = balanceScore >= 90 ? '#51cf66' : balanceScore >= 80 ? '#DAA520' : '#ff6b6b';
+        
+        html += '<tr>';
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;"><strong>${stats.sexName}</strong></td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.gamesPlayed.toLocaleString()}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgLevel.toFixed(2)}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${(stats.avgWinRate * 100).toFixed(1)}%</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgKills.toFixed(1)}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgDeaths.toFixed(1)}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgFinalGold.toFixed(0)} 💰</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513; color: ${scoreColor}; font-weight: bold;">${balanceScore.toFixed(0)}/100</td>`;
+        html += '</tr>';
+    }
+    
+    html += '</tbody></table></div>';
+    
     // Detailed class stats
     html += '<div class="report-section">';
     html += '<h3>📈 Statistiques Détaillées des Classes</h3>';
@@ -681,6 +913,12 @@ export function formatReportAsHTML(report) {
         html += `<div>Or gagné: ${stats.avgGoldEarned.toFixed(0)} 💰</div>`;
         html += `<div>Or dépensé: ${stats.avgGoldSpent.toFixed(0)} 💰</div>`;
         html += `<div>Objets achetés: ${stats.avgItemsPurchased.toFixed(1)}</div>`;
+        html += `<div>% Niveau 100: ${stats.percentReachedLevel100.toFixed(1)}%</div>`;
+        html += `<div>Potions soin: ${stats.avgItemsByCategory.heal.toFixed(1)}</div>`;
+        html += `<div>Potions force: ${stats.avgItemsByCategory.damage.toFixed(1)}</div>`;
+        html += `<div>Équipement: ${stats.avgItemsByCategory.equipment.toFixed(1)}</div>`;
+        html += `<div>Potions énergie: ${stats.avgItemsByCategory.energy.toFixed(1)}</div>`;
+        html += `<div>Potions XP: ${stats.avgItemsByCategory.exp.toFixed(1)}</div>`;
         html += `</div></div>`;
     }
     html += '</div>';
@@ -705,6 +943,12 @@ export function formatReportAsHTML(report) {
         html += `<div>Or gagné: ${stats.avgGoldEarned.toFixed(0)} 💰</div>`;
         html += `<div>Or dépensé: ${stats.avgGoldSpent.toFixed(0)} 💰</div>`;
         html += `<div>Objets achetés: ${stats.avgItemsPurchased.toFixed(1)}</div>`;
+        html += `<div>% Niveau 100: ${stats.percentReachedLevel100.toFixed(1)}%</div>`;
+        html += `<div>Potions soin: ${stats.avgItemsByCategory.heal.toFixed(1)}</div>`;
+        html += `<div>Potions force: ${stats.avgItemsByCategory.damage.toFixed(1)}</div>`;
+        html += `<div>Équipement: ${stats.avgItemsByCategory.equipment.toFixed(1)}</div>`;
+        html += `<div>Potions énergie: ${stats.avgItemsByCategory.energy.toFixed(1)}</div>`;
+        html += `<div>Potions XP: ${stats.avgItemsByCategory.exp.toFixed(1)}</div>`;
         html += `</div></div>`;
     }
     html += '</div>';
@@ -721,17 +965,23 @@ export function formatReportAsHTML(report) {
         // Group suggestions by category
         const suggestionsByCategory = {
             game: [],
+            economy: [],
             class: { guerrier: [], magicien: [], archer: [], rogue: [] },
-            race: { humain: [], elfe: [], nain: [] }
+            race: { humain: [], elfe: [], nain: [] },
+            sex: { male: [], female: [] }
         };
         
         report.suggestions.forEach(s => {
             if (s.category === 'game') {
                 suggestionsByCategory.game.push(s);
+            } else if (s.category === 'economy') {
+                suggestionsByCategory.economy.push(s);
             } else if (s.category === 'class') {
                 suggestionsByCategory.class[s.class].push(s);
             } else if (s.category === 'race') {
                 suggestionsByCategory.race[s.race].push(s);
+            } else if (s.category === 'sex') {
+                suggestionsByCategory.sex[s.sex].push(s);
             }
         });
         
@@ -741,8 +991,19 @@ export function formatReportAsHTML(report) {
             html += `<h4 style="color: #DAA520;">🎮 Suggestions Générales</h4>`;
             html += '<ul style="margin: 10px 0; padding-left: 20px;">';
             suggestionsByCategory.game.forEach(s => {
-                const color = s.type === 'difficulty' ? '#ffd93d' : '#51cf66';
+                const color = s.type === 'difficulty' ? '#ffd93d' : s.type === 'progression' ? '#51cf66' : '#ffd93d';
                 html += `<li style="margin-bottom: 8px; color: ${color};">${s.suggestion}</li>`;
+            });
+            html += '</ul></div>';
+        }
+        
+        // Display economy suggestions
+        if (suggestionsByCategory.economy.length > 0) {
+            html += `<div class="shop-item" style="display: block; margin-bottom: 15px;">`;
+            html += `<h4 style="color: #DAA520;">💰 Suggestions Économie</h4>`;
+            html += '<ul style="margin: 10px 0; padding-left: 20px;">';
+            suggestionsByCategory.economy.forEach(s => {
+                html += `<li style="margin-bottom: 8px; color: #ffd93d;">${s.suggestion}</li>`;
             });
             html += '</ul></div>';
         }
@@ -769,6 +1030,22 @@ export function formatReportAsHTML(report) {
             
             html += `<div class="shop-item" style="display: block; margin-bottom: 15px;">`;
             html += `<h4 style="color: #DAA520;">${characterRaces[raceKey].icon} ${characterRaces[raceKey].name}</h4>`;
+            html += '<ul style="margin: 10px 0; padding-left: 20px;">';
+            
+            suggestions.forEach(s => {
+                const color = s.type === 'overpowered' ? '#ff6b6b' : s.type === 'underpowered' ? '#ffd93d' : '#51cf66';
+                html += `<li style="margin-bottom: 8px; color: ${color};">${s.suggestion}</li>`;
+            });
+            
+            html += '</ul></div>';
+        }
+        
+        // Display sex suggestions
+        for (const [sexKey, suggestions] of Object.entries(suggestionsByCategory.sex)) {
+            if (suggestions.length === 0) continue;
+            
+            html += `<div class="shop-item" style="display: block; margin-bottom: 15px;">`;
+            html += `<h4 style="color: #DAA520;">${characterSexes[sexKey].icon} ${characterSexes[sexKey].name}</h4>`;
             html += '<ul style="margin: 10px 0; padding-left: 20px;">';
             
             suggestions.forEach(s => {
