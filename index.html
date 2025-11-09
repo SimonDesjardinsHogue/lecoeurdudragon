@@ -267,7 +267,6 @@
                         <button onclick="showLeaderboard()">🏆 Classement (6)</button>
                         <button onclick="showDailyQuests()">📜 Défis Quotidiens (7)</button>
                         <button onclick="showAchievements()">🏅 Succès (8)</button>
-                        <button onclick="showBalanceTest()">🧪 Test d'Équilibre (9)</button>
                     </div>
                 </div>
             </div>
@@ -451,7 +450,80 @@
                     <div id="balanceTestResults" style="margin-top: 20px;"></div>
                 </div>
                 <div class="game-actions">
-                    <button onclick="showMain()">🚪 Retour (ESC)</button>
+                    <button onclick="showAdminPanel()">🚪 Retour (ESC)</button>
+                </div>
+            </div>
+
+            <!-- Admin Panel Screen -->
+            <div id="adminPanelScreen" class="game-screen">
+                <div class="story-text">
+                    <h3>🔐 Panneau d'Administration</h3>
+                    <p>Section réservée aux administrateurs du jeu.</p>
+                    
+                    <div class="game-actions-grid" style="margin-top: 20px;">
+                        <div class="actions-column">
+                            <div class="actions-column-title">🧪 Outils de Test</div>
+                            <button onclick="showBalanceTest()">🧪 Test d'Équilibre</button>
+                        </div>
+                        <div class="actions-column">
+                            <div class="actions-column-title">🖥️ Serveur</div>
+                            <button onclick="showServerHosting()">🖥️ Hébergement Serveur</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-actions">
+                    <button onclick="showMain()">🚪 Retour au Jeu</button>
+                </div>
+            </div>
+
+            <!-- Server Hosting Screen -->
+            <div id="serverHostingScreen" class="game-screen">
+                <div class="story-text">
+                    <h3>🖥️ Hébergement du Serveur Multijoueur</h3>
+                    <p>Informations et outils pour héberger le serveur de jeu multijoueur.</p>
+                    
+                    <div class="shop-item" style="display: block; margin-top: 20px;">
+                        <h4 style="color: #DAA520;">📋 Instructions d'Installation</h4>
+                        <ol style="font-size: 0.9em; color: #ddd; text-align: left; line-height: 1.6;">
+                            <li>Naviguez vers le dossier <code>server/</code> du projet</li>
+                            <li>Installez les dépendances avec <code>npm install</code></li>
+                            <li>Démarrez le serveur avec <code>npm start</code></li>
+                            <li>Le serveur sera disponible sur le port 3000</li>
+                            <li>Partagez votre adresse IP locale avec les autres joueurs</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="shop-item" style="display: block; margin-top: 20px;">
+                        <h4 style="color: #DAA520;">🔧 Configuration</h4>
+                        <p><strong>Port par défaut:</strong> 3000</p>
+                        <p><strong>Fichier de configuration:</strong> server/server.js</p>
+                        <p><strong>Base de données:</strong> SQLite (server/leaderboard.db)</p>
+                    </div>
+                    
+                    <div class="shop-item" style="display: block; margin-top: 20px;">
+                        <h4 style="color: #DAA520;">📡 État du Serveur</h4>
+                        <p id="serverStatusInfo" style="color: #999;">Vérifier dans les paramètres multijoueur pour tester la connexion au serveur.</p>
+                    </div>
+                    
+                    <div class="shop-item" style="display: block; margin-top: 20px;">
+                        <h4 style="color: #DAA520;">📚 Documentation</h4>
+                        <p>Pour plus d'informations, consultez:</p>
+                        <ul style="font-size: 0.9em; color: #ddd; text-align: left;">
+                            <li>server/README.md - Guide de démarrage du serveur</li>
+                            <li>MULTIPLAYER_GUIDE.md - Guide du multijoueur LAN</li>
+                        </ul>
+                    </div>
+
+                    <div class="shop-item" style="display: block; margin-top: 20px;">
+                        <h4 style="color: #DAA520;">⚠️ Note</h4>
+                        <p style="font-size: 0.9em; color: #ffd93d;">
+                            Cette section est en cours d'amélioration. D'autres fonctionnalités d'administration du serveur seront ajoutées prochainement.
+                        </p>
+                    </div>
+                </div>
+                <div class="game-actions">
+                    <button onclick="showAdminPanel()">🚪 Retour (ESC)</button>
+                    <button onclick="showMultiplayerSettings()">🌐 Paramètres Multijoueur</button>
                 </div>
             </div>
 
@@ -472,7 +544,10 @@
 
         <div class="game-footer">
             <span>Le Coeur du Dragon - Un jeu inspiré par Legend of the Red Dragon</span>
-            <span class="save-indicator" id="saveIndicator">💾 Sauvegardé</span>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span class="save-indicator" id="saveIndicator">💾 Sauvegardé</span>
+                <button onclick="showAdminLogin()" style="padding: 5px 10px; font-size: 0.9em;">🔐 Admin</button>
+            </div>
         </div>
     </div>
 

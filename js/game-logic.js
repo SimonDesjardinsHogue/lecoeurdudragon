@@ -1570,3 +1570,32 @@ export function sellInventoryItem(inventoryIndex) {
 
 // Show daily quests (export for main.js)
 export { showDailyQuestsScreen };
+
+// Admin Panel Functions
+const ADMIN_PASSWORD = 'Simon';
+
+// Show admin login prompt
+export function showAdminLogin() {
+    const password = prompt('🔐 Entrez le mot de passe administrateur:');
+    
+    if (password === null) {
+        // User cancelled
+        return;
+    }
+    
+    if (password === ADMIN_PASSWORD) {
+        showAdminPanel();
+    } else {
+        alert('❌ Mot de passe incorrect!');
+    }
+}
+
+// Show admin panel
+export function showAdminPanel() {
+    showScreen('adminPanelScreen');
+}
+
+// Show server hosting screen
+export function showServerHosting() {
+    showScreen('serverHostingScreen');
+}
