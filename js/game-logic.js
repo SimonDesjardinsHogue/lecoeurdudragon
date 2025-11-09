@@ -521,6 +521,9 @@ export function showShop(filterCategory = 'all', filterByClass = true) {
     // Check and update shop availability
     initializeShopAvailability();
     
+    // Switch to merchant music when opening regular shop
+    audioManager.startMusic('merchant');
+    
     showScreen('shopScreen');
     const shopDiv = document.getElementById('shopItems');
     shopDiv.innerHTML = '';
@@ -902,6 +905,8 @@ export function showSaveOptions() {
 
 // Show main screen
 export function showMain() {
+    // Restore default music when returning to main screen
+    audioManager.startMusic('default');
     showScreen('mainScreen');
 }
 
@@ -1004,6 +1009,9 @@ export function meetNPC() {
         meetJeweler();
         return;
     }
+    
+    // Switch to mystery music for NPC encounter
+    audioManager.startMusic('mystery');
     
     showScreen('npcScreen');
     
@@ -1318,6 +1326,9 @@ function calculatePlayerScore(player) {
 
 // Meet wandering merchant with rare items
 export function meetWanderingMerchant() {
+    // Switch to merchant music
+    audioManager.startMusic('merchant');
+    
     showScreen('shopScreen');
     const shopDiv = document.getElementById('shopItems');
     shopDiv.innerHTML = '';
@@ -1401,6 +1412,9 @@ function getJewelerProfitMargin() {
 
 // Meet the Jeweler NPC
 export function meetJeweler() {
+    // Switch to merchant music for jeweler
+    audioManager.startMusic('merchant');
+    
     showScreen('shopScreen');
     const shopDiv = document.getElementById('shopItems');
     shopDiv.innerHTML = '';
