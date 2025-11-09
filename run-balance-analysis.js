@@ -12,8 +12,9 @@ console.log('║       Le Coeur du Dragon - Automated Balance Analysis         �
 console.log('╚════════════════════════════════════════════════════════════════╝\n');
 
 console.log('Starting comprehensive balance analysis...');
-console.log('This will simulate 30,000 games (2,500 per class-race combination)');
-console.log('Estimated time: 2-5 minutes depending on your system\n');
+console.log('This will simulate 60,000 games (2,500 per class-race-sex combination)');
+console.log('Testing level progression up to level 100');
+console.log('Estimated time: 5-10 minutes depending on your system\n');
 
 const startTime = Date.now();
 
