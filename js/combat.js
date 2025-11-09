@@ -251,6 +251,9 @@ export function explore() {
         gameState.inCombat = true;
         gameState.defending = false;
         
+        // Switch to combat music for boss encounter
+        audioManager.startMusic('combat');
+        
         showScreen('combatScreen');
         document.getElementById('combatLog').innerHTML = '';
         addCombatLog(`🔥 COMBAT DE BOSS ! 🔥`, 'victory');
@@ -285,6 +288,9 @@ export function explore() {
         
         gameState.inCombat = true;
         gameState.defending = false;
+        
+        // Switch to combat music for monster encounter
+        audioManager.startMusic('combat');
         
         showScreen('combatScreen');
         document.getElementById('combatLog').innerHTML = '';
@@ -389,6 +395,9 @@ export function attack() {
         
         // Immediately end combat to prevent double rewards
         gameState.inCombat = false;
+        
+        // Restore default music after combat
+        audioManager.startMusic('default');
         
         // Return to main screen after victory
         setTimeout(() => {
@@ -594,6 +603,10 @@ function handleDefeat() {
         p.health = Math.floor(p.maxHealth * 0.5);
         p.gold = Math.floor(p.gold * 0.5);
         gameState.inCombat = false;
+        
+        // Restore default music after defeat
+        audioManager.startMusic('default');
+        
         saveGame();
         updateUI();
         alert('Vous avez été vaincu ! Vous perdez la moitié de votre or et vous réveillez à l\'entrée du donjon.');
@@ -643,6 +656,9 @@ export function flee() {
         
         // Play flee sound
         audioManager.playSound('flee');
+        
+        // Restore default music after fleeing
+        audioManager.startMusic('default');
         
         setTimeout(() => {
             gameState.inCombat = false;
