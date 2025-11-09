@@ -18,11 +18,12 @@ console.log(`Total Simulations:  ${report.summary.totalSimulations.toLocaleStrin
 console.log(`Average Win Rate:   ${report.summary.avgWinRate} (target: 60-85%)`);
 console.log(`Average Level:      ${report.summary.avgLevel}`);
 console.log(`Average Kills:      ${report.summary.avgKills}`);
+console.log(`Average Bosses:     ${report.summary.avgBossesDefeated} (target: ~4 by lvl 20)`);
 console.log(`% Reached Lvl 20:   ${report.summary.percentReachedLevel20}`);
 
 console.log('\n📊 Class Balance:');
 Object.entries(report.classStats).forEach(([key, stats]) => {
-    console.log(`  ${stats.className.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Level: ${stats.avgLevel.toFixed(1)}, Lvl20: ${stats.percentReachedLevel20.toFixed(1)}%`);
+    console.log(`  ${stats.className.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Level: ${stats.avgLevel.toFixed(1)}, Bosses: ${stats.avgBossesDefeated.toFixed(1)}, Lvl20: ${stats.percentReachedLevel20.toFixed(1)}%`);
 });
 
 console.log('\n📊 Milestone Statistics by Class:');

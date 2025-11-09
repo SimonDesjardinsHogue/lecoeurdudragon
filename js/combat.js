@@ -558,6 +558,25 @@ export function enemyAttack() {
     // Apply mana shield buff if active
     enemyDamage = applyShieldBuff(enemyDamage);
     
+    // Class-specific defensive abilities
+    // Magicien: Arcane Shield - 15% chance to cast shield that reduces damage by 25%
+    if (p.class === 'magicien' && Math.random() < 0.15) {
+        const reduction = Math.floor(enemyDamage * 0.25);
+        enemyDamage = enemyDamage - reduction;
+        addCombatLog(`✨ Bouclier arcanique ! Les dégâts sont réduits de ${reduction}.`, 'special');
+    }
+    
+    // Archer: DEX-based dodge - chance to reduce damage based on dexterity
+    if (p.class === 'archer') {
+        const dexMod = getStatModifier(p.dexterity);
+        const dodgeChance = Math.min(0.12, dexMod * 0.012); // Up to 12% dodge chance
+        if (Math.random() < dodgeChance) {
+            const reduction = Math.floor(enemyDamage * 0.30);
+            enemyDamage = enemyDamage - reduction;
+            addCombatLog(`💨 Esquive partielle ! Les dégâts sont réduits de ${reduction}.`, 'special');
+        }
+    }
+    
     p.health -= enemyDamage;
     addCombatLog(`Le ${e.name} vous inflige ${enemyDamage} dégâts !`, 'damage');
     
