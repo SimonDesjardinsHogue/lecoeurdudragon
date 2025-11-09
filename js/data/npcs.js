@@ -45,13 +45,13 @@ export const npcs = [
         special: 'jeweler'
     },
     {
-        name: 'Marcel - L\'un des M&M',
+        name: 'Le garçon M&M',
         icon: '🔍',
         dialogue: 'Salutations, aventurier ! Je suis le cadet des M&M. Ma sœur et moi explorons les mystères anciens de Valéria. Nous avons découvert qu\'un réseau de passages secrets traverse tout le donjon. Cherche les symboles gravés sur les murs... ils pourraient te sauver la vie !',
         reward: { type: 'xp', amount: 50 }
     },
     {
-        name: 'Morgane - L\'une des M&M',
+        name: 'La fille M&M',
         icon: '📜',
         dialogue: 'Ah, un nouveau héros ! Je suis l\'aînée des M&M. Mon frère et moi avons déchiffré d\'anciennes inscriptions. Savais-tu que le Cœur du Dragon fut autrefois divisé en trois fragments ? Les gardiens du donjon détiennent peut-être des indices sur les autres morceaux... Tiens, prends ceci pour t\'aider.',
         reward: { type: 'gold', amount: 75 }
