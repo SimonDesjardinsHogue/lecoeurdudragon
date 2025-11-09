@@ -219,10 +219,32 @@ function simulateCombat(player, enemy) {
 }
 
 // Simulate a single game
-function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxCombats = 10000) {
+function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxCombats = 50000) {
     const player = createSimulatedPlayer(classKey, raceKey, sexKey);
     
+    // Track stats at milestone levels
+    const milestones = [25, 50, 75, 100];
+    const milestoneStats = {};
+    
     for (let i = 0; i < maxCombats; i++) {
+        // Check if we've reached a milestone and haven't recorded it yet
+        for (const milestone of milestones) {
+            if (player.level >= milestone && !milestoneStats[milestone]) {
+                milestoneStats[milestone] = {
+                    level: player.level,
+                    kills: player.kills,
+                    deaths: player.deaths,
+                    combatsWon: player.combatsWon,
+                    combatsLost: player.combatsLost,
+                    gold: player.gold,
+                    totalGoldEarned: player.totalGoldEarned,
+                    strength: player.strength,
+                    defense: player.defense,
+                    health: player.maxHealth
+                };
+            }
+        }
+        
         // Stop if we reach level 100
         if (player.level >= 100) {
             break;
@@ -287,6 +309,24 @@ function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxCombats 
         }
     }
     
+    // Ensure we capture final state for levels reached
+    for (const milestone of milestones) {
+        if (player.level >= milestone && !milestoneStats[milestone]) {
+            milestoneStats[milestone] = {
+                level: player.level,
+                kills: player.kills,
+                deaths: player.deaths,
+                combatsWon: player.combatsWon,
+                combatsLost: player.combatsLost,
+                gold: player.gold,
+                totalGoldEarned: player.totalGoldEarned,
+                strength: player.strength,
+                defense: player.defense,
+                health: player.maxHealth
+            };
+        }
+    }
+    
     return {
         class: classKey,
         race: raceKey,
@@ -308,7 +348,8 @@ function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxCombats 
         finalDexterity: player.dexterity,
         finalConstitution: player.constitution,
         winRate: player.combatsWon / (player.combatsWon + player.combatsLost),
-        reachedLevel100: player.level >= 100
+        reachedLevel100: player.level >= 100,
+        milestoneStats: milestoneStats // Add milestone tracking
     };
 }
 
@@ -488,7 +529,13 @@ function analyzeResults(results) {
             minLevel: Math.min(...games.map(g => g.finalLevel)),
             maxKills: Math.max(...games.map(g => g.kills)),
             minKills: Math.min(...games.map(g => g.kills)),
-            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100),
+            milestones: {
+                25: calculateMilestoneStats(games, 25),
+                50: calculateMilestoneStats(games, 50),
+                75: calculateMilestoneStats(games, 75),
+                100: calculateMilestoneStats(games, 100)
+            }
         };
         
         analysis.byClass[classKey] = stats;
@@ -525,7 +572,13 @@ function analyzeResults(results) {
             minLevel: Math.min(...games.map(g => g.finalLevel)),
             maxKills: Math.max(...games.map(g => g.kills)),
             minKills: Math.min(...games.map(g => g.kills)),
-            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100),
+            milestones: {
+                25: calculateMilestoneStats(games, 25),
+                50: calculateMilestoneStats(games, 50),
+                75: calculateMilestoneStats(games, 75),
+                100: calculateMilestoneStats(games, 100)
+            }
         };
         
         analysis.byRace[raceKey] = stats;
@@ -562,7 +615,13 @@ function analyzeResults(results) {
             minLevel: Math.min(...games.map(g => g.finalLevel)),
             maxKills: Math.max(...games.map(g => g.kills)),
             minKills: Math.min(...games.map(g => g.kills)),
-            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100)
+            percentReachedLevel100: (games.filter(g => g.reachedLevel100).length / games.length * 100),
+            milestones: {
+                25: calculateMilestoneStats(games, 25),
+                50: calculateMilestoneStats(games, 50),
+                75: calculateMilestoneStats(games, 75),
+                100: calculateMilestoneStats(games, 100)
+            }
         };
         
         analysis.bySex[sexKey] = stats;
@@ -619,7 +678,37 @@ function analyzeResults(results) {
 
 // Calculate average
 function average(arr) {
+    if (arr.length === 0) return 0;
     return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
+// Calculate milestone statistics
+function calculateMilestoneStats(games, milestone) {
+    const gamesReachedMilestone = games.filter(g => g.milestoneStats && g.milestoneStats[milestone]);
+    
+    if (gamesReachedMilestone.length === 0) {
+        return {
+            gamesReached: 0,
+            percentReached: 0,
+            avgKills: 0,
+            avgDeaths: 0,
+            avgGold: 0,
+            avgStrength: 0,
+            avgDefense: 0,
+            avgHealth: 0
+        };
+    }
+    
+    return {
+        gamesReached: gamesReachedMilestone.length,
+        percentReached: (gamesReachedMilestone.length / games.length) * 100,
+        avgKills: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].kills)),
+        avgDeaths: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].deaths)),
+        avgGold: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].gold)),
+        avgStrength: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].strength)),
+        avgDefense: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].defense)),
+        avgHealth: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].health))
+    };
 }
 
 // Generate balance report with suggestions

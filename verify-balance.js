@@ -25,6 +25,27 @@ Object.entries(report.classStats).forEach(([key, stats]) => {
     console.log(`  ${stats.className.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Level: ${stats.avgLevel.toFixed(1)}, Lvl100: ${stats.percentReachedLevel100.toFixed(1)}%`);
 });
 
+console.log('\n📊 Milestone Statistics by Class:');
+console.log('Class         | Lvl 25        | Lvl 50        | Lvl 75        | Lvl 100');
+console.log('--------------|---------------|---------------|---------------|---------------');
+Object.entries(report.classStats).forEach(([key, stats]) => {
+    const className = stats.className.padEnd(13);
+    const m25 = stats.milestones[25].percentReached > 0 
+        ? `${stats.milestones[25].percentReached.toFixed(0)}%: K=${stats.milestones[25].avgKills.toFixed(1)} D=${stats.milestones[25].avgDeaths.toFixed(1)}`.padEnd(13)
+        : 'N/A'.padEnd(13);
+    const m50 = stats.milestones[50].percentReached > 0 
+        ? `${stats.milestones[50].percentReached.toFixed(0)}%: K=${stats.milestones[50].avgKills.toFixed(1)} D=${stats.milestones[50].avgDeaths.toFixed(1)}`.padEnd(13)
+        : 'N/A'.padEnd(13);
+    const m75 = stats.milestones[75].percentReached > 0 
+        ? `${stats.milestones[75].percentReached.toFixed(0)}%: K=${stats.milestones[75].avgKills.toFixed(1)} D=${stats.milestones[75].avgDeaths.toFixed(1)}`.padEnd(13)
+        : 'N/A'.padEnd(13);
+    const m100 = stats.milestones[100].percentReached > 0 
+        ? `${stats.milestones[100].percentReached.toFixed(0)}%: K=${stats.milestones[100].avgKills.toFixed(1)} D=${stats.milestones[100].avgDeaths.toFixed(1)}`.padEnd(13)
+        : 'N/A'.padEnd(13);
+    
+    console.log(`${className} | ${m25} | ${m50} | ${m75} | ${m100}`);
+});
+
 console.log('\n📊 Sex Balance:');
 Object.entries(report.sexStats).forEach(([key, stats]) => {
     console.log(`  ${stats.sexName.padEnd(12)} - WinRate: ${(stats.avgWinRate * 100).toFixed(1)}%, Level: ${stats.avgLevel.toFixed(1)}, Lvl100: ${stats.percentReachedLevel100.toFixed(1)}%`);
