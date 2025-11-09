@@ -9,6 +9,7 @@ import { updateQuestProgress } from './daily-quests.js';
 import { updateSkillBuffs, applyShieldBuff, checkDodge, clearSkillBuffs, resetCombatState } from './skills.js';
 import { trackAchievementProgress, checkAchievements } from './achievements.js';
 import { submitScore, getNetworkState } from './network.js';
+import { getEventMultiplier } from './scheduled-events.js';
 
 // Check if player should face a boss (every 5 levels with probability)
 function shouldFaceBoss() {
@@ -323,14 +324,19 @@ export function attack() {
     const strengthMod = getStatModifier(p.strength);
     const enemyDefenseMod = getStatModifier(e.defense);
     
+    // Apply event strength multiplier
+    const eventStrengthMultiplier = getEventMultiplier('strengthMultiplier', 1);
+    
     // Calculate base damage with increased randomness: -3 to +10
     const damageVariance = Math.floor(Math.random() * 14) - 3;
-    let playerDamage = Math.max(1, p.strength + strengthMod - (e.defense + enemyDefenseMod) + damageVariance);
+    let playerDamage = Math.max(1, Math.floor((p.strength + strengthMod) * eventStrengthMultiplier) - (e.defense + enemyDefenseMod) + damageVariance);
     
-    // Critical hit chance (10%)
+    // Critical hit chance (10% base + event bonus)
+    const baseCriticalChance = 0.10;
+    const eventCriticalMultiplier = getEventMultiplier('criticalChance', 1);
     const criticalChance = Math.random();
     let isCritical = false;
-    if (criticalChance < 0.10) {
+    if (criticalChance < (baseCriticalChance * eventCriticalMultiplier)) {
         playerDamage = Math.floor(playerDamage * 1.5);
         isCritical = true;
     }
@@ -347,13 +353,23 @@ export function attack() {
         // Victory - Add randomness to rewards (80% to 120% of base values)
         const goldMultiplier = 0.80 + Math.random() * 0.40;
         const xpMultiplier = 0.80 + Math.random() * 0.40;
-        const goldEarned = Math.round(e.gold * goldMultiplier);
-        const xpEarned = Math.round(e.xp * xpMultiplier);
+        
+        // Apply event multipliers
+        const eventGoldMultiplier = getEventMultiplier('goldMultiplier', 1) * getEventMultiplier('combatRewardMultiplier', 1);
+        const eventXpMultiplier = getEventMultiplier('xpMultiplier', 1) * getEventMultiplier('combatRewardMultiplier', 1);
+        
+        const goldEarned = Math.round(e.gold * goldMultiplier * eventGoldMultiplier);
+        const xpEarned = Math.round(e.xp * xpMultiplier * eventXpMultiplier);
         
         p.gold += goldEarned;
         p.xp += xpEarned;
         p.kills++;
-        addCombatLog(`Victoire ! Vous gagnez ${goldEarned} or et ${xpEarned} XP !`, 'victory');
+        
+        let victoryMessage = `Victoire ! Vous gagnez ${goldEarned} or et ${xpEarned} XP !`;
+        if (eventGoldMultiplier > 1 || eventXpMultiplier > 1) {
+            victoryMessage += ' 🎉 (Bonus événement)';
+        }
+        addCombatLog(victoryMessage, 'victory');
         
         // Update quest progress
         updateQuestProgress('kill', 1);
