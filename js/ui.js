@@ -15,6 +15,15 @@ export function showScreen(screenId) {
         document.getElementById('gameStats').style.display = 'none';
     }
     
+    // Reset NPC screen layout when showing it
+    if (screenId === 'npcScreen') {
+        const eventInfo = document.getElementById('eventInfo');
+        const npcContent = document.getElementById('npcContent');
+        // Default to showing npcContent, individual functions will override if needed
+        if (eventInfo) eventInfo.style.display = 'none';
+        if (npcContent) npcContent.style.display = 'block';
+    }
+    
     // Update skills UI when showing combat screen
     if (screenId === 'combatScreen') {
         updateSkillsUI();

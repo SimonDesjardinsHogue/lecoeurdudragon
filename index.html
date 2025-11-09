@@ -398,7 +398,16 @@
 
             <!-- NPC Screen -->
             <div id="npcScreen" class="game-screen">
-                <div class="story-text">
+                <div class="event-info" id="eventInfo" style="display: none;">
+                    <div class="event-icon-container">
+                        <div class="event-icon" id="eventIcon">👹</div>
+                    </div>
+                    <div class="event-details">
+                        <h3 id="eventName">Événement</h3>
+                        <div id="eventDescription"></div>
+                    </div>
+                </div>
+                <div class="story-text" id="npcContent">
                     <h3 id="npcName">PNJ</h3>
                     <div id="npcDialogue"></div>
                 </div>
