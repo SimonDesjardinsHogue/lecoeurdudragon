@@ -9,7 +9,8 @@ import { audioManager } from '../audio.js';
 import { updateQuestProgress } from '../daily-quests.js';
 import { trackAchievementProgress, checkAchievements } from '../achievements.js';
 import { getEventMultiplier } from '../scheduled-events.js';
-import { healPlayer, restoreEnergy, addExperience, checkLevelUp } from '../game-logic.js';
+import { healPlayer, restoreEnergy, addExperience, checkLevelUp, meetNPC } from '../game-logic.js';
+import { triggerRandomEvent } from '../combat.js';
 
 // Helper function to get class display name
 function getClassDisplayName(classKey) {
@@ -216,6 +217,19 @@ export function isItemUnavailable(itemIndex) {
 
 // Show regular shop with filters
 export function showShop(filterCategory = 'all', filterByClass = true) {
+    // Random encounter in village - 15% chance for NPC, 10% chance for village event
+    const encounterRoll = Math.random();
+    
+    if (encounterRoll < 0.15) {
+        // NPC encounter in village
+        meetNPC('village');
+        return;
+    } else if (encounterRoll < 0.25) {
+        // Village event (theft, etc.)
+        triggerRandomEvent('village');
+        return;
+    }
+    
     // Check and update shop availability
     initializeShopAvailability();
     

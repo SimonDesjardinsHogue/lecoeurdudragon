@@ -8,7 +8,8 @@ import { audioManager } from '../audio.js';
 import { meetWanderingMerchant } from './shop.js';
 
 // Meet a random NPC
-export function meetNPC() {
+// location parameter can be 'forest', 'village', or undefined (for backward compatibility)
+export function meetNPC(location = null) {
     // Check if player has enough energy to meet an NPC
     if (gameState.player.energy < 2) {
         alert('Vous êtes trop fatigué pour rencontrer un PNJ ! Allez dormir à l\'auberge pour récupérer votre énergie.');
@@ -21,7 +22,18 @@ export function meetNPC() {
     // Update UI immediately to show energy consumption
     updateUI();
     
-    const npc = npcs[Math.floor(Math.random() * npcs.length)];
+    // Filter NPCs by location if specified
+    let availableNPCs = npcs;
+    if (location) {
+        availableNPCs = npcs.filter(npc => npc.location === location || npc.location === 'both');
+    }
+    
+    // If no NPCs available for this location, use all NPCs as fallback
+    if (availableNPCs.length === 0) {
+        availableNPCs = npcs;
+    }
+    
+    const npc = availableNPCs[Math.floor(Math.random() * availableNPCs.length)];
     
     // Check if it's the wandering merchant
     if (npc.special === 'wandering_merchant') {
