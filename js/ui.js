@@ -134,7 +134,7 @@ export function updateUI() {
             switch(p.class) {
                 case 'guerrier': weaponIcon = '⚔️'; break;
                 case 'archer': weaponIcon = '🏹'; break;
-                case 'magicien': weaponIcon = '🔮'; break;
+                case 'magicien': weaponIcon = '🪄'; break;
             }
         }
         weaponIconEl.textContent = weaponIcon;
