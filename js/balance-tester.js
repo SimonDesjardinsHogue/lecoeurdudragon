@@ -899,7 +899,6 @@ function generateBalanceReport(analysis) {
     };
     
     // Calculate balance scores for classes (deviation from average)
-    const classIssues = [];
     for (const [classKey, stats] of Object.entries(analysis.byClass)) {
         const levelDeviation = Math.abs(stats.avgLevel - avgLevelOverall) / avgLevelOverall;
         const winRateDeviation = Math.abs(stats.avgWinRate - avgWinRateOverall) / avgWinRateOverall;
@@ -907,53 +906,9 @@ function generateBalanceReport(analysis) {
         
         const balanceScore = 100 - ((levelDeviation + winRateDeviation + killsDeviation) / 3 * 100);
         report.balanceScore.byClass[classKey] = balanceScore.toFixed(2);
-        
-        // Track issues with severity score
-        let severityScore = 0;
-        
-        // Check for severe underperformance (> 15% deviation)
-        if (stats.avgWinRate < avgWinRateOverall * 0.85) {
-            severityScore += 3;
-            classIssues.push({
-                category: 'class',
-                class: classKey,
-                type: 'underpowered',
-                metric: 'winRate',
-                severity: 3,
-                suggestion: `${stats.className} a un taux de victoire très inférieur à la moyenne (${(stats.avgWinRate * 100).toFixed(1)}% vs ${(avgWinRateOverall * 100).toFixed(1)}%). Suggestion: Augmenter la force de base de +2 ou la défense de +1.`
-            });
-        }
-        
-        // Check for excessive deaths (clear survivability issue)
-        const avgDeathsOverall = average(allClasses.map(c => c.avgDeaths));
-        if (stats.avgDeaths > avgDeathsOverall * 1.5) {
-            severityScore += 3;
-            classIssues.push({
-                category: 'class',
-                class: classKey,
-                type: 'survivability',
-                metric: 'deaths',
-                severity: 3,
-                suggestion: `${stats.className} meurt beaucoup trop souvent (${stats.avgDeaths.toFixed(1)} morts vs ${avgDeathsOverall.toFixed(1)} en moyenne). Suggestion: Augmenter les PV de base de +20 ou améliorer la défense de +3.`
-            });
-        }
-        
-        // Check for poor progression (> 10% below average)
-        if (stats.avgLevel < avgLevelOverall * 0.9) {
-            severityScore += 2;
-            classIssues.push({
-                category: 'class',
-                class: classKey,
-                type: 'progression',
-                metric: 'level',
-                severity: 2,
-                suggestion: `${stats.className} atteint des niveaux inférieurs à la moyenne (${stats.avgLevel.toFixed(1)} vs ${avgLevelOverall.toFixed(1)}). Suggestion: Augmenter les gains d'XP de +10% pour cette classe.`
-            });
-        }
     }
     
     // Calculate balance scores for races
-    const raceIssues = [];
     for (const [raceKey, stats] of Object.entries(analysis.byRace)) {
         const levelDeviation = Math.abs(stats.avgLevel - avgLevelOverallRace) / avgLevelOverallRace;
         const winRateDeviation = Math.abs(stats.avgWinRate - avgWinRateOverallRace) / avgWinRateOverallRace;
@@ -961,33 +916,9 @@ function generateBalanceReport(analysis) {
         
         const balanceScore = 100 - ((levelDeviation + winRateDeviation + killsDeviation) / 3 * 100);
         report.balanceScore.byRace[raceKey] = balanceScore.toFixed(2);
-        
-        // Only suggest for significant underperformance (> 10% deviation)
-        if (stats.avgWinRate < avgWinRateOverallRace * 0.9) {
-            raceIssues.push({
-                category: 'race',
-                race: raceKey,
-                type: 'underpowered',
-                metric: 'winRate',
-                severity: 2,
-                suggestion: `${stats.raceName} a un taux de victoire inférieur à la moyenne (${(stats.avgWinRate * 100).toFixed(1)}% vs ${(avgWinRateOverallRace * 100).toFixed(1)}%). Suggestion: Ajuster les modificateurs de race (+1 constitution ou +1 force).`
-            });
-        }
-        
-        if (stats.avgLevel < avgLevelOverallRace * 0.9) {
-            raceIssues.push({
-                category: 'race',
-                race: raceKey,
-                type: 'progression',
-                metric: 'level',
-                severity: 2,
-                suggestion: `${stats.raceName} atteint des niveaux inférieurs à la moyenne (${stats.avgLevel.toFixed(1)} vs ${avgLevelOverallRace.toFixed(1)}). Suggestion: Augmenter le modificateur de constitution de +1.`
-            });
-        }
     }
     
     // Calculate balance scores for sexes
-    const sexIssues = [];
     for (const [sexKey, stats] of Object.entries(analysis.bySex)) {
         const levelDeviation = Math.abs(stats.avgLevel - avgLevelOverallSex) / avgLevelOverallSex;
         const winRateDeviation = Math.abs(stats.avgWinRate - avgWinRateOverallSex) / avgWinRateOverallSex;
@@ -995,36 +926,151 @@ function generateBalanceReport(analysis) {
         
         const balanceScore = 100 - ((levelDeviation + winRateDeviation + killsDeviation) / 3 * 100);
         report.balanceScore.bySex[sexKey] = balanceScore.toFixed(2);
-        
-        // Only suggest for significant underperformance (> 10% deviation)
-        if (stats.avgWinRate < avgWinRateOverallSex * 0.9) {
-            sexIssues.push({
-                category: 'sex',
-                sex: sexKey,
-                type: 'underpowered',
-                metric: 'winRate',
-                severity: 2,
-                suggestion: `${stats.sexName} a un taux de victoire inférieur à la moyenne (${(stats.avgWinRate * 100).toFixed(1)}% vs ${(avgWinRateOverallSex * 100).toFixed(1)}%). Suggestion: Ajuster les stats de base (+1 force ou +1 défense).`
-            });
+    }
+    
+    // NEW REQUIREMENT: Only suggest for EXTREME cases - compare all classes/races/sexes
+    // Find the single most extreme underperformer for each metric
+    
+    // 1. Find class that dies the most (compared to others)
+    const avgDeathsOverall = average(allClasses.map(c => c.avgDeaths));
+    let worstDeathsClass = null;
+    let maxDeathDeviation = 0;
+    
+    for (const [classKey, stats] of Object.entries(analysis.byClass)) {
+        const deathDeviation = (stats.avgDeaths - avgDeathsOverall) / avgDeathsOverall;
+        if (deathDeviation > maxDeathDeviation && deathDeviation > 0.3) { // At least 30% more deaths
+            maxDeathDeviation = deathDeviation;
+            worstDeathsClass = { classKey, stats, deviation: deathDeviation };
         }
     }
     
-    // Only add the most severe issues to suggestions
-    // Prioritize: severe class issues > race issues > sex issues
-    const sortedClassIssues = classIssues.sort((a, b) => b.severity - a.severity);
-    const sortedRaceIssues = raceIssues.sort((a, b) => b.severity - a.severity);
-    const sortedSexIssues = sexIssues.sort((a, b) => b.severity - a.severity);
+    if (worstDeathsClass) {
+        report.suggestions.push({
+            category: 'class',
+            class: worstDeathsClass.classKey,
+            type: 'survivability',
+            metric: 'deaths',
+            severity: 3,
+            suggestion: `${worstDeathsClass.stats.className} meurt beaucoup trop souvent comparé aux autres classes (${worstDeathsClass.stats.avgDeaths.toFixed(1)} morts vs ${avgDeathsOverall.toFixed(1)} en moyenne, +${(maxDeathDeviation * 100).toFixed(0)}%). Suggestion: Augmenter les PV de base de +20 ou améliorer la défense de +3.`
+        });
+    }
     
-    // Add top issues to report (max 1 per category to keep focused)
-    if (sortedClassIssues.length > 0) {
-        report.suggestions.push(sortedClassIssues[0]);
+    // 2. Find class that kills the least (compared to others)
+    let worstKillsClass = null;
+    let maxKillDeficit = 0;
+    
+    for (const [classKey, stats] of Object.entries(analysis.byClass)) {
+        const killDeficit = (avgKillsOverall - stats.avgKills) / avgKillsOverall;
+        if (killDeficit > maxKillDeficit && killDeficit > 0.2) { // At least 20% fewer kills
+            maxKillDeficit = killDeficit;
+            worstKillsClass = { classKey, stats, deficit: killDeficit };
+        }
     }
-    if (sortedRaceIssues.length > 0) {
-        report.suggestions.push(sortedRaceIssues[0]);
+    
+    if (worstKillsClass) {
+        report.suggestions.push({
+            category: 'class',
+            class: worstKillsClass.classKey,
+            type: 'offense',
+            metric: 'kills',
+            severity: 2,
+            suggestion: `${worstKillsClass.stats.className} tue beaucoup moins d'ennemis que les autres classes (${worstKillsClass.stats.avgKills.toFixed(1)} kills vs ${avgKillsOverall.toFixed(1)} en moyenne, -${(maxKillDeficit * 100).toFixed(0)}%). Suggestion: Augmenter la force de base de +3 ou améliorer les gains d'XP de +15%.`
+        });
     }
-    if (sortedSexIssues.length > 0) {
-        report.suggestions.push(sortedSexIssues[0]);
+    
+    // 3. Find class with the least gold (compared to others)
+    const avgFinalGoldOverall = average(allClasses.map(c => c.avgFinalGold));
+    let worstGoldClass = null;
+    let maxGoldDeficit = 0;
+    
+    for (const [classKey, stats] of Object.entries(analysis.byClass)) {
+        const goldDeficit = (avgFinalGoldOverall - stats.avgFinalGold) / avgFinalGoldOverall;
+        if (goldDeficit > maxGoldDeficit && goldDeficit > 0.3) { // At least 30% less gold
+            maxGoldDeficit = goldDeficit;
+            worstGoldClass = { classKey, stats, deficit: goldDeficit };
+        }
     }
+    
+    if (worstGoldClass) {
+        report.suggestions.push({
+            category: 'class',
+            class: worstGoldClass.classKey,
+            type: 'economy',
+            metric: 'gold',
+            severity: 2,
+            suggestion: `${worstGoldClass.stats.className} termine avec beaucoup moins d'or que les autres classes (${worstGoldClass.stats.avgFinalGold.toFixed(0)} or vs ${avgFinalGoldOverall.toFixed(0)} en moyenne, -${(maxGoldDeficit * 100).toFixed(0)}%). Suggestion: Augmenter les récompenses en or de +25% pour cette classe ou réduire le coût de repos de -30%.`
+        });
+    }
+    
+    // 4. Find class with worst win rate (if extreme)
+    let worstWinRateClass = null;
+    let maxWinRateDeficit = 0;
+    
+    for (const [classKey, stats] of Object.entries(analysis.byClass)) {
+        const winRateDeficit = (avgWinRateOverall - stats.avgWinRate) / avgWinRateOverall;
+        if (winRateDeficit > maxWinRateDeficit && winRateDeficit > 0.15) { // At least 15% worse
+            maxWinRateDeficit = winRateDeficit;
+            worstWinRateClass = { classKey, stats, deficit: winRateDeficit };
+        }
+    }
+    
+    if (worstWinRateClass) {
+        report.suggestions.push({
+            category: 'class',
+            class: worstWinRateClass.classKey,
+            type: 'underpowered',
+            metric: 'winRate',
+            severity: 3,
+            suggestion: `${worstWinRateClass.stats.className} a un taux de victoire très inférieur aux autres classes (${(worstWinRateClass.stats.avgWinRate * 100).toFixed(1)}% vs ${(avgWinRateOverall * 100).toFixed(1)}% en moyenne, -${(maxWinRateDeficit * 100).toFixed(0)}%). Suggestion: Augmenter la force de base de +2 ET la défense de +2.`
+        });
+    }
+    
+    // 5. Check races for extreme differences
+    const avgDeathsRace = average(allRaces.map(r => r.avgDeaths));
+    let worstDeathsRace = null;
+    let maxDeathDeviationRace = 0;
+    
+    for (const [raceKey, stats] of Object.entries(analysis.byRace)) {
+        const deathDeviation = (stats.avgDeaths - avgDeathsRace) / avgDeathsRace;
+        if (deathDeviation > maxDeathDeviationRace && deathDeviation > 0.25) {
+            maxDeathDeviationRace = deathDeviation;
+            worstDeathsRace = { raceKey, stats, deviation: deathDeviation };
+        }
+    }
+    
+    if (worstDeathsRace) {
+        report.suggestions.push({
+            category: 'race',
+            race: worstDeathsRace.raceKey,
+            type: 'survivability',
+            metric: 'deaths',
+            severity: 2,
+            suggestion: `${worstDeathsRace.stats.raceName} meurt plus souvent que les autres races (${worstDeathsRace.stats.avgDeaths.toFixed(1)} morts vs ${avgDeathsRace.toFixed(1)} en moyenne, +${(maxDeathDeviationRace * 100).toFixed(0)}%). Suggestion: Augmenter le modificateur de constitution de +2.`
+        });
+    }
+    
+    // 6. Check sexes for extreme differences
+    const avgDeathsSex = average(allSexes.map(s => s.avgDeaths));
+    let worstDeathsSex = null;
+    let maxDeathDeviationSex = 0;
+    
+    for (const [sexKey, stats] of Object.entries(analysis.bySex)) {
+        const deathDeviation = (stats.avgDeaths - avgDeathsSex) / avgDeathsSex;
+        if (deathDeviation > maxDeathDeviationSex && deathDeviation > 0.20) {
+            maxDeathDeviationSex = deathDeviation;
+            worstDeathsSex = { sexKey, stats, deviation: deathDeviation };
+        }
+    }
+    
+    if (worstDeathsSex) {
+        report.suggestions.push({
+            category: 'sex',
+            sex: worstDeathsSex.sexKey,
+            type: 'survivability',
+            metric: 'deaths',
+            severity: 2,
+            suggestion: `${worstDeathsSex.stats.sexName} meurt plus souvent que l'autre sexe (${worstDeathsSex.stats.avgDeaths.toFixed(1)} morts vs ${avgDeathsSex.toFixed(1)} en moyenne, +${(maxDeathDeviationSex * 100).toFixed(0)}%). Suggestion: Augmenter les PV de base de +10 ou la défense de +1.`
+        });
     }
     
     // Overall game balance suggestions
