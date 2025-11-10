@@ -84,6 +84,30 @@ export const shopItems = [
     { name: 'Bouclier Céleste', icon: '🛡️', description: '+18 Défense', cost: 1615, category: 'equipment', type: 'shield', classRestriction: 'guerrier', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
     { name: 'Bouclier du Protecteur Immortel', icon: '🛡️', description: '+22 Défense', cost: 2280, category: 'equipment', type: 'shield', classRestriction: 'guerrier', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
     
+    // Books for Magicien (Mage) - 10 tiers for level 1-20
+    { name: 'Livre Usé', icon: '📕', description: '+1 Intelligence', cost: 33, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
+    { name: 'Livre de Sorts Mineurs', icon: '📕', description: '+3 Intelligence', cost: 66, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
+    { name: 'Grimoire d\'Apprenti', icon: '📗', description: '+5 Intelligence', cost: 109, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
+    { name: 'Tome de Magie Ancienne', icon: '📗', description: '+7 Intelligence', cost: 171, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
+    { name: 'Codex Mystique', icon: '📘', description: '+9 Intelligence', cost: 251, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
+    { name: 'Livre des Secrets', icon: '📘', description: '+10 Intelligence', cost: 484, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
+    { name: 'Grimoire Légendaire', icon: '📙', description: '+12 Intelligence', cost: 760, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
+    { name: 'Livre des Arcanes Divins', icon: '📙', description: '+15 Intelligence', cost: 1140, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
+    { name: 'Codex Céleste', icon: '📙', description: '+18 Intelligence', cost: 1615, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
+    { name: 'Tome de la Connaissance Ultime', icon: '📙', description: '+22 Intelligence', cost: 2280, category: 'equipment', type: 'book', classRestriction: 'magicien', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
+    
+    // Quivers for Archer - 10 tiers for level 1-20
+    { name: 'Carquois Usé', icon: '🏹', description: '+1 Dextérité', cost: 33, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
+    { name: 'Carquois en Cuir', icon: '🏹', description: '+3 Dextérité', cost: 66, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
+    { name: 'Carquois Renforcé', icon: '🏹', description: '+5 Dextérité', cost: 109, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
+    { name: 'Carquois Elfique', icon: '🏹', description: '+7 Dextérité', cost: 171, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
+    { name: 'Carquois du Chasseur', icon: '🏹', description: '+9 Dextérité', cost: 251, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
+    { name: 'Carquois Enchanté', icon: '🏹', description: '+10 Dextérité', cost: 484, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
+    { name: 'Carquois Runique', icon: '🏹', description: '+12 Dextérité', cost: 760, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
+    { name: 'Carquois du Tireur d\'Élite', icon: '🏹', description: '+15 Dextérité', cost: 1140, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
+    { name: 'Carquois Céleste', icon: '🏹', description: '+18 Dextérité', cost: 1615, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
+    { name: 'Carquois de l\'Archer Suprême', icon: '🏹', description: '+22 Dextérité', cost: 2280, category: 'equipment', type: 'quiver', classRestriction: 'archer', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
+    
     // Armors (10 tiers for level 1-20)
     { name: 'Armure en Tissu', icon: '🛡️', description: '+1 Défense', cost: 33, category: 'equipment', type: 'armor', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
     { name: 'Armure de Cuir', icon: '🛡️', description: '+3 Défense', cost: 66, category: 'equipment', type: 'armor', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
