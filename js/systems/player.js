@@ -95,7 +95,7 @@ export function checkLevelUp() {
     if (p.xp >= p.xpToLevel) {
         p.level++;
         p.xp -= p.xpToLevel;
-        p.xpToLevel = Math.floor(p.xpToLevel * 1.5);
+        p.xpToLevel = Math.floor(p.xpToLevel * 1.8);
         
         // Class-based HP increase
         let hpIncrease = 10; // Default for Guerrier
@@ -108,8 +108,8 @@ export function checkLevelUp() {
         // Stat increases
         p.maxHealth += hpIncrease;
         p.health = p.maxHealth;
-        p.strength += 5;
-        p.defense += 3;
+        p.strength += 3;
+        p.defense += 2;
         
         // Every 4 levels, increase armor class by +1
         if (p.level % 4 === 0) {
