@@ -78,22 +78,22 @@ export function handleKeyPress(event) {
                 window.explore();
                 break;
             case '2':
-                window.meetNPC();
-                break;
-            case '3':
                 window.showShop();
                 break;
-            case '4':
+            case '3':
                 window.rest();
                 break;
-            case '5':
+            case '4':
                 window.showStats();
                 break;
-            case '6':
+            case '5':
                 window.showLeaderboard();
                 break;
-            case '7':
+            case '6':
                 window.showDailyQuests();
+                break;
+            case '7':
+                window.showDailyRewards();
                 break;
             case '8':
                 window.showAchievements();
