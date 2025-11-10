@@ -1156,6 +1156,7 @@ export function formatReportAsHTML(report) {
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Taux Victoire</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Kills Moy.</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Morts Moy.</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Récolté</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Final</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Équilibre</th>';
     html += '</tr></thead><tbody>';
@@ -1171,6 +1172,7 @@ export function formatReportAsHTML(report) {
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${(stats.avgWinRate * 100).toFixed(1)}%</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgKills.toFixed(1)}</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgDeaths.toFixed(1)}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgGoldEarned.toFixed(0)} 💰</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgFinalGold.toFixed(0)} 💰</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513; color: ${scoreColor}; font-weight: bold;">${balanceScore.toFixed(0)}/100</td>`;
         html += '</tr>';
@@ -1189,6 +1191,7 @@ export function formatReportAsHTML(report) {
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Taux Victoire</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Kills Moy.</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Morts Moy.</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Récolté</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Final</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Équilibre</th>';
     html += '</tr></thead><tbody>';
@@ -1204,6 +1207,7 @@ export function formatReportAsHTML(report) {
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${(stats.avgWinRate * 100).toFixed(1)}%</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgKills.toFixed(1)}</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgDeaths.toFixed(1)}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgGoldEarned.toFixed(0)} 💰</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgFinalGold.toFixed(0)} 💰</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513; color: ${scoreColor}; font-weight: bold;">${balanceScore.toFixed(0)}/100</td>`;
         html += '</tr>';
@@ -1222,6 +1226,7 @@ export function formatReportAsHTML(report) {
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Taux Victoire</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Kills Moy.</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Morts Moy.</th>';
+    html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Récolté</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Or Final</th>';
     html += '<th style="padding: 10px; border: 1px solid #8B4513;">Équilibre</th>';
     html += '</tr></thead><tbody>';
@@ -1237,6 +1242,7 @@ export function formatReportAsHTML(report) {
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${(stats.avgWinRate * 100).toFixed(1)}%</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgKills.toFixed(1)}</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgDeaths.toFixed(1)}</td>`;
+        html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgGoldEarned.toFixed(0)} 💰</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513;">${stats.avgFinalGold.toFixed(0)} 💰</td>`;
         html += `<td style="padding: 8px; border: 1px solid #8B4513; color: ${scoreColor}; font-weight: bold;">${balanceScore.toFixed(0)}/100</td>`;
         html += '</tr>';
