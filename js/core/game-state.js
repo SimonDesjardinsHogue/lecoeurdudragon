@@ -41,6 +41,9 @@ export const gameState = {
         weaponDamage: 0,  // Damage from last purchased weapon
         currentWeapon: null,  // Currently equipped weapon item
         currentArmor: null,   // Currently equipped armor item
+        currentShield: null,  // Currently equipped shield (warrior only)
+        currentBook: null,    // Currently equipped book (mage only)
+        currentQuiver: null,  // Currently equipped quiver (archer only)
         mana: 100,           // Mana for mages
         maxMana: 100,        // Max mana for mages
         // Metal inventory (in ounces)

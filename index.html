@@ -68,6 +68,24 @@
                             <span class="char-value-small" id="equippedArmorNameInline">Aucune</span>
                         </div>
                     </div>
+                    <!-- Class-specific equipment slot -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px;">
+                        <!-- Shield for Warrior -->
+                        <div class="char-compact" id="equippedShieldSlotInline" style="display: none;" title="Bouclier équipé">
+                            <span class="char-label-small" id="equippedShieldIconInline">🛡️</span>
+                            <span class="char-value-small" id="equippedShieldNameInline">Aucun</span>
+                        </div>
+                        <!-- Book for Mage -->
+                        <div class="char-compact" id="equippedBookSlotInline" style="display: none;" title="Livre équipé">
+                            <span class="char-label-small" id="equippedBookIconInline">📕</span>
+                            <span class="char-value-small" id="equippedBookNameInline">Aucun</span>
+                        </div>
+                        <!-- Quiver for Archer -->
+                        <div class="char-compact" id="equippedQuiverSlotInline" style="display: none;" title="Carquois équipé">
+                            <span class="char-label-small" id="equippedQuiverIconInline">🏹</span>
+                            <span class="char-value-small" id="equippedQuiverNameInline">Aucun</span>
+                        </div>
+                    </div>
                     <div style="margin-top: 5px; display: flex; align-items: center; gap: 5px;">
                         <div class="char-compact" onclick="toggleInventoryPanel()" style="cursor: pointer; display: inline-flex; align-items: center; gap: 3px; padding: 3px 6px; background: rgba(0,0,0,0.3); border-radius: 3px;" title="Ouvrir/Fermer le sac">
                             <span class="char-label-small">🎒</span>
@@ -186,6 +204,33 @@
                                 <div style="font-weight: bold; color: #DAA520;">Armure</div>
                                 <div id="equippedArmorName">Aucune armure</div>
                                 <div id="equippedArmorDesc" style="font-size: 0.85em; color: #999;"></div>
+                            </div>
+                        </div>
+                        <!-- Shield for Warrior -->
+                        <div class="equipment-item" id="equippedShieldSlot" style="display: none;">
+                            <div class="equipment-icon">🛡️</div>
+                            <div class="equipment-details">
+                                <div style="font-weight: bold; color: #DAA520;">Bouclier</div>
+                                <div id="equippedShieldName">Aucun bouclier</div>
+                                <div id="equippedShieldDesc" style="font-size: 0.85em; color: #999;"></div>
+                            </div>
+                        </div>
+                        <!-- Book for Mage -->
+                        <div class="equipment-item" id="equippedBookSlot" style="display: none;">
+                            <div class="equipment-icon">📕</div>
+                            <div class="equipment-details">
+                                <div style="font-weight: bold; color: #DAA520;">Livre</div>
+                                <div id="equippedBookName">Aucun livre</div>
+                                <div id="equippedBookDesc" style="font-size: 0.85em; color: #999;"></div>
+                            </div>
+                        </div>
+                        <!-- Quiver for Archer -->
+                        <div class="equipment-item" id="equippedQuiverSlot" style="display: none;">
+                            <div class="equipment-icon">🏹</div>
+                            <div class="equipment-details">
+                                <div style="font-weight: bold; color: #DAA520;">Carquois</div>
+                                <div id="equippedQuiverName">Aucun carquois</div>
+                                <div id="equippedQuiverDesc" style="font-size: 0.85em; color: #999;"></div>
                             </div>
                         </div>
                     </div>

@@ -100,17 +100,41 @@ export function initializeShopItems() {
     shopItems[64].effect = () => { gameState.player.defense += 18; }; // Bouclier Céleste
     shopItems[65].effect = () => { gameState.player.defense += 22; }; // Bouclier du Protecteur Immortel
     
+    // Books for Magicien (10 tiers)
+    shopItems[66].effect = () => { gameState.player.intelligence += 1; };  // Livre Usé
+    shopItems[67].effect = () => { gameState.player.intelligence += 3; };  // Livre de Sorts Mineurs
+    shopItems[68].effect = () => { gameState.player.intelligence += 5; };  // Grimoire d'Apprenti
+    shopItems[69].effect = () => { gameState.player.intelligence += 7; };  // Tome de Magie Ancienne
+    shopItems[70].effect = () => { gameState.player.intelligence += 9; };  // Codex Mystique
+    shopItems[71].effect = () => { gameState.player.intelligence += 10; }; // Livre des Secrets
+    shopItems[72].effect = () => { gameState.player.intelligence += 12; }; // Grimoire Légendaire
+    shopItems[73].effect = () => { gameState.player.intelligence += 15; }; // Livre des Arcanes Divins
+    shopItems[74].effect = () => { gameState.player.intelligence += 18; }; // Codex Céleste
+    shopItems[75].effect = () => { gameState.player.intelligence += 22; }; // Tome de la Connaissance Ultime
+    
+    // Quivers for Archer (10 tiers)
+    shopItems[76].effect = () => { gameState.player.dexterity += 1; };  // Carquois Usé
+    shopItems[77].effect = () => { gameState.player.dexterity += 3; };  // Carquois en Cuir
+    shopItems[78].effect = () => { gameState.player.dexterity += 5; };  // Carquois Renforcé
+    shopItems[79].effect = () => { gameState.player.dexterity += 7; };  // Carquois Elfique
+    shopItems[80].effect = () => { gameState.player.dexterity += 9; };  // Carquois du Chasseur
+    shopItems[81].effect = () => { gameState.player.dexterity += 10; }; // Carquois Enchanté
+    shopItems[82].effect = () => { gameState.player.dexterity += 12; }; // Carquois Runique
+    shopItems[83].effect = () => { gameState.player.dexterity += 15; }; // Carquois du Tireur d'Élite
+    shopItems[84].effect = () => { gameState.player.dexterity += 18; }; // Carquois Céleste
+    shopItems[85].effect = () => { gameState.player.dexterity += 22; }; // Carquois de l'Archer Suprême
+    
     // Armors (10 tiers)
-    shopItems[66].effect = () => { gameState.player.defense += 1; };  // Armure en Tissu
-    shopItems[67].effect = () => { gameState.player.defense += 3; };  // Armure de Cuir
-    shopItems[68].effect = () => { gameState.player.defense += 5; };  // Armure Clouée
-    shopItems[69].effect = () => { gameState.player.defense += 7; };  // Cotte de Mailles
-    shopItems[70].effect = () => { gameState.player.defense += 9; };  // Armure d'Acier
-    shopItems[71].effect = () => { gameState.player.defense += 10; }; // Armure Enchantée
-    shopItems[72].effect = () => { gameState.player.defense += 12; }; // Armure Runique
-    shopItems[73].effect = () => { gameState.player.defense += 15; }; // Armure Divine
-    shopItems[74].effect = () => { gameState.player.defense += 18; }; // Armure Céleste
-    shopItems[75].effect = () => { gameState.player.defense += 22; }; // Armure Immortelle
+    shopItems[86].effect = () => { gameState.player.defense += 1; };  // Armure en Tissu
+    shopItems[87].effect = () => { gameState.player.defense += 3; };  // Armure de Cuir
+    shopItems[88].effect = () => { gameState.player.defense += 5; };  // Armure Clouée
+    shopItems[89].effect = () => { gameState.player.defense += 7; };  // Cotte de Mailles
+    shopItems[90].effect = () => { gameState.player.defense += 9; };  // Armure d'Acier
+    shopItems[91].effect = () => { gameState.player.defense += 10; }; // Armure Enchantée
+    shopItems[92].effect = () => { gameState.player.defense += 12; }; // Armure Runique
+    shopItems[93].effect = () => { gameState.player.defense += 15; }; // Armure Divine
+    shopItems[94].effect = () => { gameState.player.defense += 18; }; // Armure Céleste
+    shopItems[95].effect = () => { gameState.player.defense += 22; }; // Armure Immortelle
     
     // Rare items
     rareItems[0].effect = () => { // Élixir de Résurrection
@@ -221,6 +245,8 @@ export function showShop(filterCategory = 'all', filterByClass = true) {
                 <option value="shield" ${filterCategory === 'shield' ? 'selected' : ''}>🛡️ Boucliers</option>
                 <option value="weapon" ${filterCategory === 'weapon' ? 'selected' : ''}>⚔️ Armes</option>
                 <option value="armor" ${filterCategory === 'armor' ? 'selected' : ''}>🛡️ Armures</option>
+                <option value="book" ${filterCategory === 'book' ? 'selected' : ''}>📚 Livres</option>
+                <option value="quiver" ${filterCategory === 'quiver' ? 'selected' : ''}>🏹 Carquois</option>
             </select>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -250,8 +276,8 @@ export function showShop(filterCategory = 'all', filterByClass = true) {
     let filteredItems = filterCategory === 'all' 
         ? shopItems 
         : shopItems.filter(item => {
-            // For equipment types (shield, weapon, armor), check the type field
-            if (filterCategory === 'shield' || filterCategory === 'weapon' || filterCategory === 'armor') {
+            // For equipment types (shield, weapon, armor, book, quiver), check the type field
+            if (filterCategory === 'shield' || filterCategory === 'weapon' || filterCategory === 'armor' || filterCategory === 'book' || filterCategory === 'quiver') {
                 return item.type === filterCategory;
             }
             // For other categories (heal, damage, energy, exp), check the category field
@@ -492,6 +518,22 @@ export function buyItem(index) {
             }
             if (item.type === 'shield' && item.bonus) {
                 p.currentShield = {
+                    name: item.name,
+                    icon: item.icon,
+                    bonus: item.bonus,
+                    description: item.description
+                };
+            }
+            if (item.type === 'book' && item.bonus) {
+                p.currentBook = {
+                    name: item.name,
+                    icon: item.icon,
+                    bonus: item.bonus,
+                    description: item.description
+                };
+            }
+            if (item.type === 'quiver' && item.bonus) {
+                p.currentQuiver = {
                     name: item.name,
                     icon: item.icon,
                     bonus: item.bonus,

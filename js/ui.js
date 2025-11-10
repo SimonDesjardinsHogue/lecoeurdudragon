@@ -240,6 +240,58 @@ export function updateUI() {
             armorNameInlineEl.textContent = 'Aucune';
         }
     }
+    
+    // Update class-specific equipment slots
+    const shieldSlotInline = document.getElementById('equippedShieldSlotInline');
+    const bookSlotInline = document.getElementById('equippedBookSlotInline');
+    const quiverSlotInline = document.getElementById('equippedQuiverSlotInline');
+    
+    // Hide all class-specific slots by default
+    if (shieldSlotInline) shieldSlotInline.style.display = 'none';
+    if (bookSlotInline) bookSlotInline.style.display = 'none';
+    if (quiverSlotInline) quiverSlotInline.style.display = 'none';
+    
+    // Show and update the appropriate slot based on class
+    if (p.class === 'guerrier' && shieldSlotInline) {
+        shieldSlotInline.style.display = 'block';
+        const shieldIconInlineEl = document.getElementById('equippedShieldIconInline');
+        const shieldNameInlineEl = document.getElementById('equippedShieldNameInline');
+        if (shieldIconInlineEl && shieldNameInlineEl) {
+            if (p.currentShield) {
+                shieldIconInlineEl.textContent = p.currentShield.icon || '🛡️';
+                shieldNameInlineEl.textContent = p.currentShield.name;
+            } else {
+                shieldIconInlineEl.textContent = '🛡️';
+                shieldNameInlineEl.textContent = 'Aucun';
+            }
+        }
+    } else if (p.class === 'magicien' && bookSlotInline) {
+        bookSlotInline.style.display = 'block';
+        const bookIconInlineEl = document.getElementById('equippedBookIconInline');
+        const bookNameInlineEl = document.getElementById('equippedBookNameInline');
+        if (bookIconInlineEl && bookNameInlineEl) {
+            if (p.currentBook) {
+                bookIconInlineEl.textContent = p.currentBook.icon || '📕';
+                bookNameInlineEl.textContent = p.currentBook.name;
+            } else {
+                bookIconInlineEl.textContent = '📕';
+                bookNameInlineEl.textContent = 'Aucun';
+            }
+        }
+    } else if (p.class === 'archer' && quiverSlotInline) {
+        quiverSlotInline.style.display = 'block';
+        const quiverIconInlineEl = document.getElementById('equippedQuiverIconInline');
+        const quiverNameInlineEl = document.getElementById('equippedQuiverNameInline');
+        if (quiverIconInlineEl && quiverNameInlineEl) {
+            if (p.currentQuiver) {
+                quiverIconInlineEl.textContent = p.currentQuiver.icon || '🏹';
+                quiverNameInlineEl.textContent = p.currentQuiver.name;
+            } else {
+                quiverIconInlineEl.textContent = '🏹';
+                quiverNameInlineEl.textContent = 'Aucun';
+            }
+        }
+    }
 }
 
 // Calculate difficulty indicator based on player vs enemy stats
@@ -688,5 +740,54 @@ export function updateEquipmentModal() {
     } else {
         if (armorNameEl) armorNameEl.textContent = 'Aucune armure';
         if (armorDescEl) armorDescEl.textContent = 'Visitez le marchand pour acheter une armure';
+    }
+    
+    // Update class-specific equipment slots
+    const shieldSlot = document.getElementById('equippedShieldSlot');
+    const bookSlot = document.getElementById('equippedBookSlot');
+    const quiverSlot = document.getElementById('equippedQuiverSlot');
+    
+    // Hide all class-specific slots by default
+    if (shieldSlot) shieldSlot.style.display = 'none';
+    if (bookSlot) bookSlot.style.display = 'none';
+    if (quiverSlot) quiverSlot.style.display = 'none';
+    
+    // Show and update the appropriate slot based on class
+    if (p.class === 'guerrier' && shieldSlot) {
+        shieldSlot.style.display = 'block';
+        const shieldNameEl = document.getElementById('equippedShieldName');
+        const shieldDescEl = document.getElementById('equippedShieldDesc');
+        
+        if (p.currentShield) {
+            if (shieldNameEl) shieldNameEl.textContent = p.currentShield.name;
+            if (shieldDescEl) shieldDescEl.textContent = p.currentShield.description;
+        } else {
+            if (shieldNameEl) shieldNameEl.textContent = 'Aucun bouclier';
+            if (shieldDescEl) shieldDescEl.textContent = 'Visitez le marchand pour acheter un bouclier';
+        }
+    } else if (p.class === 'magicien' && bookSlot) {
+        bookSlot.style.display = 'block';
+        const bookNameEl = document.getElementById('equippedBookName');
+        const bookDescEl = document.getElementById('equippedBookDesc');
+        
+        if (p.currentBook) {
+            if (bookNameEl) bookNameEl.textContent = p.currentBook.name;
+            if (bookDescEl) bookDescEl.textContent = p.currentBook.description;
+        } else {
+            if (bookNameEl) bookNameEl.textContent = 'Aucun livre';
+            if (bookDescEl) bookDescEl.textContent = 'Visitez le marchand pour acheter un livre';
+        }
+    } else if (p.class === 'archer' && quiverSlot) {
+        quiverSlot.style.display = 'block';
+        const quiverNameEl = document.getElementById('equippedQuiverName');
+        const quiverDescEl = document.getElementById('equippedQuiverDesc');
+        
+        if (p.currentQuiver) {
+            if (quiverNameEl) quiverNameEl.textContent = p.currentQuiver.name;
+            if (quiverDescEl) quiverDescEl.textContent = p.currentQuiver.description;
+        } else {
+            if (quiverNameEl) quiverNameEl.textContent = 'Aucun carquois';
+            if (quiverDescEl) quiverDescEl.textContent = 'Visitez le marchand pour acheter un carquois';
+        }
     }
 }
