@@ -10,6 +10,7 @@ import { updateSkillBuffs, applyShieldBuff, checkDodge, clearSkillBuffs, resetCo
 import { trackAchievementProgress, checkAchievements } from './achievements.js';
 import { submitScore, getNetworkState } from './network.js';
 import { getEventMultiplier } from './scheduled-events.js';
+import { applyFirstVictoryBonus, showFirstVictoryNotification } from './daily-rewards.js';
 
 // Roll initiative for combat
 // Returns the initiative roll (d10 + dexterity modifier)
@@ -592,8 +593,12 @@ export function attack() {
         const eventGoldMultiplier = getEventMultiplier('goldMultiplier', 1) * getEventMultiplier('combatRewardMultiplier', 1);
         const eventXpMultiplier = getEventMultiplier('xpMultiplier', 1) * getEventMultiplier('combatRewardMultiplier', 1);
         
-        const goldEarned = Math.round(e.gold * goldMultiplier * eventGoldMultiplier);
-        const xpEarned = Math.round(e.xp * xpMultiplier * eventXpMultiplier);
+        // Check for first victory bonus
+        const firstVictory = applyFirstVictoryBonus();
+        const firstVictoryMultiplier = firstVictory.applied ? 2 : 1;
+        
+        let goldEarned = Math.round(e.gold * goldMultiplier * eventGoldMultiplier * firstVictoryMultiplier);
+        let xpEarned = Math.round(e.xp * xpMultiplier * eventXpMultiplier * firstVictoryMultiplier);
         
         p.gold += goldEarned;
         p.xp += xpEarned;
@@ -604,6 +609,11 @@ export function attack() {
             victoryMessage += ' 🎉 (Bonus événement)';
         }
         addCombatLog(victoryMessage, 'victory');
+        
+        // Show first victory notification if applicable
+        if (firstVictory.applied) {
+            showFirstVictoryNotification(goldEarned, xpEarned);
+        }
         
         // Update quest progress
         updateQuestProgress('kill', 1);

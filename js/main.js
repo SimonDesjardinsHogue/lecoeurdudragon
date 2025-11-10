@@ -11,9 +11,13 @@ import { updateUI, updateEnemyUI, updateSkillsUI, updateCombatInventoryUI, updat
 import { initNetwork, configureServer, getNetworkState, submitScore, fetchLeaderboard, checkServerHealth, requestLeaderboardUpdate, retryDefaultServerConnection } from './network.js';
 import { showMultiplayerSettings, saveServerConfig, testServerConnection, disableMultiplayer, showConnectionNotification, dismissConnectionNotification } from './multiplayer-ui.js';
 import * as scheduledEventsModule from './scheduled-events.js';
+import * as dailyRewardsModule from './daily-rewards.js';
 
 // Make scheduled events module available globally for UI updates
 window.scheduledEventsModule = scheduledEventsModule;
+
+// Make daily rewards module available globally
+window.dailyRewardsModule = dailyRewardsModule;
 
 // Make connection notification functions available globally
 window.showConnectionNotification = showConnectionNotification;
@@ -71,6 +75,9 @@ window.addEventListener('load', () => {
     
     // Initialize scheduled events
     scheduledEventsModule.initializeScheduledEvents();
+    
+    // Initialize daily rewards
+    dailyRewardsModule.initializeDailyRewards();
     
     // Update event banner initially
     updateEventBanner();
@@ -130,6 +137,9 @@ window.meetNPC = meetNPC;
 window.showLeaderboard = showLeaderboard;
 window.toggleAudio = toggleAudio;
 window.showDailyQuests = showDailyQuestsScreen;
+window.showDailyRewards = dailyRewardsModule.showDailyRewardsScreen;
+window.startChest = dailyRewardsModule.startChest;
+window.openChest = dailyRewardsModule.openChest;
 
 // Expose useSkill function
 window.useSkill = function(skillId) {
