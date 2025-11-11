@@ -59,6 +59,20 @@ export function configureServer(serverUrl) {
   // Remove trailing slash
   serverUrl = serverUrl.replace(/\/$/, '');
   
+  // Validate URL format for security
+  try {
+    const url = new URL(serverUrl);
+    // Only allow http and https protocols
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      console.error('❌ Protocole non supporté:', url.protocol);
+      return;
+    }
+    serverUrl = url.origin; // Use normalized URL
+  } catch (e) {
+    console.error('❌ URL invalide:', serverUrl);
+    return;
+  }
+  
   networkState.serverUrl = serverUrl;
   networkState.enabled = true;
   localStorage.setItem('lecoeurdudragon_serverUrl', serverUrl);
