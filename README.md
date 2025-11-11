@@ -77,7 +77,7 @@ Puis ouvrez votre navigateur à: `http://localhost:8000/`
 
 ### Statistiques de Jeu
 - **Niveau Maximum** : 20
-- **Nombre d'Ennemis** : 20 types différents (+ 5 Boss uniques)
+- **Nombre d'Ennemis** : 25 types différents (+ 5 Boss uniques)
 - **Temps de Jeu Estimé** : ~10-15 heures pour atteindre le niveau maximum
 - **Classes de Personnages** : 3 classes uniques (Guerrier, Magicien, Archer)
 - **Races de Personnages** : 3 races (Humain, Elfe, Nain)
@@ -109,7 +109,7 @@ Puis ouvrez votre navigateur à: `http://localhost:8000/`
   - Troll des Cavernes (Niv. 5) - Régénération
   - Seigneur Liche (Niv. 10) - Vol de vie
   - Hydre à Trois Têtes (Niv. 15) - Triple attaque
-  - Démon des Flammes (Niv. 17+) - Explosion de feu
+  - Démon des Flammes (Niv. 20) - Explosion de feu
   - Dragon Ancien (Niv. 20) - Souffle de dragon dévastateur
 
 #### 🏪 Le Marchand et l'Économie
@@ -180,18 +180,21 @@ Débloquez des succès en accomplissant des exploits :
 
 ### Ennemis et Boss
 
-#### 20 Types d'Ennemis (Niveaux 1-20)
+#### 25 Types d'Ennemis (Niveaux 1-20)
 1. **Rat Géant** 🐀 - Niveau débutant (30 HP, 7 Force)
 2. **Gobelin** 👺 - Facile (50 HP, 9 Force)
-3. **Araignée Géante** 🕷️ - Facile (55 HP, 10 Force)
-4. **Squelette** 💀 - Moyen (60 HP, 12 Force)
-5. **Orc** 👹 - Moyen-Difficile (80 HP, 15 Force)
-6. **Bandit** 🗡️ - Moyen (75 HP, 14 Force)
-7. **Loup-Garou** 🐺 - Difficile (100 HP, 18 Force)
-8. **Zombie** 🧟 - Difficile (90 HP, 16 Force)
-9. **Sorcier Noir** 🧙 - Très Difficile (110 HP, 20 Force)
-10. **Dragon Mineur** 🐉 - Très Difficile (150 HP, 23 Force)
-11-20. **Et 10 ennemis avancés** pour les niveaux 11-20 !
+3. **Gobelin Archer** 🏹👺 - Facile (45 HP, 10 Force)
+4. **Araignée Géante** 🕷️ - Facile (55 HP, 10 Force)
+5. **Squelette** 💀 - Moyen (60 HP, 12 Force)
+6. **Squelette Archer** 🏹💀 - Moyen (55 HP, 13 Force)
+7. **Orc** 👹 - Moyen-Difficile (80 HP, 15 Force)
+8. **Bandit** 🗡️ - Moyen (75 HP, 14 Force)
+9. **Bandit Arbalétrier** 🎯🗡️ - Moyen (70 HP, 16 Force)
+10. **Loup-Garou** 🐺 - Difficile (100 HP, 18 Force)
+11. **Zombie** 🧟 - Difficile (90 HP, 16 Force)
+12. **Sorcier Noir** 🧙 - Très Difficile (110 HP, 20 Force)
+13. **Dragon Mineur** 🐉 - Très Difficile (150 HP, 23 Force)
+14-25. **Et 12 ennemis avancés** pour les niveaux 11-20 !
 
 #### 5 Boss Légendaires
 Chaque boss a des capacités spéciales uniques et récompense un objet légendaire !
@@ -199,7 +202,7 @@ Chaque boss a des capacités spéciales uniques et récompense un objet légenda
 1. **Troll des Cavernes** 👹 (Niv. 5) - Régénération 4-7 HP/tour
 2. **Seigneur Liche** 💀 (Niv. 10) - Vol de vie (15 HP)
 3. **Hydre à Trois Têtes** 🐉 (Niv. 15) - Triple attaque dévastatrice
-4. **Démon des Flammes** 😈 (Niv. 17+) - Explosion de feu (ignore 50% défense)
+4. **Démon des Flammes** 😈 (Niv. 20) - Explosion de feu (ignore 50% défense)
 5. **Dragon Ancien** 🐲 (Niv. 20) - Souffle légendaire du dragon
 
 ### Progression et Montée de Niveau
