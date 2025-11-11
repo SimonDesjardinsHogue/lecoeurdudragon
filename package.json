@@ -1,0 +1,34 @@
+{
+  "name": "lecoeurdudragon",
+  "version": "1.1.0",
+  "description": "Un RPG épique inspiré par Legend of the Red Dragon - 20 niveaux, 5 Boss légendaires, 3 classes de héros. Explorez le royaume de Valéria dans cette aventure médiévale-fantastique.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000",
+    "test": "echo \"No tests specified yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimonDesjardinsHogue/lecoeurdudragon.git"
+  },
+  "keywords": [
+    "rpg",
+    "game",
+    "javascript",
+    "pwa",
+    "medieval",
+    "fantasy",
+    "legend-of-the-red-dragon",
+    "browser-game",
+    "multiplayer"
+  ],
+  "author": "Simon Desjardins Hogue",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/SimonDesjardinsHogue/lecoeurdudragon/issues"
+  },
+  "homepage": "https://simondesjardinshogue.github.io/lecoeurdudragon/",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

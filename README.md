@@ -1,12 +1,42 @@
 # ⚔️ Le Coeur du Dragon ⚔️
 
-Une quête légendaire de courage et d'honneur inspirée par Legend of the Red Dragon.
+<div align="center">
+
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/SimonDesjardinsHogue/lecoeurdudragon/releases)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-green.svg)](LICENSE)
+[![Deploy Status](https://img.shields.io/badge/deploy-GitHub%20Pages-success.svg)](https://simondesjardinshogue.github.io/lecoeurdudragon/)
+[![PWA](https://img.shields.io/badge/PWA-Ready-blueviolet.svg)](manifest.json)
+[![Language](https://img.shields.io/badge/language-JavaScript%20ES6-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Made with Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4%EF%B8%8F-red.svg)](https://github.com/SimonDesjardinsHogue)
+
+**Une quête légendaire de courage et d'honneur inspirée par Legend of the Red Dragon**
 
 **🎯 Un RPG complet avec 10-15 heures de gameplay | 20 niveaux | 5 Boss épiques | 3 Classes uniques**
 
-**Version actuelle : 1.1.0** | [📝 Voir les changements](CHANGELOG.md)
+[🎮 Jouer Maintenant](https://simondesjardinshogue.github.io/lecoeurdudragon/) | [📖 Documentation](CONTRIBUTING.md) | [📝 Changelog](CHANGELOG.md) | [🐛 Reporter un Bug](https://github.com/SimonDesjardinsHogue/lecoeurdudragon/issues)
 
-![Game Screenshot](https://github.com/user-attachments/assets/589cfd57-3726-44ea-b8e6-5f2b63bcc5c9)
+</div>
+
+---
+
+---
+
+## 📑 Table des Matières
+
+- [Description](#-description)
+- [Caractéristiques Principales](#-caractéristiques-principales)
+- [Comment Jouer](#-comment-jouer)
+- [Objectifs et Portée](#-objectifs-et-portée-du-jeu)
+- [Conseils pour Débutants](#-conseils-et-stratégies-pour-les-nouveaux-joueurs)
+- [Mode Multijoueur](#-mode-multijoueur-lan)
+- [Technologie](#️-technologie)
+- [Développement](#-développement-et-contribution)
+- [Déploiement](#-déploiement)
+- [Contribuer](#-contribuer)
+- [Sécurité](#-sécurité)
+- [Licence](#-licence)
+
+---
 
 ## 📖 Description
 
@@ -506,10 +536,81 @@ Pour une liste détaillée de 30 optimisations et améliorations proposées, con
 
 Ces documents comprennent des suggestions organisées par catégorie (UX, Performance, Gameplay, Technique) avec des priorités et un plan d'implémentation.
 
+## 🤝 Contribuer
+
+Nous accueillons les contributions de la communauté ! Que vous souhaitiez corriger un bug, ajouter une fonctionnalité, ou améliorer la documentation, votre aide est la bienvenue.
+
+### Comment Contribuer
+
+1. **Lisez le guide de contribution** : [CONTRIBUTING.md](CONTRIBUTING.md)
+2. **Consultez le code de conduite** : [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+3. **Créez une issue** pour discuter de votre idée
+4. **Fork le projet** et créez une branche pour votre fonctionnalité
+5. **Soumettez une pull request** avec vos changements
+
+### Domaines d'Aide
+
+- 🐛 Correction de bugs
+- ✨ Nouvelles fonctionnalités
+- 📝 Amélioration de la documentation
+- 🎨 Design et graphismes
+- 🌍 Traductions
+- 🧪 Tests et assurance qualité
+
+## 🔒 Sécurité
+
+La sécurité de nos utilisateurs est primordiale. Si vous découvrez une vulnérabilité de sécurité :
+
+- **NE PAS** créer une issue publique
+- Consultez notre [Politique de Sécurité](SECURITY.md)
+- Signalez-la de manière responsable via GitHub Security Advisories
+
+Nous nous engageons à répondre dans les 48 heures et à publier un correctif dans les 90 jours.
+
 ## 📜 Licence
 
-MIT License - Libre d'utilisation et de modification
+Ce projet est sous licence **GNU Affero General Public License v3.0 (AGPL-3.0)**.
 
-## 🙏 Inspirations
+Cela signifie que vous êtes libre de :
+- ✅ Utiliser le jeu à des fins personnelles ou commerciales
+- ✅ Modifier et adapter le code
+- ✅ Distribuer votre propre version
 
-Inspiré par **Legend of the Red Dragon (LORD)**, un jeu BBS classique créé par Seth Able Robinson.
+Avec les conditions suivantes :
+- 📋 Vous devez publier le code source de vos modifications
+- 📋 Vous devez utiliser la même licence (AGPL-3.0)
+- 📋 Vous devez indiquer les changements effectués
+- 📋 Si vous exécutez une version modifiée sur un serveur, vous devez rendre le code source disponible
+
+Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## 🙏 Remerciements et Inspirations
+
+- **Legend of the Red Dragon (LORD)** - Jeu BBS classique créé par Seth Able Robinson qui a inspiré ce projet
+- **Communauté Open Source** - Pour les outils et bibliothèques qui rendent ce projet possible
+- **Contributeurs** - Merci à tous ceux qui ont contribué à améliorer le jeu !
+
+## 📞 Contact et Support
+
+- 🐛 **Bugs et problèmes** : [GitHub Issues](https://github.com/SimonDesjardinsHogue/lecoeurdudragon/issues)
+- 💬 **Discussions** : [GitHub Discussions](https://github.com/SimonDesjardinsHogue/lecoeurdudragon/discussions)
+- 🔒 **Sécurité** : Voir [SECURITY.md](SECURITY.md)
+
+## ⭐ Soutenez le Projet
+
+Si vous aimez Le Coeur du Dragon, n'hésitez pas à :
+- ⭐ Mettre une étoile sur GitHub
+- 🐛 Signaler des bugs
+- 💡 Suggérer des améliorations
+- 📢 Partager avec vos amis
+- 🤝 Contribuer au code
+
+---
+
+<div align="center">
+
+Fait avec ❤️ par [Simon Desjardins Hogue](https://github.com/SimonDesjardinsHogue)
+
+**Bon courage, héros légendaire ! Que votre quête soit glorieuse ! ⚔️🛡️**
+
+</div>
