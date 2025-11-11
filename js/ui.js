@@ -107,21 +107,19 @@ export function updateUI() {
     document.getElementById('playerHealth').textContent = `${p.health}/${p.maxHealth}`;
     
     // Display stats with modifiers
-    const strengthMod = getStatModifier(p.strength);
+    const puissanceMod = getStatModifier(p.puissance);
     const defenseMod = getStatModifier(p.defense);
-    const dexterityMod = getStatModifier(p.dexterity);
-    const constitutionMod = getStatModifier(p.constitution);
-    const intelligenceMod = getStatModifier(p.intelligence);
-    const wisdomMod = getStatModifier(p.wisdom);
-    const charismaMod = getStatModifier(p.charisma);
+    const adresseMod = getStatModifier(p.adresse);
+    const espritMod = getStatModifier(p.esprit);
+    const presenceMod = getStatModifier(p.presence);
     
-    document.getElementById('playerStrength').textContent = `${p.strength} (${strengthMod >= 0 ? '+' : ''}${strengthMod})`;
+    document.getElementById('playerPuissance').textContent = `${p.puissance} (${puissanceMod >= 0 ? '+' : ''}${puissanceMod})`;
     document.getElementById('playerDefense').textContent = `${p.defense} (${defenseMod >= 0 ? '+' : ''}${defenseMod})`;
     
     // Update weapon damage display and icon
     const weaponDamage = p.weaponDamage || 0;
-    const totalDamage = weaponDamage + strengthMod;
-    document.getElementById('playerWeaponDamage').textContent = `${weaponDamage} (+${strengthMod >= 0 ? strengthMod : 0})`;
+    const totalDamage = weaponDamage + puissanceMod;
+    document.getElementById('playerWeaponDamage').textContent = `${weaponDamage} (+${puissanceMod >= 0 ? puissanceMod : 0})`;
     
     // Update weapon icon based on class or equipped weapon
     const weaponIconEl = document.getElementById('weaponIcon');
@@ -153,11 +151,9 @@ export function updateUI() {
         }
     }
     
-    document.getElementById('playerDexterity').textContent = `${p.dexterity} (${dexterityMod >= 0 ? '+' : ''}${dexterityMod})`;
-    document.getElementById('playerConstitution').textContent = `${p.constitution} (${constitutionMod >= 0 ? '+' : ''}${constitutionMod})`;
-    document.getElementById('playerIntelligence').textContent = `${p.intelligence} (${intelligenceMod >= 0 ? '+' : ''}${intelligenceMod})`;
-    document.getElementById('playerWisdom').textContent = `${p.wisdom} (${wisdomMod >= 0 ? '+' : ''}${wisdomMod})`;
-    document.getElementById('playerCharisma').textContent = `${p.charisma} (${charismaMod >= 0 ? '+' : ''}${charismaMod})`;
+    document.getElementById('playerAdresse').textContent = `${p.adresse} (${adresseMod >= 0 ? '+' : ''}${adresseMod})`;
+    document.getElementById('playerEsprit').textContent = `${p.esprit} (${espritMod >= 0 ? '+' : ''}${espritMod})`;
+    document.getElementById('playerPresence').textContent = `${p.presence} (${presenceMod >= 0 ? '+' : ''}${presenceMod})`;
     
     document.getElementById('playerXP').textContent = `${p.xp}/${p.xpToLevel}`;
     document.getElementById('playerEnergy').textContent = `${p.energy}/${p.maxEnergy}`;

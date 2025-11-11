@@ -6,13 +6,11 @@ export const characterClasses = {
         icon: '⚔️',
         description: 'Un combattant robuste avec beaucoup de points de vie et une bonne classe d\'armure',
         maxHealth: 148,
-        strength: 12,
+        puissance: 14,    // High power (strength + endurance)
         defense: 9,
-        dexterity: 10,
-        constitution: 14,
-        intelligence: 8,
-        wisdom: 10,
-        charisma: 10,
+        adresse: 10,      // Average skill
+        esprit: 9,        // Low spirit
+        presence: 10,     // Average presence
         maxEnergy: 100
     },
     magicien: {
@@ -20,27 +18,23 @@ export const characterClasses = {
         icon: '🧙',
         description: 'Un lanceur de sorts puissant mais fragile',
         maxHealth: 122,
-        strength: 8,
+        puissance: 8,     // Low power
         defense: 6,
-        dexterity: 10,
-        constitution: 8,
-        intelligence: 19,
-        wisdom: 14,
-        charisma: 12,
+        adresse: 10,      // Average skill
+        esprit: 16,       // High spirit (intelligence + wisdom)
+        presence: 12,     // Good presence
         maxEnergy: 100
     },
     archer: {
         name: 'Archer',
         icon: '🏹',
-        description: 'Un combattant équilibré avec une bonne force',
+        description: 'Un combattant équilibré avec une bonne dextérité',
         maxHealth: 128,
-        strength: 15,
+        puissance: 12,    // Good power
         defense: 8,
-        dexterity: 16,
-        constitution: 12,
-        intelligence: 10,
-        wisdom: 12,
-        charisma: 10,
+        adresse: 15,      // High skill (dexterity + agility)
+        esprit: 11,       // Average spirit
+        presence: 10,     // Average presence
         maxEnergy: 100
     }
 };
@@ -58,13 +52,11 @@ export function applyCharacterClass(player, classKey) {
     player.classIcon = charClass.icon;
     player.maxHealth = charClass.maxHealth;
     player.health = charClass.maxHealth;
-    player.strength = charClass.strength;
+    player.puissance = charClass.puissance;
     player.defense = charClass.defense;
-    player.dexterity = charClass.dexterity;
-    player.constitution = charClass.constitution;
-    player.intelligence = charClass.intelligence;
-    player.wisdom = charClass.wisdom;
-    player.charisma = charClass.charisma;
+    player.adresse = charClass.adresse;
+    player.esprit = charClass.esprit;
+    player.presence = charClass.presence;
     player.maxEnergy = charClass.maxEnergy;
     player.energy = charClass.maxEnergy;
 }

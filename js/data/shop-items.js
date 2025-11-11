@@ -15,16 +15,16 @@ export const shopItems = [
     { name: 'Élixir de Soin Immortel', icon: '⚗️', description: 'Restaure 550 HP', cost: 1112, category: 'heal', type: 'potion', strength: 'tier10', effect: null },
     
     // Damage potions (10 tiers for level 1-20)
-    { name: 'Potion de Force Minuscule', icon: '💪', description: '+1 Force', cost: 28, category: 'damage', type: 'potion', strength: 'tier1', effect: null },
-    { name: 'Potion de Force Mineure', icon: '💪', description: '+3 Force', cost: 47, category: 'damage', type: 'potion', strength: 'tier2', effect: null },
-    { name: 'Potion de Force', icon: '💪', description: '+5 Force', cost: 71, category: 'damage', type: 'potion', strength: 'tier3', effect: null },
-    { name: 'Potion de Force Supérieure', icon: '💪', description: '+7 Force', cost: 104, category: 'damage', type: 'potion', strength: 'tier4', effect: null },
-    { name: 'Potion de Force Majeure', icon: '💪', description: '+9 Force', cost: 142, category: 'damage', type: 'potion', strength: 'tier5', effect: null },
-    { name: 'Potion de Force Extrême', icon: '💪', description: '+10 Force', cost: 346, category: 'damage', type: 'potion', strength: 'tier6', effect: null },
-    { name: 'Potion de Force Titanesque', icon: '💪', description: '+12 Force', cost: 519, category: 'damage', type: 'potion', strength: 'tier7', effect: null },
-    { name: 'Potion de Force Divine', icon: '💪', description: '+15 Force', cost: 766, category: 'damage', type: 'potion', strength: 'tier8', effect: null },
-    { name: 'Potion de Force Céleste', icon: '💪', description: '+18 Force', cost: 1087, category: 'damage', type: 'potion', strength: 'tier9', effect: null },
-    { name: 'Potion de Force Immortelle', icon: '💪', description: '+22 Force', cost: 1482, category: 'damage', type: 'potion', strength: 'tier10', effect: null },
+    { name: 'Potion de Force Minuscule', icon: '💪', description: '+1 Puissance', cost: 28, category: 'damage', type: 'potion', strength: 'tier1', effect: null },
+    { name: 'Potion de Force Mineure', icon: '💪', description: '+3 Puissance', cost: 47, category: 'damage', type: 'potion', strength: 'tier2', effect: null },
+    { name: 'Potion de Force', icon: '💪', description: '+5 Puissance', cost: 71, category: 'damage', type: 'potion', strength: 'tier3', effect: null },
+    { name: 'Potion de Force Supérieure', icon: '💪', description: '+7 Puissance', cost: 104, category: 'damage', type: 'potion', strength: 'tier4', effect: null },
+    { name: 'Potion de Force Majeure', icon: '💪', description: '+9 Puissance', cost: 142, category: 'damage', type: 'potion', strength: 'tier5', effect: null },
+    { name: 'Potion de Force Extrême', icon: '💪', description: '+10 Puissance', cost: 346, category: 'damage', type: 'potion', strength: 'tier6', effect: null },
+    { name: 'Potion de Force Titanesque', icon: '💪', description: '+12 Puissance', cost: 519, category: 'damage', type: 'potion', strength: 'tier7', effect: null },
+    { name: 'Potion de Force Divine', icon: '💪', description: '+15 Puissance', cost: 766, category: 'damage', type: 'potion', strength: 'tier8', effect: null },
+    { name: 'Potion de Force Céleste', icon: '💪', description: '+18 Puissance', cost: 1087, category: 'damage', type: 'potion', strength: 'tier9', effect: null },
+    { name: 'Potion de Force Immortelle', icon: '💪', description: '+22 Puissance', cost: 1482, category: 'damage', type: 'potion', strength: 'tier10', effect: null },
     
     // Energy potions
     { name: 'Potion d\'Énergie Mineure', icon: '⚡', description: 'Restaure 30 Énergie', cost: 23, category: 'energy', type: 'potion', strength: 'weak', effect: null },
@@ -37,40 +37,40 @@ export const shopItems = [
     { name: 'Potion d\'Expérience Majeure', icon: '✨', description: '+120 XP', cost: 123, category: 'exp', type: 'potion', strength: 'strong', effect: null },
     
     // Weapons for Guerrier (Warrior) - 10 tiers for level 1-20
-    { name: 'Épée Rouillée', icon: '⚔️', description: '1 de dégât\n✨ +1 Force', cost: 49, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
-    { name: 'Épée en Fer', icon: '⚔️', description: '3 de dégât\n✨ +1 Force', cost: 99, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
-    { name: 'Épée en Acier', icon: '⚔️', description: '5 de dégât\n✨ +1 Force', cost: 160, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
-    { name: 'Épée Enchantée', icon: '⚔️', description: '7 de dégât\n✨ +1 Force', cost: 247, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
-    { name: 'Épée Flamboyante', icon: '⚔️', description: '9 de dégât\n✨ +1 Force', cost: 358, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
-    { name: 'Épée Runique', icon: '⚔️', description: '10 de dégât\n✨ +1 Force', cost: 679, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
-    { name: 'Épée Légendaire', icon: '⚔️', description: '12 de dégât\n✨ +1 Force', cost: 1049, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
-    { name: 'Épée Divine', icon: '⚔️', description: '15 de dégât\n✨ +1 Force', cost: 1543, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
-    { name: 'Épée Céleste', icon: '⚔️', description: '18 de dégât\n✨ +1 Force', cost: 2223, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
-    { name: 'Épée du Conquérant Suprême', icon: '⚔️', description: '22 de dégât\n✨ +1 Force', cost: 3088, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
+    { name: 'Épée Rouillée', icon: '⚔️', description: '1 de dégât\n✨ +1 Puissance', cost: 49, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
+    { name: 'Épée en Fer', icon: '⚔️', description: '3 de dégât\n✨ +1 Puissance', cost: 99, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
+    { name: 'Épée en Acier', icon: '⚔️', description: '5 de dégât\n✨ +1 Puissance', cost: 160, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
+    { name: 'Épée Enchantée', icon: '⚔️', description: '7 de dégât\n✨ +1 Puissance', cost: 247, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
+    { name: 'Épée Flamboyante', icon: '⚔️', description: '9 de dégât\n✨ +1 Puissance', cost: 358, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
+    { name: 'Épée Runique', icon: '⚔️', description: '10 de dégât\n✨ +1 Puissance', cost: 679, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
+    { name: 'Épée Légendaire', icon: '⚔️', description: '12 de dégât\n✨ +1 Puissance', cost: 1049, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
+    { name: 'Épée Divine', icon: '⚔️', description: '15 de dégât\n✨ +1 Puissance', cost: 1543, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
+    { name: 'Épée Céleste', icon: '⚔️', description: '18 de dégât\n✨ +1 Puissance', cost: 2223, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
+    { name: 'Épée du Conquérant Suprême', icon: '⚔️', description: '22 de dégât\n✨ +1 Puissance', cost: 3088, category: 'equipment', type: 'weapon', classRestriction: 'guerrier', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
     
     // Weapons for Archer - 10 tiers for level 1-20
-    { name: 'Arc Basique', icon: '🏹', description: '1 de dégât\n✨ +1 Force', cost: 49, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
-    { name: 'Arc Court', icon: '🏹', description: '3 de dégât\n✨ +1 Force', cost: 99, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
-    { name: 'Arc Long', icon: '🏹', description: '5 de dégât\n✨ +1 Force', cost: 160, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
-    { name: 'Arc Composite', icon: '🏹', description: '7 de dégât\n✨ +1 Force', cost: 247, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
-    { name: 'Arc Elfique', icon: '🏹', description: '9 de dégât\n✨ +1 Force', cost: 358, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
-    { name: 'Arc Runique', icon: '🏹', description: '10 de dégât\n✨ +1 Force', cost: 679, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
-    { name: 'Arc Légendaire', icon: '🏹', description: '12 de dégât\n✨ +1 Force', cost: 1049, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
-    { name: 'Arc du Chasseur Divin', icon: '🏹', description: '15 de dégât\n✨ +1 Force', cost: 1543, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
-    { name: 'Arc Céleste', icon: '🏹', description: '18 de dégât\n✨ +1 Force', cost: 2223, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
-    { name: 'Arc de l\'Étoile Filante', icon: '🏹', description: '22 de dégât\n✨ +1 Force', cost: 3088, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
+    { name: 'Arc Basique', icon: '🏹', description: '1 de dégât\n✨ +1 Puissance', cost: 49, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
+    { name: 'Arc Court', icon: '🏹', description: '3 de dégât\n✨ +1 Puissance', cost: 99, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
+    { name: 'Arc Long', icon: '🏹', description: '5 de dégât\n✨ +1 Puissance', cost: 160, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
+    { name: 'Arc Composite', icon: '🏹', description: '7 de dégât\n✨ +1 Puissance', cost: 247, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
+    { name: 'Arc Elfique', icon: '🏹', description: '9 de dégât\n✨ +1 Puissance', cost: 358, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
+    { name: 'Arc Runique', icon: '🏹', description: '10 de dégât\n✨ +1 Puissance', cost: 679, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
+    { name: 'Arc Légendaire', icon: '🏹', description: '12 de dégât\n✨ +1 Puissance', cost: 1049, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
+    { name: 'Arc du Chasseur Divin', icon: '🏹', description: '15 de dégât\n✨ +1 Puissance', cost: 1543, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
+    { name: 'Arc Céleste', icon: '🏹', description: '18 de dégât\n✨ +1 Puissance', cost: 2223, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
+    { name: 'Arc de l\'Étoile Filante', icon: '🏹', description: '22 de dégât\n✨ +1 Puissance', cost: 3088, category: 'equipment', type: 'weapon', classRestriction: 'archer', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
     
     // Weapons for Magicien (Mage) - 10 tiers for level 1-20
-    { name: 'Bâton de Bois', icon: '🔱', description: '1 de dégât\n✨ +1 Force', cost: 49, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
-    { name: 'Bâton d\'Apprenti', icon: '🔱', description: '3 de dégât\n✨ +1 Force', cost: 99, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
-    { name: 'Bâton Mystique', icon: '🔱', description: '5 de dégât\n✨ +1 Force', cost: 160, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
-    { name: 'Bâton Enchanté', icon: '🔱', description: '7 de dégât\n✨ +1 Force', cost: 247, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
-    { name: 'Bâton de Pouvoir', icon: '🔱', description: '9 de dégât\n✨ +1 Force', cost: 358, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
-    { name: 'Bâton Runique', icon: '🔱', description: '10 de dégât\n✨ +1 Force', cost: 679, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
-    { name: 'Bâton Légendaire', icon: '🔱', description: '12 de dégât\n✨ +1 Force', cost: 1049, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
-    { name: 'Bâton de l\'Archimage', icon: '🔱', description: '15 de dégât\n✨ +1 Force', cost: 1543, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
-    { name: 'Bâton Céleste', icon: '🔱', description: '18 de dégât\n✨ +1 Force', cost: 2223, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
-    { name: 'Bâton de l\'Univers', icon: '🔱', description: '22 de dégât\n✨ +1 Force', cost: 3088, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
+    { name: 'Bâton de Bois', icon: '🔱', description: '1 de dégât\n✨ +1 Puissance', cost: 49, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
+    { name: 'Bâton d\'Apprenti', icon: '🔱', description: '3 de dégât\n✨ +1 Puissance', cost: 99, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
+    { name: 'Bâton Mystique', icon: '🔱', description: '5 de dégât\n✨ +1 Puissance', cost: 160, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
+    { name: 'Bâton Enchanté', icon: '🔱', description: '7 de dégât\n✨ +1 Puissance', cost: 247, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
+    { name: 'Bâton de Pouvoir', icon: '🔱', description: '9 de dégât\n✨ +1 Puissance', cost: 358, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
+    { name: 'Bâton Runique', icon: '🔱', description: '10 de dégât\n✨ +1 Puissance', cost: 679, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
+    { name: 'Bâton Légendaire', icon: '🔱', description: '12 de dégât\n✨ +1 Puissance', cost: 1049, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
+    { name: 'Bâton de l\'Archimage', icon: '🔱', description: '15 de dégât\n✨ +1 Puissance', cost: 1543, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
+    { name: 'Bâton Céleste', icon: '🔱', description: '18 de dégât\n✨ +1 Puissance', cost: 2223, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
+    { name: 'Bâton de l\'Univers', icon: '🔱', description: '22 de dégât\n✨ +1 Puissance', cost: 3088, category: 'equipment', type: 'weapon', classRestriction: 'magicien', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
     
     // Shields for Guerrier (Warrior) - 10 tiers for level 1-20
     { name: 'Bouclier en Bois', icon: '🛡️', description: '+1 Défense', cost: 43, category: 'classes', type: 'shield', classRestriction: 'guerrier', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
@@ -97,16 +97,16 @@ export const shopItems = [
     { name: 'Tome de la Connaissance Ultime', icon: '📙', description: '+22 Intelligence', cost: 2964, category: 'classes', type: 'book', classRestriction: 'magicien', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
     
     // Quivers for Archer - 10 tiers for level 1-20
-    { name: 'Carquois Usé', icon: '🏹', description: '+1 Dextérité', cost: 43, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
-    { name: 'Carquois en Cuir', icon: '🏹', description: '+3 Dextérité', cost: 86, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
-    { name: 'Carquois Renforcé', icon: '🏹', description: '+5 Dextérité', cost: 142, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
-    { name: 'Carquois Elfique', icon: '🏹', description: '+7 Dextérité', cost: 222, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
-    { name: 'Carquois du Chasseur', icon: '🏹', description: '+9 Dextérité', cost: 326, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
-    { name: 'Carquois Enchanté', icon: '🏹', description: '+10 Dextérité', cost: 629, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
-    { name: 'Carquois Runique', icon: '🏹', description: '+12 Dextérité', cost: 988, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
-    { name: 'Carquois du Tireur d\'Élite', icon: '🏹', description: '+15 Dextérité', cost: 1482, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
-    { name: 'Carquois Céleste', icon: '🏹', description: '+18 Dextérité', cost: 2100, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
-    { name: 'Carquois de l\'Archer Suprême', icon: '🏹', description: '+22 Dextérité', cost: 2964, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
+    { name: 'Carquois Usé', icon: '🏹', description: '+1 Adresse', cost: 43, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
+    { name: 'Carquois en Cuir', icon: '🏹', description: '+3 Adresse', cost: 86, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 3, rarity: 'commun', levelRequirement: 3, effect: null },
+    { name: 'Carquois Renforcé', icon: '🏹', description: '+5 Adresse', cost: 142, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 5, rarity: 'rare', levelRequirement: 5, effect: null },
+    { name: 'Carquois Elfique', icon: '🏹', description: '+7 Adresse', cost: 222, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 7, rarity: 'rare', levelRequirement: 7, effect: null },
+    { name: 'Carquois du Chasseur', icon: '🏹', description: '+9 Adresse', cost: 326, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 9, rarity: 'epique', levelRequirement: 9, effect: null },
+    { name: 'Carquois Enchanté', icon: '🏹', description: '+10 Adresse', cost: 629, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 10, rarity: 'epique', levelRequirement: 11, effect: null },
+    { name: 'Carquois Runique', icon: '🏹', description: '+12 Adresse', cost: 988, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 12, rarity: 'legendaire', levelRequirement: 13, effect: null },
+    { name: 'Carquois du Tireur d\'Élite', icon: '🏹', description: '+15 Adresse', cost: 1482, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 15, rarity: 'legendaire', levelRequirement: 15, effect: null },
+    { name: 'Carquois Céleste', icon: '🏹', description: '+18 Adresse', cost: 2100, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 18, rarity: 'legendaire', levelRequirement: 17, effect: null },
+    { name: 'Carquois de l\'Archer Suprême', icon: '🏹', description: '+22 Adresse', cost: 2964, category: 'classes', type: 'quiver', classRestriction: 'archer', bonus: 22, rarity: 'legendaire', levelRequirement: 20, effect: null },
     
     // Armors (10 tiers for level 1-20)
     { name: 'Armure en Tissu', icon: '🛡️', description: '+1 Défense', cost: 43, category: 'equipment', type: 'armor', bonus: 1, rarity: 'commun', levelRequirement: 1, effect: null },
@@ -124,20 +124,20 @@ export const shopItems = [
 // Rare items for wandering merchant
 export const rareItems = [
     { name: 'Élixir de Résurrection', icon: '🧬', description: 'Restaure toute la santé et l\'énergie', cost: 285, category: 'heal', effect: null },
-    { name: 'Potion de Géant', icon: '💪', description: '+12 Force', cost: 332, category: 'damage', effect: null },
+    { name: 'Potion de Géant', icon: '💪', description: '+12 Puissance', cost: 332, category: 'damage', effect: null },
     { name: 'Armure Runique', icon: '🛡️', description: '+8 Défense, +2 toutes stats', cost: 427, category: 'equipment', effect: null },
-    { name: 'Amulette de Fortune', icon: '🍀', description: '+100 Or, +5 Charisme', cost: 237, category: 'equipment', effect: null },
-    { name: 'Grimoire Ancien', icon: '📖', description: '+10 Intelligence, +200 XP', cost: 380, category: 'exp', effect: null }
+    { name: 'Amulette de Fortune', icon: '🍀', description: '+100 Or, +5 Présence', cost: 237, category: 'equipment', effect: null },
+    { name: 'Grimoire Ancien', icon: '📖', description: '+10 Esprit, +200 XP', cost: 380, category: 'exp', effect: null }
 ];
 
 // Legendary items - rewards from bosses
 export const legendaryItems = [
-    { name: 'Épée du Conquérant', icon: '⚔️', description: '+15 Force, +5 Dextérité', effect: (p) => { p.strength += 15; p.dexterity += 5; } },
+    { name: 'Épée du Conquérant', icon: '⚔️', description: '+15 Puissance, +5 Adresse', effect: (p) => { p.puissance += 15; p.adresse += 5; } },
     { name: 'Armure du Titan', icon: '🛡️', description: '+10 Défense, +30 PV Max', effect: (p) => { p.defense += 10; p.maxHealth += 30; p.health += 30; } },
-    { name: 'Amulette de Vie', icon: '💎', description: '+50 PV Max, +3 Constitution', effect: (p) => { p.maxHealth += 50; p.health += 50; p.constitution += 3; } },
-    { name: 'Anneau de Puissance', icon: '💍', description: '+8 Force, +8 Intelligence', effect: (p) => { p.strength += 8; p.intelligence += 8; } },
-    { name: 'Cape de l\'Ombre', icon: '🦇', description: '+7 Dextérité, +5 Défense', effect: (p) => { p.dexterity += 7; p.defense += 5; } },
-    { name: 'Couronne de Sagesse', icon: '👑', description: '+10 Intelligence, +10 Sagesse', effect: (p) => { p.intelligence += 10; p.wisdom += 10; } },
-    { name: 'Marteau du Forgeron Divin', icon: '🔨', description: '+20 Force, +5 Constitution', effect: (p) => { p.strength += 20; p.constitution += 5; } },
-    { name: 'Bâton du Mage Suprême', icon: '🔮', description: '+15 Intelligence, +50 Énergie Max', effect: (p) => { p.intelligence += 15; p.maxEnergy += 50; p.energy += 50; } }
+    { name: 'Amulette de Vie', icon: '💎', description: '+50 PV Max, +3 Puissance', effect: (p) => { p.maxHealth += 50; p.health += 50; p.puissance += 3; } },
+    { name: 'Anneau de Puissance', icon: '💍', description: '+8 Puissance, +8 Esprit', effect: (p) => { p.puissance += 8; p.esprit += 8; } },
+    { name: 'Cape de l\'Ombre', icon: '🦇', description: '+7 Adresse, +5 Défense', effect: (p) => { p.adresse += 7; p.defense += 5; } },
+    { name: 'Couronne de Sagesse', icon: '👑', description: '+10 Esprit, +10 Présence', effect: (p) => { p.esprit += 10; p.presence += 10; } },
+    { name: 'Marteau du Forgeron Divin', icon: '🔨', description: '+20 Puissance, +5 Esprit', effect: (p) => { p.puissance += 20; p.esprit += 5; } },
+    { name: 'Bâton du Mage Suprême', icon: '🔮', description: '+15 Esprit, +50 Énergie Max', effect: (p) => { p.esprit += 15; p.maxEnergy += 50; p.energy += 50; } }
 ];

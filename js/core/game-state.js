@@ -21,13 +21,11 @@ export const gameState = {
         level: 1,
         health: 100,
         maxHealth: 100,
-        strength: 10,
+        puissance: 10,    // Power - combines strength + endurance
         defense: 5,
-        dexterity: 10,
-        constitution: 10,
-        intelligence: 10,
-        wisdom: 10,
-        charisma: 10,
+        adresse: 10,      // Skill - combines dexterity + agility
+        esprit: 10,       // Mind/Spirit - combines intelligence + wisdom
+        presence: 10,     // Presence - combines charisma + willpower
         statPoints: 0,   // Points to spend on stats
         gold: 50,
         xp: 0,
