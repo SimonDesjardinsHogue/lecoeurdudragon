@@ -1,5 +1,6 @@
 index-original.html
 screenshots/
+!assets/screenshots/
 tmp/
 balance-report-*.html
 test-balance.js

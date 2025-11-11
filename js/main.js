@@ -43,6 +43,8 @@ function toggleAudio() {
 }
 
 // Register Service Worker for offline support (PWA)
+let deferredPrompt;
+
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
@@ -65,6 +67,75 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// PWA Install functionality
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    // Show the install banner
+    showInstallBanner();
+});
+
+function showInstallBanner() {
+    const installBanner = document.getElementById('installBanner');
+    if (installBanner) {
+        // Check if user has previously dismissed the banner
+        const dismissed = localStorage.getItem('pwa-install-dismissed');
+        if (!dismissed) {
+            installBanner.style.display = 'block';
+        }
+    }
+}
+
+function installPWA() {
+    const installBanner = document.getElementById('installBanner');
+    if (installBanner) {
+        installBanner.style.display = 'none';
+    }
+    
+    if (!deferredPrompt) {
+        console.log('[PWA] Install prompt not available');
+        return;
+    }
+    
+    // Show the install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('[PWA] User accepted the install prompt');
+        } else {
+            console.log('[PWA] User dismissed the install prompt');
+        }
+        deferredPrompt = null;
+    });
+}
+
+function dismissInstallBanner() {
+    const installBanner = document.getElementById('installBanner');
+    if (installBanner) {
+        installBanner.style.display = 'none';
+    }
+    // Remember that user dismissed the banner
+    localStorage.setItem('pwa-install-dismissed', 'true');
+}
+
+// Detect if app is installed
+window.addEventListener('appinstalled', () => {
+    console.log('[PWA] App was installed');
+    const installBanner = document.getElementById('installBanner');
+    if (installBanner) {
+        installBanner.style.display = 'none';
+    }
+    deferredPrompt = null;
+});
+
+// Make PWA functions available globally
+window.installPWA = installPWA;
+window.dismissInstallBanner = dismissInstallBanner;
 
 // Initialize game on load
 window.addEventListener('load', () => {
