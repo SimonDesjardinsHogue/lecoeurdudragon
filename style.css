@@ -1190,16 +1190,45 @@ input[type="text"]:focus {
     .story-text {
         font-size: 0.85em;
         line-height: 1.4;
+        max-height: 150px;
+        overflow-y: auto;
     }
 
     button {
         padding: 8px 12px;
         font-size: 0.85em;
         min-width: 100px;
+        min-height: 40px; /* Maintain touch target size even in landscape */
     }
 
     .combat-log {
-        max-height: 100px;
+        max-height: 120px;
+        font-size: 0.9em;
+    }
+    
+    /* Make better use of horizontal space in landscape */
+    .game-actions {
+        justify-content: space-between;
+    }
+    
+    .game-actions-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    /* Compact enemy display in landscape */
+    .enemy-info {
+        padding: 10px;
+        min-height: auto;
+    }
+    
+    /* Hide mobile help button in landscape to save space */
+    .mobile-help-button {
+        width: 40px;
+        height: 40px;
+        bottom: 10px;
+        right: 10px;
+        font-size: 20px;
     }
 }
 

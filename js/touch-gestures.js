@@ -58,6 +58,42 @@ function handleTouchEnd(event) {
 }
 
 /**
+ * Show visual feedback for swipe gesture
+ */
+function showSwipeFeedback(direction, emoji) {
+    let indicator = document.getElementById('swipeIndicator');
+    
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'swipeIndicator';
+        indicator.className = 'swipe-indicator';
+        document.body.appendChild(indicator);
+    }
+    
+    // Position based on direction
+    if (direction === 'left') {
+        indicator.style.left = '20px';
+        indicator.style.right = 'auto';
+    } else if (direction === 'right') {
+        indicator.style.right = '20px';
+        indicator.style.left = 'auto';
+    }
+    
+    indicator.textContent = emoji;
+    indicator.classList.remove('show');
+    
+    // Trigger reflow to restart animation
+    void indicator.offsetWidth;
+    
+    indicator.classList.add('show');
+    
+    // Remove class after animation
+    setTimeout(() => {
+        indicator.classList.remove('show');
+    }, 500);
+}
+
+/**
  * Handle swipe right gesture
  */
 function handleSwipeRight() {
@@ -66,6 +102,7 @@ function handleSwipeRight() {
         const currentScreen = getCurrentScreen();
         if (currentScreen === 'combatScreen' && typeof window.flee === 'function') {
             console.log('📱 Swipe right detected: Flee');
+            showSwipeFeedback('right', '🏃');
             window.flee();
         }
     }
@@ -80,6 +117,7 @@ function handleSwipeLeft() {
         const currentScreen = getCurrentScreen();
         if (currentScreen === 'combatScreen' && typeof window.defend === 'function') {
             console.log('📱 Swipe left detected: Defend');
+            showSwipeFeedback('left', '🛡️');
             window.defend();
         }
     }
@@ -158,6 +196,35 @@ function showTouchHints() {
         @keyframes fadeInOut {
             0%, 100% { opacity: 0; }
             10%, 90% { opacity: 1; }
+        }
+        
+        .swipe-indicator {
+            position: fixed;
+            top: 50%;
+            font-size: 3em;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 200;
+            transition: all 0.3s ease;
+        }
+        
+        .swipe-indicator.show {
+            animation: swipeFeedback 0.5s ease-out;
+        }
+        
+        @keyframes swipeFeedback {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
         }
         
         @media (max-width: 768px) {
