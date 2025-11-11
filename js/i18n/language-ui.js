@@ -139,7 +139,7 @@ function updateRaceOption(value, name, desc) {
             
             if (strong) {
                 const icon = strong.textContent.split(' ')[0]; // Keep the icon
-                strong.innerHTML = `${icon} ${name}`;
+                strong.textContent = `${icon} ${name}`;
             }
             
             if (small && desc) {
@@ -159,7 +159,7 @@ function updateClassOption(value, name, desc) {
             
             if (strong) {
                 const icon = strong.textContent.split(' ')[0]; // Keep the icon
-                strong.innerHTML = `${icon} ${name}`;
+                strong.textContent = `${icon} ${name}`;
             }
             
             if (smalls.length > 1 && desc) {
