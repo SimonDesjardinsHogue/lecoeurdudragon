@@ -9,10 +9,68 @@ Safari sur iOS/iPadOS a des politiques de sécurité plus strictes et des diffé
 2. **Timeouts réseau** : Safari a des timeouts par défaut plus courts
 3. **Politiques CORS** : Safari applique plus strictement les règles cross-origin
 4. **Gestion du cache** : Safari met en cache de manière plus agressive
+5. **🆕 Chargement de bibliothèques externes** : Safari bloque souvent le chargement de scripts depuis des CDN HTTPS quand le site est en HTTP (mixed content), et a des politiques CSP strictes
 
 ## Solution Implemented
 
-### 1. Configuration WebSocket Côté Client (`js/network.js`)
+### 1. Socket.IO Client Loading (🆕 CRITIQUE pour Safari/iOS)
+**Le problème principal** : Le chargement de Socket.IO depuis un CDN externe (`https://cdn.socket.io`) ne fonctionne pas sur Safari/iOS car :
+- **Mixed Content** : Safari bloque les requêtes HTTPS depuis une page HTTP locale
+- **CSP (Content Security Policy)** : Safari a des politiques plus strictes sur les scripts externes
+- **Dynamic Import** : Safari peut bloquer les imports dynamiques de domaines externes
+
+**Solution** : Charger Socket.IO depuis le serveur local lui-même
+
+**Code avant :**
+```javascript
+import('https://cdn.socket.io/4.6.1/socket.io.min.js').then(() => {
+  // Configuration...
+});
+```
+
+**Code après :**
+```javascript
+// Load Socket.IO client from the server (Safari/iOS compatible)
+const loadSocketIO = () => {
+  return new Promise((resolve, reject) => {
+    if (typeof io !== 'undefined') {
+      resolve();
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = `${networkState.serverUrl}/socket.io/socket.io.js`;
+    script.async = true;
+    
+    script.onload = () => {
+      if (typeof io !== 'undefined') {
+        console.log('✓ Socket.IO client chargé depuis le serveur');
+        resolve();
+      } else {
+        reject(new Error('Socket.IO loaded but io is undefined'));
+      }
+    };
+    
+    script.onerror = () => {
+      reject(new Error('Failed to load Socket.IO client'));
+    };
+    
+    document.head.appendChild(script);
+  });
+};
+
+loadSocketIO().then(() => {
+  // Configuration...
+});
+```
+
+**Avantages** :
+- ✅ Même origine (HTTP local → HTTP local) - Pas de mixed content
+- ✅ Pas de dépendance externe sur Internet
+- ✅ Version garantie compatible avec le serveur
+- ✅ Fonctionne sur tous les navigateurs, y compris Safari/iOS
+
+### 2. Configuration WebSocket Côté Client (`js/network.js`)
 **Changements :**
 - ✅ Ordre des transports : `['polling', 'websocket']` au lieu de `['websocket', 'polling']`
 - ✅ Timeout étendu : 20 secondes (de 5s par défaut)
@@ -46,7 +104,7 @@ networkState.socket = io(networkState.serverUrl, {
 });
 ```
 
-### 2. Gestion des Timeouts pour Fetch (`js/network.js`)
+### 3. Gestion des Timeouts pour Fetch (`js/network.js`)
 **Changements :**
 - ✅ AbortController avec timeout de 10 secondes pour toutes les requêtes fetch
 - ✅ Options Safari-spécifiques :
@@ -69,7 +127,7 @@ const response = await fetch(`${networkState.serverUrl}/api/health`, {
 clearTimeout(timeoutId);
 ```
 
-### 3. Configuration Serveur (`server/server.js`)
+### 4. Configuration Serveur (`server/server.js`)
 **Changements :**
 - ✅ Ordre des transports : `['polling', 'websocket']` (correspondant au client)
 - ✅ Timeouts augmentés :
@@ -108,17 +166,18 @@ const io = new Server(httpServer, {
 });
 ```
 
-### 4. Documentation Mise à Jour
+### 5. Documentation Mise à Jour
 - ✅ Ajout d'une section "🔧 Correctifs Safari/iPad" dans `TROUBLESHOOTING_MULTIJOUEUR.md`
 - ✅ Instructions pour vider le cache Safari
 - ✅ Instructions pour redémarrer le serveur
 - ✅ Guide de débogage avec la console Safari
 
 ## Fichiers Modifiés
-1. `js/network.js` - Configuration client WebSocket et fetch
-2. `server/server.js` - Configuration serveur Socket.IO
-3. `TROUBLESHOOTING_MULTIJOUEUR.md` - Documentation utilisateur
-4. `test-safari-compatibility.sh` - Tests de validation (nouveau)
+1. `js/network.js` - **Chargement Socket.IO depuis serveur local** (🆕 CRITIQUE), configuration client WebSocket et fetch
+2. `server/server.js` - Configuration serveur Socket.IO (sert automatiquement le client Socket.IO)
+3. `SAFARI_FIX_SUMMARY.md` - Documentation technique mise à jour
+4. `TROUBLESHOOTING_MULTIJOUEUR.md` - Documentation utilisateur
+5. `test-safari-compatibility.sh` - Tests de validation
 
 ## Tests
 ### Tests Automatisés
@@ -139,25 +198,32 @@ const io = new Server(httpServer, {
 
 ## Pourquoi Ça Fonctionne Maintenant
 
-### 1. Ordre des Transports
+### 1. 🆕 Chargement Local de Socket.IO (LE PLUS IMPORTANT)
+**Le problème résolu** : Safari/iOS bloquait le chargement du CDN externe
+- ✅ Plus de problèmes de "mixed content" (HTTP vs HTTPS)
+- ✅ Pas de dépendance sur Internet pour charger la bibliothèque
+- ✅ Compatibilité garantie avec la version du serveur
+- ✅ Fonctionne derrière les firewalls et sur réseaux locaux isolés
+
+### 2. Ordre des Transports
 Safari est plus strict sur l'établissement de connexions WebSocket. En commençant avec polling :
 - ✅ Connexion immédiate garantie
 - ✅ Mise à niveau progressive vers WebSocket
 - ✅ Pas de blocage initial
 
-### 2. Timeouts Augmentés
+### 3. Timeouts Augmentés
 Safari sur réseau WiFi peut être plus lent :
 - ✅ 10 secondes pour fetch (vs 5s par défaut)
 - ✅ 20 secondes pour WebSocket (vs 5s par défaut)
 - ✅ 60 secondes pour ping (vs 5s par défaut)
 
-### 3. Reconnexion Automatique
+### 4. Reconnexion Automatique
 Si la connexion est perdue :
 - ✅ 5 tentatives automatiques
 - ✅ Délai exponentiel entre tentatives
 - ✅ Pas de perte de données
 
-### 4. Cache Désactivé
+### 5. Cache Désactivé
 Safari met en cache agressivement :
 - ✅ `cache: 'no-cache'` force les requêtes fraîches
 - ✅ Évite les problèmes de version obsolète
