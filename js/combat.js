@@ -118,7 +118,7 @@ function createBossEnemy() {
 }
 
 // Trigger random event
-export function triggerRandomEvent() {
+export function triggerRandomEvent(location = null) {
     const eventType = Math.random();
     
     // 15% riddle, 15% moral choice, 70% random event
@@ -127,7 +127,18 @@ export function triggerRandomEvent() {
     } else if (eventType < 0.30) {
         triggerMoralChoice();
     } else {
-        const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
+        // Filter events by location if specified
+        let availableEvents = randomEvents;
+        if (location) {
+            availableEvents = randomEvents.filter(event => event.location === location);
+        }
+        
+        // If no events available for this location, use all events as fallback
+        if (availableEvents.length === 0) {
+            availableEvents = randomEvents;
+        }
+        
+        const event = availableEvents[Math.floor(Math.random() * availableEvents.length)];
         const result = event.effect(gameState.player);
         
         showScreen('npcScreen');
@@ -158,7 +169,7 @@ export function triggerRandomEvent() {
         
         const resultPara = document.createElement('p');
         resultPara.textContent = `✨ ${result}`;
-        resultPara.style.color = event.type === 'trap' ? '#ff6b6b' : '#51cf66';
+        resultPara.style.color = event.type === 'trap' || event.type === 'theft' ? '#ff6b6b' : '#51cf66';
         resultPara.style.fontWeight = 'bold';
         eventDescription.appendChild(resultPara);
         
@@ -308,7 +319,7 @@ function makeMoralChoice(option, container) {
 export function explore() {
     // Check if player has enough energy to explore
     if (gameState.player.energy < 10) {
-        alert('Vous êtes trop fatigué pour explorer le donjon ! Allez dormir à l\'auberge pour récupérer votre énergie.');
+        alert('Vous êtes trop fatigué pour explorer la forêt ! Allez dormir à l\'auberge pour récupérer votre énergie.');
         return;
     }
     
@@ -369,11 +380,11 @@ export function explore() {
     const encounterRoll = Math.random();
     
     if (encounterRoll < 0.2) {
-        // Random event
-        triggerRandomEvent();
+        // Random event (forest-specific)
+        triggerRandomEvent('forest');
     } else if (encounterRoll < 0.4) {
-        // NPC encounter
-        meetNPC();
+        // NPC encounter (forest-specific)
+        meetNPC('forest');
     } else {
         // Monster encounter - 7% chance for dual monsters
         const dualMonsterChance = Math.random() < 0.07;
