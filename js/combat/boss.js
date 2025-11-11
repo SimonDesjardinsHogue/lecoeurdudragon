@@ -26,7 +26,7 @@ export function createBossEnemy() {
         ...bossTemplate,
         maxHealth: Math.floor(bossTemplate.health * levelMultiplier),
         health: Math.floor(bossTemplate.health * levelMultiplier),
-        strength: Math.floor(bossTemplate.strength * levelMultiplier),
+        strength: Math.floor(bossTemplate.puissance * levelMultiplier),
         defense: Math.floor(bossTemplate.defense * levelMultiplier),
         gold: Math.floor(bossTemplate.gold * levelMultiplier),
         xp: Math.floor(bossTemplate.xp * levelMultiplier),

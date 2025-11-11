@@ -5,22 +5,22 @@ export const characterRaces = {
         name: 'Humain',
         icon: '👤',
         description: 'Polyvalent et équilibré',
-        dexterityMod: 0,
-        constitutionMod: 0
+        adresseMod: 0,
+        puissanceMod: 0
     },
     elfe: {
         name: 'Elfe',
         icon: '🧝',
         description: 'Agile et gracieux',
-        dexterityMod: 2,
-        constitutionMod: -2
+        adresseMod: 2,
+        puissanceMod: -2
     },
     nain: {
         name: 'Nain',
         icon: '🧔',
         description: 'Robuste et résistant',
-        dexterityMod: -2,
-        constitutionMod: 2
+        adresseMod: -2,
+        puissanceMod: 2
     }
 };
 
@@ -37,11 +37,11 @@ export function applyRaceModifiers(player, raceKey) {
     player.raceIcon = race.icon;
     
     // Apply stat modifiers
-    player.dexterity += race.dexterityMod;
-    player.constitution += race.constitutionMod;
+    player.adresse += race.adresseMod;
+    player.puissance += race.puissanceMod;
     
-    // Constitution affects max health (each point of constitution = 5 HP)
-    const constitutionHealthBonus = race.constitutionMod * 5;
-    player.maxHealth += constitutionHealthBonus;
+    // Puissance affects max health (each point of puissance = 5 HP, similar to constitution)
+    const puissanceHealthBonus = race.puissanceMod * 5;
+    player.maxHealth += puissanceHealthBonus;
     player.health = player.maxHealth;
 }

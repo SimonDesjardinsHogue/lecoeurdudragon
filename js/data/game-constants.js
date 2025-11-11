@@ -49,7 +49,7 @@ export function generateRandomStats(rarity) {
     if (rarity === 'commun') return null;
     
     const bonusRange = rarities[rarity].statBonus;
-    const stats = ['strength', 'defense', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+    const stats = ['puissance', 'defense', 'adresse', 'puissance', 'esprit', 'esprit', 'presence'];
     const randomStats = {};
     
     // Number of random stats based on rarity

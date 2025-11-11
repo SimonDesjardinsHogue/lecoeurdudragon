@@ -45,7 +45,7 @@ export const randomEvents = [
         description: 'Une brume toxique émane des plantes de la forêt !',
         effect: (p) => {
             const baseDamage = 10 + Math.floor(Math.random() * 15);
-            const damage = Math.max(1, baseDamage - Math.floor(p.constitution / 2));
+            const damage = Math.max(1, baseDamage - Math.floor(p.puissance / 2));
             p.health = Math.max(1, p.health - damage);
             return `Vous perdez ${damage} HP à cause du poison !`;
         },
@@ -136,11 +136,9 @@ export const randomEvents = [
         icon: '🔮',
         description: 'Vous trouvez un parchemin laissé par les M&M. Il contient des connaissances sur les anciens gardiens de Valéria...',
         effect: (p) => {
-            const wisdomBonus = 1 + Math.floor(Math.random() * 2);
-            const intelligenceBonus = 1 + Math.floor(Math.random() * 2);
-            p.wisdom += wisdomBonus;
-            p.intelligence += intelligenceBonus;
-            return `Vous étudiez le parchemin avec attention. Votre sagesse augmente de ${wisdomBonus} et votre intelligence de ${intelligenceBonus} !`;
+            const espritBonus = 2 + Math.floor(Math.random() * 3); // 2-4 total esprit bonus
+            p.esprit += espritBonus;
+            return `Vous étudiez le parchemin avec attention. Votre esprit augmente de ${espritBonus} !`;
         },
         location: 'forest'
     },
@@ -240,9 +238,9 @@ export const moralChoices = [
                 effect: (p) => {
                     if (p.gold >= 50) {
                         p.gold -= 50;
-                        const charismaBonus = 1 + Math.floor(Math.random() * 3); // 1-3 charisma
-                        p.charisma += charismaBonus;
-                        return `Vous aidez le mendiant. Votre charisme augmente de ${charismaBonus} ! (-50 or)`;
+                        const presenceBonus = 1 + Math.floor(Math.random() * 3); // 1-3 presence
+                        p.presence += presenceBonus;
+                        return `Vous aidez le mendiant. Votre présence augmente de ${presenceBonus} ! (-50 or)`;
                     } else {
                         return 'Vous n\'avez pas assez d\'or...';
                     }
@@ -251,8 +249,8 @@ export const moralChoices = [
             {
                 text: 'Ignorer et continuer',
                 effect: (p) => {
-                    p.charisma -= 1;
-                    return 'Vous ignorez le mendiant. Votre charisme diminue de 1.';
+                    p.presence -= 1;
+                    return 'Vous ignorez le mendiant. Votre présence diminue de 1.';
                 }
             }
         ]
@@ -265,18 +263,18 @@ export const moralChoices = [
                 effect: (p) => {
                     const goldFound = 60 + Math.floor(Math.random() * 40); // 60-100 gold
                     p.gold += goldFound;
-                    p.wisdom -= 1;
-                    return `Vous prenez l\'or. Vous gagnez ${goldFound} pièces d\'or mais votre sagesse diminue de 1.`;
+                    p.esprit -= 1;
+                    return `Vous prenez l\'or. Vous gagnez ${goldFound} pièces d\'or mais votre esprit diminue de 1.`;
                 }
             },
             {
                 text: 'Laisser l\'or et prier pour le défunt',
                 effect: (p) => {
-                    const wisdomBonus = 1 + Math.floor(Math.random() * 2); // 1-2 wisdom
+                    const espritBonus = 1 + Math.floor(Math.random() * 2); // 1-2 esprit
                     const xpBonus = 40 + Math.floor(Math.random() * 30); // 40-70 XP
-                    p.wisdom += wisdomBonus;
+                    p.esprit += espritBonus;
                     p.xp += xpBonus;
-                    return `Vous respectez les morts. Votre sagesse augmente de ${wisdomBonus} et vous gagnez ${xpBonus} XP.`;
+                    return `Vous respectez les morts. Votre esprit augmente de ${espritBonus} et vous gagnez ${xpBonus} XP.`;
                 }
             }
         ]

@@ -22,7 +22,7 @@ function calculateMilestoneStats(games, milestone) {
             avgKills: 0,
             avgDeaths: 0,
             avgGold: 0,
-            avgStrength: 0,
+            avgPuissance: 0,
             avgDefense: 0,
             avgHealth: 0
         };
@@ -34,7 +34,7 @@ function calculateMilestoneStats(games, milestone) {
         avgKills: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].kills)),
         avgDeaths: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].deaths)),
         avgGold: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].gold)),
-        avgStrength: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].strength)),
+        avgPuissance: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].puissance)),
         avgDefense: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].defense)),
         avgHealth: average(gamesReachedMilestone.map(g => g.milestoneStats[milestone].health))
     };
@@ -71,7 +71,7 @@ export function analyzeResults(results) {
                 energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
                 exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
             },
-            avgStrength: average(games.map(g => g.finalStrength)),
+            avgPuissance: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
             avgDexterity: average(games.map(g => g.finalDexterity)),
@@ -114,7 +114,7 @@ export function analyzeResults(results) {
                 energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
                 exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
             },
-            avgStrength: average(games.map(g => g.finalStrength)),
+            avgPuissance: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
             avgDexterity: average(games.map(g => g.finalDexterity)),
@@ -157,7 +157,7 @@ export function analyzeResults(results) {
                 energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
                 exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
             },
-            avgStrength: average(games.map(g => g.finalStrength)),
+            avgPuissance: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
             avgDexterity: average(games.map(g => g.finalDexterity)),
@@ -209,7 +209,7 @@ export function analyzeResults(results) {
                 energy: average(games.map(g => g.itemsPurchasedByCategory.energy)),
                 exp: average(games.map(g => g.itemsPurchasedByCategory.exp))
             },
-            avgStrength: average(games.map(g => g.finalStrength)),
+            avgPuissance: average(games.map(g => g.finalStrength)),
             avgDefense: average(games.map(g => g.finalDefense)),
             avgHealth: average(games.map(g => g.finalHealth)),
             avgDexterity: average(games.map(g => g.finalDexterity)),

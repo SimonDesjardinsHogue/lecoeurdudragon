@@ -7,7 +7,7 @@ import { fetchLeaderboard, getNetworkState } from '../network.js';
 
 // Calculate player score for leaderboard
 function calculatePlayerScore(player) {
-    return (player.level * 100) + (player.kills * 50) + (player.strength * 10) + (player.defense * 5);
+    return (player.level * 100) + (player.kills * 50) + (player.puissance * 10) + (player.defense * 5);
 }
 
 // Show leaderboard screen
@@ -46,7 +46,7 @@ async function displayLocalLeaderboard() {
             name: gameState.player.name,
             level: gameState.player.level,
             kills: gameState.player.kills,
-            strength: gameState.player.strength,
+            strength: gameState.player.puissance,
             defense: gameState.player.defense,
             score: calculatePlayerScore(gameState.player)
         };
@@ -102,8 +102,8 @@ async function displayLocalLeaderboard() {
             `;
             
             // Provide default values for potentially missing fields
-            const displayScore = player.score || ((player.level || 0) * 100) + ((player.kills || 0) * 50) + ((player.strength || 10) * 10) + ((player.defense || 5) * 5);
-            const displayStrength = player.strength || 10;
+            const displayScore = player.score || ((player.level || 0) * 100) + ((player.kills || 0) * 50) + ((player.puissance || 10) * 10) + ((player.defense || 5) * 5);
+            const displayStrength = player.puissance || 10;
             const displayDefense = player.defense || 5;
             
             const statsSection = document.createElement('div');
@@ -213,8 +213,8 @@ function updateLeaderboardDisplay(scores) {
             `;
             
             // Provide default values for potentially missing fields
-            const displayScore = score.score || ((score.level || 0) * 100) + ((score.kills || 0) * 50) + ((score.strength || 10) * 10) + ((score.defense || 5) * 5);
-            const displayStrength = score.strength || 10;
+            const displayScore = score.score || ((score.level || 0) * 100) + ((score.kills || 0) * 50) + ((score.puissance || 10) * 10) + ((score.defense || 5) * 5);
+            const displayStrength = score.puissance || 10;
             const displayDefense = score.defense || 5;
             
             const statsSection = document.createElement('div');
