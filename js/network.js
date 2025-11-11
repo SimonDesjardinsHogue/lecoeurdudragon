@@ -59,6 +59,20 @@ export function configureServer(serverUrl) {
   // Remove trailing slash
   serverUrl = serverUrl.replace(/\/$/, '');
   
+  // Validate URL format for security
+  try {
+    const url = new URL(serverUrl);
+    // Only allow http and https protocols
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      console.error('❌ Protocole non supporté:', url.protocol);
+      return;
+    }
+    serverUrl = url.origin; // Use normalized URL
+  } catch (e) {
+    console.error('❌ URL invalide:', serverUrl);
+    return;
+  }
+  
   networkState.serverUrl = serverUrl;
   networkState.enabled = true;
   localStorage.setItem('lecoeurdudragon_serverUrl', serverUrl);
@@ -148,13 +162,39 @@ export function connectToServer() {
   }
   
   try {
-    // Dynamically import Socket.IO client
-    import('https://cdn.socket.io/4.6.1/socket.io.min.js').then(() => {
-      if (typeof io === 'undefined') {
-        console.error('Socket.IO client non disponible');
-        return;
-      }
-      
+    // Load Socket.IO client from the server (Safari/iOS compatible)
+    // This avoids mixed content issues and ensures version compatibility
+    const loadSocketIO = () => {
+      return new Promise((resolve, reject) => {
+        // Check if Socket.IO is already loaded
+        if (typeof io !== 'undefined') {
+          resolve();
+          return;
+        }
+        
+        // Create script element to load Socket.IO from server
+        const script = document.createElement('script');
+        script.src = `${networkState.serverUrl}/socket.io/socket.io.js`;
+        script.async = true;
+        
+        script.onload = () => {
+          if (typeof io !== 'undefined') {
+            console.log('✓ Socket.IO client chargé depuis le serveur');
+            resolve();
+          } else {
+            reject(new Error('Socket.IO loaded but io is undefined'));
+          }
+        };
+        
+        script.onerror = () => {
+          reject(new Error('Failed to load Socket.IO client'));
+        };
+        
+        document.head.appendChild(script);
+      });
+    };
+    
+    loadSocketIO().then(() => {
       // Safari/iOS compatible configuration
       // Safari prefers polling first, then upgrades to websocket
       networkState.socket = io(networkState.serverUrl, {
