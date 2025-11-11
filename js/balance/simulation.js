@@ -17,13 +17,13 @@ export function createSimulatedPlayer(classKey, raceKey = 'humain', sexKey = 'ma
         level: 1,
         health: 100,
         maxHealth: 100,
-        strength: 10,
+        puissance: 10,
         defense: 5,
-        dexterity: 10,
-        constitution: 10,
-        intelligence: 10,
-        wisdom: 10,
-        charisma: 10,
+        adresse: 10,
+        puissance: 10,
+        esprit: 10,
+        esprit: 10,
+        presence: 10,
         gold: 75,
         xp: 0,
         xpToLevel: 100,
@@ -85,22 +85,22 @@ function allocateStatPoints(player, points) {
     // Define stat priorities for each class
     const classPriorities = {
         guerrier: [
-            { stat: 'strength', weight: 0.4 },
-            { stat: 'constitution', weight: 0.3 },
+            { stat: 'puissance', weight: 0.4 },
+            { stat: 'puissance', weight: 0.3 },
             { stat: 'defense', weight: 0.2 },
-            { stat: 'dexterity', weight: 0.1 }
+            { stat: 'adresse', weight: 0.1 }
         ],
         magicien: [
-            { stat: 'intelligence', weight: 0.5 },
-            { stat: 'wisdom', weight: 0.2 },
-            { stat: 'constitution', weight: 0.2 },
-            { stat: 'dexterity', weight: 0.1 }
+            { stat: 'esprit', weight: 0.5 },
+            { stat: 'esprit', weight: 0.2 },
+            { stat: 'puissance', weight: 0.2 },
+            { stat: 'adresse', weight: 0.1 }
         ],
         archer: [
-            { stat: 'dexterity', weight: 0.4 },
-            { stat: 'strength', weight: 0.3 },
-            { stat: 'constitution', weight: 0.2 },
-            { stat: 'wisdom', weight: 0.1 }
+            { stat: 'adresse', weight: 0.4 },
+            { stat: 'puissance', weight: 0.3 },
+            { stat: 'puissance', weight: 0.2 },
+            { stat: 'esprit', weight: 0.1 }
         ]
     };
     
@@ -228,11 +228,11 @@ export function simulatePurchasing(player) {
             player.health = Math.min(player.maxHealth, player.health + healAmount);
         } else if (itemToBuy.category === 'damage') {
             const strBonus = parseInt(itemToBuy.description.match(/\d+/)?.[0] || 0);
-            player.strength += strBonus;
+            player.puissance += strBonus;
         } else if (itemToBuy.category === 'equipment') {
             if (itemToBuy.type === 'weapon') {
                 const strBonus = itemToBuy.bonus || parseInt(itemToBuy.description.match(/\d+/)?.[0] || 0);
-                player.strength += strBonus;
+                player.puissance += strBonus;
                 player.equippedItems.weapon = itemToBuy;
             } else if (itemToBuy.type === 'armor') {
                 const defBonus = itemToBuy.bonus || parseInt(itemToBuy.description.match(/\d+/)?.[0] || 0);
@@ -247,11 +247,11 @@ export function simulatePurchasing(player) {
                 player.equippedItems.classItem = itemToBuy;
             } else if (itemToBuy.type === 'book') {
                 const intBonus = itemToBuy.bonus || 0;
-                player.intelligence += intBonus;
+                player.esprit += intBonus;
                 player.equippedItems.classItem = itemToBuy;
             } else if (itemToBuy.type === 'quiver') {
                 const dexBonus = itemToBuy.bonus || 0;
-                player.dexterity += dexBonus;
+                player.adresse += dexBonus;
                 player.equippedItems.classItem = itemToBuy;
             }
         } else if (itemToBuy.category === 'energy') {
@@ -296,12 +296,12 @@ export function simulateCombat(player, enemy) {
         turns++;
         
         // Player attacks
-        const strengthMod = getStatModifier(player.strength);
+        const strengthMod = getStatModifier(player.puissance);
         const enemyDefenseMod = getStatModifier(enemyCopy.defense);
         
         // Use same damage variance as combat.js: -3 to +10
         const damageVariance = Math.floor(Math.random() * 14) - 3;
-        let playerDamage = Math.max(1, player.strength + strengthMod - (enemyCopy.defense + enemyDefenseMod) + damageVariance);
+        let playerDamage = Math.max(1, player.puissance + strengthMod - (enemyCopy.defense + enemyDefenseMod) + damageVariance);
         
         // Critical hit chance (10%)
         if (Math.random() < 0.10) {
@@ -327,12 +327,12 @@ export function simulateCombat(player, enemy) {
         }
         
         // Enemy attacks
-        const enemyStrengthMod = getStatModifier(enemyCopy.strength);
+        const enemyStrengthMod = getStatModifier(enemyCopy.puissance);
         const playerDefenseMod = getStatModifier(player.defense);
         
         // Use same damage variance as combat.js: -3 to +10
         const enemyDamageVariance = Math.floor(Math.random() * 14) - 3;
-        const enemyDamage = Math.max(1, enemyCopy.strength + enemyStrengthMod - (player.defense + playerDefenseMod) + enemyDamageVariance);
+        const enemyDamage = Math.max(1, enemyCopy.puissance + enemyStrengthMod - (player.defense + playerDefenseMod) + enemyDamageVariance);
         player.health -= enemyDamage;
         
         if (player.health <= 0) {
@@ -368,7 +368,7 @@ export function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxC
                     combatsLost: player.combatsLost,
                     gold: player.gold,
                     totalGoldEarned: player.totalGoldEarned,
-                    strength: player.strength,
+                    puissance: player.puissance,
                     defense: player.defense,
                     health: player.maxHealth
                 };
@@ -404,7 +404,7 @@ export function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxC
             enemy = {
                 ...bossTemplate,
                 health: Math.floor(bossTemplate.health * levelMultiplier * 1.5),
-                strength: Math.floor(bossTemplate.strength * levelMultiplier * 1.3),
+                puissance: Math.floor(bossTemplate.puissance * levelMultiplier * 1.3),
                 defense: Math.floor(bossTemplate.defense * levelMultiplier * 1.2),
                 gold: Math.floor(bossTemplate.gold * levelMultiplier * 2.0),
                 xp: Math.floor(bossTemplate.xp * levelMultiplier * xpMultiplier),
@@ -418,7 +418,7 @@ export function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxC
             enemy = {
                 ...enemyTemplate,
                 health: Math.floor(enemyTemplate.health * scaleFactor * 1.3), // Much more HP
-                strength: Math.floor(enemyTemplate.strength * scaleFactor * 1.2), // Stronger
+                puissance: Math.floor(enemyTemplate.puissance * scaleFactor * 1.2), // Stronger
                 defense: Math.floor(enemyTemplate.defense * scaleFactor * 1.1),
                 gold: Math.floor(enemyTemplate.gold * scaleFactor * 1.5),
                 xp: Math.floor(enemyTemplate.xp * scaleFactor * xpBonus) // Reduced XP gains
@@ -450,7 +450,7 @@ export function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxC
                 combatsLost: player.combatsLost,
                 gold: player.gold,
                 totalGoldEarned: player.totalGoldEarned,
-                strength: player.strength,
+                puissance: player.puissance,
                 defense: player.defense,
                 health: player.maxHealth
             };
@@ -472,11 +472,11 @@ export function simulateGame(classKey, raceKey = 'humain', sexKey = 'male', maxC
         totalGoldSpent: player.totalGoldSpent,
         itemsPurchased: player.itemsPurchased,
         itemsPurchasedByCategory: player.itemsPurchasedByCategory,
-        finalStrength: player.strength,
+        finalStrength: player.puissance,
         finalDefense: player.defense,
         finalHealth: player.maxHealth,
-        finalDexterity: player.dexterity,
-        finalConstitution: player.constitution,
+        finalDexterity: player.adresse,
+        finalConstitution: player.puissance,
         winRate: player.combatsWon / (player.combatsWon + player.combatsLost),
         reachedLevel20: player.level >= 20,
         milestoneStats: milestoneStats // Add milestone tracking

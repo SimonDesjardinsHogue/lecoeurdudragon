@@ -82,8 +82,8 @@ export function meetNPC(location = null) {
         let rewardText = '';
         
         // Charisma increases NPC rewards: +10% per charisma modifier point
-        const charismaMod = getStatModifier(p.charisma);
-        const rewardBonus = 1 + (charismaMod * 0.10);
+        const presenceMod = getStatModifier(p.presence);
+        const rewardBonus = 1 + (presenceMod * 0.10);
         
         if (npc.reward.type === 'heal') {
             const baseHealAmount = npc.reward.amount;
@@ -91,14 +91,14 @@ export function meetNPC(location = null) {
             const healAmount = Math.min(bonusHealAmount, p.maxHealth - p.health);
             p.health = Math.min(p.maxHealth, p.health + bonusHealAmount);
             rewardText = `Vous avez été soigné de ${healAmount} HP !`;
-            if (charismaMod > 0) {
+            if (presenceMod > 0) {
                 rewardText += ` (+${Math.floor((rewardBonus - 1) * 100)}% grâce à votre charisme)`;
             }
         } else if (npc.reward.type === 'gold') {
             const bonusGoldAmount = Math.floor(npc.reward.amount * rewardBonus);
             p.gold += bonusGoldAmount;
             rewardText = `Vous avez reçu ${bonusGoldAmount} pièces d'or !`;
-            if (charismaMod > 0) {
+            if (presenceMod > 0) {
                 rewardText += ` (+${Math.floor((rewardBonus - 1) * 100)}% grâce à votre charisme)`;
             }
         }

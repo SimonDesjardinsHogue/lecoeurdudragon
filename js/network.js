@@ -299,7 +299,7 @@ export async function submitScore() {
     className: player.className || 'Guerrier',
     race: player.race || 'humain',
     gender: player.gender || 'male',
-    strength: player.strength,
+    puissance: player.puissance,
     defense: player.defense
   };
   

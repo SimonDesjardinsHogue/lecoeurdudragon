@@ -5,25 +5,25 @@ import { gameState, getStatModifier } from '../game-state.js';
 import { addCombatLog } from '../ui.js';
 
 // Roll initiative for combat
-// Returns the initiative roll (d10 + dexterity modifier)
+// Returns the initiative roll (d10 + adresse modifier)
 export function rollInitiative(character) {
     const d10Roll = Math.floor(Math.random() * 10) + 1; // Roll 1d10
-    // Use character's dexterity if available, otherwise estimate based on enemy type
-    let dexterity = character.dexterity;
-    if (dexterity === undefined && character.name) {
-        // Enemies don't have explicit dexterity, estimate based on type
-        // Ranged enemies get bonus dexterity, heavy enemies get penalty
+    // Use character's adresse if available, otherwise estimate based on enemy type
+    let adresse = character.adresse;
+    if (adresse === undefined && character.name) {
+        // Enemies don't have explicit adresse, estimate based on type
+        // Ranged enemies get bonus adresse, heavy enemies get penalty
         if (character.isRanged) {
-            dexterity = 14; // Ranged enemies are more agile
+            adresse = 14; // Ranged enemies are more agile
         } else if (character.name.includes('Golem') || character.name.includes('Titan')) {
-            dexterity = 8; // Heavy enemies are slower
+            adresse = 8; // Heavy enemies are slower
         } else {
-            dexterity = 10; // Default dexterity for enemies
+            adresse = 10; // Default adresse for enemies
         }
-    } else if (dexterity === undefined) {
-        dexterity = 10; // Fallback default
+    } else if (adresse === undefined) {
+        adresse = 10; // Fallback default
     }
-    const dexMod = getStatModifier(dexterity);
+    const dexMod = getStatModifier(adresse);
     return d10Roll + dexMod;
 }
 
@@ -41,24 +41,24 @@ export function determineInitiative() {
     gameState.enemyInitiative = enemyInitiative;
     
     // Display initiative rolls
-    const playerDexMod = getStatModifier(player.dexterity);
+    const playerAdresseMod = getStatModifier(player.adresse);
     
-    // Calculate enemy dexterity for display
-    let enemyDex = enemy.dexterity;
-    if (enemyDex === undefined) {
+    // Calculate enemy adresse for display
+    let enemyAdresse = enemy.adresse;
+    if (enemyAdresse === undefined) {
         if (enemy.isRanged) {
-            enemyDex = 14;
+            enemyAdresse = 14;
         } else if (enemy.name.includes('Golem') || enemy.name.includes('Titan')) {
-            enemyDex = 8;
+            enemyAdresse = 8;
         } else {
-            enemyDex = 10;
+            enemyAdresse = 10;
         }
     }
-    const enemyDexMod = getStatModifier(enemyDex);
+    const enemyAdresseMod = getStatModifier(enemyAdresse);
     
     addCombatLog(`⚡ Jets d'initiative !`, 'info');
-    addCombatLog(`Vous : ${playerInitiative} (Bonus DEX: ${playerDexMod >= 0 ? '+' : ''}${playerDexMod})`, 'player-damage');
-    addCombatLog(`${enemy.name} : ${enemyInitiative} (Bonus DEX: ${enemyDexMod >= 0 ? '+' : ''}${enemyDexMod})`, 'damage');
+    addCombatLog(`Vous : ${playerInitiative} (Bonus DEX: ${playerAdresseMod >= 0 ? '+' : ''}${playerAdresseMod})`, 'player-damage');
+    addCombatLog(`${enemy.name} : ${enemyInitiative} (Bonus DEX: ${enemyAdresseMod >= 0 ? '+' : ''}${enemyAdresseMod})`, 'damage');
     
     // Determine who goes first
     if (playerInitiative > enemyInitiative) {

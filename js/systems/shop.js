@@ -32,16 +32,16 @@ export function initializeShopItems() {
     shopItems[9].effect = () => healPlayer(550);  // Élixir de Soin Immortel
     
     // Damage potions (10 tiers)
-    shopItems[10].effect = () => { gameState.player.strength += 1; };   // Potion de Force Minuscule
-    shopItems[11].effect = () => { gameState.player.strength += 3; };   // Potion de Force Mineure
-    shopItems[12].effect = () => { gameState.player.strength += 5; };   // Potion de Force
-    shopItems[13].effect = () => { gameState.player.strength += 7; };   // Potion de Force Supérieure
-    shopItems[14].effect = () => { gameState.player.strength += 9; };   // Potion de Force Majeure
-    shopItems[15].effect = () => { gameState.player.strength += 10; };  // Potion de Force Extrême
-    shopItems[16].effect = () => { gameState.player.strength += 12; };  // Potion de Force Titanesque
-    shopItems[17].effect = () => { gameState.player.strength += 15; };  // Potion de Force Divine
-    shopItems[18].effect = () => { gameState.player.strength += 18; };  // Potion de Force Céleste
-    shopItems[19].effect = () => { gameState.player.strength += 22; };  // Potion de Force Immortelle
+    shopItems[10].effect = () => { gameState.player.puissance += 1; };   // Potion de Force Minuscule
+    shopItems[11].effect = () => { gameState.player.puissance += 3; };   // Potion de Force Mineure
+    shopItems[12].effect = () => { gameState.player.puissance += 5; };   // Potion de Force
+    shopItems[13].effect = () => { gameState.player.puissance += 7; };   // Potion de Force Supérieure
+    shopItems[14].effect = () => { gameState.player.puissance += 9; };   // Potion de Force Majeure
+    shopItems[15].effect = () => { gameState.player.puissance += 10; };  // Potion de Force Extrême
+    shopItems[16].effect = () => { gameState.player.puissance += 12; };  // Potion de Force Titanesque
+    shopItems[17].effect = () => { gameState.player.puissance += 15; };  // Potion de Force Divine
+    shopItems[18].effect = () => { gameState.player.puissance += 18; };  // Potion de Force Céleste
+    shopItems[19].effect = () => { gameState.player.puissance += 22; };  // Potion de Force Immortelle
     
     // Energy potions (3 tiers)
     shopItems[20].effect = () => restoreEnergy(30);  // Potion d'Énergie Mineure
@@ -54,40 +54,40 @@ export function initializeShopItems() {
     shopItems[25].effect = () => addExperience(120); // Potion d'Expérience Majeure
     
     // Weapons for Guerrier (10 tiers)
-    shopItems[26].effect = () => { gameState.player.strength += 1; };  // Épée Rouillée
-    shopItems[27].effect = () => { gameState.player.strength += 3; };  // Épée en Fer
-    shopItems[28].effect = () => { gameState.player.strength += 5; };  // Épée en Acier
-    shopItems[29].effect = () => { gameState.player.strength += 7; };  // Épée Enchantée
-    shopItems[30].effect = () => { gameState.player.strength += 9; };  // Épée Flamboyante
-    shopItems[31].effect = () => { gameState.player.strength += 10; }; // Épée Runique
-    shopItems[32].effect = () => { gameState.player.strength += 12; }; // Épée Légendaire
-    shopItems[33].effect = () => { gameState.player.strength += 15; }; // Épée Divine
-    shopItems[34].effect = () => { gameState.player.strength += 18; }; // Épée Céleste
-    shopItems[35].effect = () => { gameState.player.strength += 22; }; // Épée du Conquérant Suprême
+    shopItems[26].effect = () => { gameState.player.puissance += 1; };  // Épée Rouillée
+    shopItems[27].effect = () => { gameState.player.puissance += 3; };  // Épée en Fer
+    shopItems[28].effect = () => { gameState.player.puissance += 5; };  // Épée en Acier
+    shopItems[29].effect = () => { gameState.player.puissance += 7; };  // Épée Enchantée
+    shopItems[30].effect = () => { gameState.player.puissance += 9; };  // Épée Flamboyante
+    shopItems[31].effect = () => { gameState.player.puissance += 10; }; // Épée Runique
+    shopItems[32].effect = () => { gameState.player.puissance += 12; }; // Épée Légendaire
+    shopItems[33].effect = () => { gameState.player.puissance += 15; }; // Épée Divine
+    shopItems[34].effect = () => { gameState.player.puissance += 18; }; // Épée Céleste
+    shopItems[35].effect = () => { gameState.player.puissance += 22; }; // Épée du Conquérant Suprême
     
     // Weapons for Archer (10 tiers)
-    shopItems[36].effect = () => { gameState.player.strength += 1; };  // Arc Basique
-    shopItems[37].effect = () => { gameState.player.strength += 3; };  // Arc Court
-    shopItems[38].effect = () => { gameState.player.strength += 5; };  // Arc Long
-    shopItems[39].effect = () => { gameState.player.strength += 7; };  // Arc Composite
-    shopItems[40].effect = () => { gameState.player.strength += 9; };  // Arc Elfique
-    shopItems[41].effect = () => { gameState.player.strength += 10; }; // Arc Runique
-    shopItems[42].effect = () => { gameState.player.strength += 12; }; // Arc Légendaire
-    shopItems[43].effect = () => { gameState.player.strength += 15; }; // Arc du Chasseur Divin
-    shopItems[44].effect = () => { gameState.player.strength += 18; }; // Arc Céleste
-    shopItems[45].effect = () => { gameState.player.strength += 22; }; // Arc de l'Étoile Filante
+    shopItems[36].effect = () => { gameState.player.puissance += 1; };  // Arc Basique
+    shopItems[37].effect = () => { gameState.player.puissance += 3; };  // Arc Court
+    shopItems[38].effect = () => { gameState.player.puissance += 5; };  // Arc Long
+    shopItems[39].effect = () => { gameState.player.puissance += 7; };  // Arc Composite
+    shopItems[40].effect = () => { gameState.player.puissance += 9; };  // Arc Elfique
+    shopItems[41].effect = () => { gameState.player.puissance += 10; }; // Arc Runique
+    shopItems[42].effect = () => { gameState.player.puissance += 12; }; // Arc Légendaire
+    shopItems[43].effect = () => { gameState.player.puissance += 15; }; // Arc du Chasseur Divin
+    shopItems[44].effect = () => { gameState.player.puissance += 18; }; // Arc Céleste
+    shopItems[45].effect = () => { gameState.player.puissance += 22; }; // Arc de l'Étoile Filante
     
     // Weapons for Magicien (10 tiers)
-    shopItems[46].effect = () => { gameState.player.strength += 1; };  // Bâton de Bois
-    shopItems[47].effect = () => { gameState.player.strength += 3; };  // Bâton d'Apprenti
-    shopItems[48].effect = () => { gameState.player.strength += 5; };  // Bâton Mystique
-    shopItems[49].effect = () => { gameState.player.strength += 7; };  // Bâton Enchanté
-    shopItems[50].effect = () => { gameState.player.strength += 9; };  // Bâton de Pouvoir
-    shopItems[51].effect = () => { gameState.player.strength += 10; }; // Bâton Runique
-    shopItems[52].effect = () => { gameState.player.strength += 12; }; // Bâton Légendaire
-    shopItems[53].effect = () => { gameState.player.strength += 15; }; // Bâton de l'Archimage
-    shopItems[54].effect = () => { gameState.player.strength += 18; }; // Bâton Céleste
-    shopItems[55].effect = () => { gameState.player.strength += 22; }; // Bâton de l'Univers
+    shopItems[46].effect = () => { gameState.player.puissance += 1; };  // Bâton de Bois
+    shopItems[47].effect = () => { gameState.player.puissance += 3; };  // Bâton d'Apprenti
+    shopItems[48].effect = () => { gameState.player.puissance += 5; };  // Bâton Mystique
+    shopItems[49].effect = () => { gameState.player.puissance += 7; };  // Bâton Enchanté
+    shopItems[50].effect = () => { gameState.player.puissance += 9; };  // Bâton de Pouvoir
+    shopItems[51].effect = () => { gameState.player.puissance += 10; }; // Bâton Runique
+    shopItems[52].effect = () => { gameState.player.puissance += 12; }; // Bâton Légendaire
+    shopItems[53].effect = () => { gameState.player.puissance += 15; }; // Bâton de l'Archimage
+    shopItems[54].effect = () => { gameState.player.puissance += 18; }; // Bâton Céleste
+    shopItems[55].effect = () => { gameState.player.puissance += 22; }; // Bâton de l'Univers
     
     // Shields for Guerrier (10 tiers)
     shopItems[56].effect = () => { gameState.player.defense += 1; };  // Bouclier en Bois
@@ -102,28 +102,28 @@ export function initializeShopItems() {
     shopItems[65].effect = () => { gameState.player.defense += 22; }; // Bouclier du Protecteur Immortel
     
     // Books for Magicien (10 tiers)
-    shopItems[66].effect = () => { gameState.player.intelligence += 1; };  // Livre Usé
-    shopItems[67].effect = () => { gameState.player.intelligence += 3; };  // Livre de Sorts Mineurs
-    shopItems[68].effect = () => { gameState.player.intelligence += 5; };  // Grimoire d'Apprenti
-    shopItems[69].effect = () => { gameState.player.intelligence += 7; };  // Tome de Magie Ancienne
-    shopItems[70].effect = () => { gameState.player.intelligence += 9; };  // Codex Mystique
-    shopItems[71].effect = () => { gameState.player.intelligence += 10; }; // Livre des Secrets
-    shopItems[72].effect = () => { gameState.player.intelligence += 12; }; // Grimoire Légendaire
-    shopItems[73].effect = () => { gameState.player.intelligence += 15; }; // Livre des Arcanes Divins
-    shopItems[74].effect = () => { gameState.player.intelligence += 18; }; // Codex Céleste
-    shopItems[75].effect = () => { gameState.player.intelligence += 22; }; // Tome de la Connaissance Ultime
+    shopItems[66].effect = () => { gameState.player.esprit += 1; };  // Livre Usé
+    shopItems[67].effect = () => { gameState.player.esprit += 3; };  // Livre de Sorts Mineurs
+    shopItems[68].effect = () => { gameState.player.esprit += 5; };  // Grimoire d'Apprenti
+    shopItems[69].effect = () => { gameState.player.esprit += 7; };  // Tome de Magie Ancienne
+    shopItems[70].effect = () => { gameState.player.esprit += 9; };  // Codex Mystique
+    shopItems[71].effect = () => { gameState.player.esprit += 10; }; // Livre des Secrets
+    shopItems[72].effect = () => { gameState.player.esprit += 12; }; // Grimoire Légendaire
+    shopItems[73].effect = () => { gameState.player.esprit += 15; }; // Livre des Arcanes Divins
+    shopItems[74].effect = () => { gameState.player.esprit += 18; }; // Codex Céleste
+    shopItems[75].effect = () => { gameState.player.esprit += 22; }; // Tome de la Connaissance Ultime
     
     // Quivers for Archer (10 tiers)
-    shopItems[76].effect = () => { gameState.player.dexterity += 1; };  // Carquois Usé
-    shopItems[77].effect = () => { gameState.player.dexterity += 3; };  // Carquois en Cuir
-    shopItems[78].effect = () => { gameState.player.dexterity += 5; };  // Carquois Renforcé
-    shopItems[79].effect = () => { gameState.player.dexterity += 7; };  // Carquois Elfique
-    shopItems[80].effect = () => { gameState.player.dexterity += 9; };  // Carquois du Chasseur
-    shopItems[81].effect = () => { gameState.player.dexterity += 10; }; // Carquois Enchanté
-    shopItems[82].effect = () => { gameState.player.dexterity += 12; }; // Carquois Runique
-    shopItems[83].effect = () => { gameState.player.dexterity += 15; }; // Carquois du Tireur d'Élite
-    shopItems[84].effect = () => { gameState.player.dexterity += 18; }; // Carquois Céleste
-    shopItems[85].effect = () => { gameState.player.dexterity += 22; }; // Carquois de l'Archer Suprême
+    shopItems[76].effect = () => { gameState.player.adresse += 1; };  // Carquois Usé
+    shopItems[77].effect = () => { gameState.player.adresse += 3; };  // Carquois en Cuir
+    shopItems[78].effect = () => { gameState.player.adresse += 5; };  // Carquois Renforcé
+    shopItems[79].effect = () => { gameState.player.adresse += 7; };  // Carquois Elfique
+    shopItems[80].effect = () => { gameState.player.adresse += 9; };  // Carquois du Chasseur
+    shopItems[81].effect = () => { gameState.player.adresse += 10; }; // Carquois Enchanté
+    shopItems[82].effect = () => { gameState.player.adresse += 12; }; // Carquois Runique
+    shopItems[83].effect = () => { gameState.player.adresse += 15; }; // Carquois du Tireur d'Élite
+    shopItems[84].effect = () => { gameState.player.adresse += 18; }; // Carquois Céleste
+    shopItems[85].effect = () => { gameState.player.adresse += 22; }; // Carquois de l'Archer Suprême
     
     // Armors (10 tiers)
     shopItems[86].effect = () => { gameState.player.defense += 1; };  // Armure en Tissu
@@ -142,7 +142,7 @@ export function initializeShopItems() {
         gameState.player.health = gameState.player.maxHealth;
         gameState.player.energy = gameState.player.maxEnergy;
     };
-    rareItems[1].effect = () => { gameState.player.strength += 12; }; // Potion de Géant
+    rareItems[1].effect = () => { gameState.player.puissance += 12; }; // Potion de Géant
     rareItems[2].effect = () => { // Armure Runique
         const p = gameState.player;
         p.defense += 8;
@@ -151,14 +151,14 @@ export function initializeShopItems() {
         p.constitution += 2;
         p.intelligence += 2;
         p.wisdom += 2;
-        p.charisma += 2;
+        p.presence += 2;
     };
     rareItems[3].effect = () => { // Amulette de Fortune
         gameState.player.gold += 100;
-        gameState.player.charisma += 5;
+        gameState.player.presence += 5;
     };
     rareItems[4].effect = () => { // Grimoire Ancien
-        gameState.player.intelligence += 10;
+        gameState.player.esprit += 10;
         addExperience(200);
     };
 }
@@ -399,8 +399,8 @@ export function showShop(filterCategory = 'all', filterByClass = true) {
             }
             
             // Calculate discounted price based on charisma
-            const charismaMod = getStatModifier(gameState.player.charisma);
-            const charismaDiscount = Math.min(0.20, Math.max(0, charismaMod * 0.02));
+            const presenceMod = getStatModifier(gameState.player.presence);
+            const charismaDiscount = Math.min(0.20, Math.max(0, presenceMod * 0.02));
             
             // Apply event shop discount
             const eventDiscount = getEventMultiplier('shopDiscount', 0);
@@ -470,8 +470,8 @@ export function buyItem(index) {
     }
     
     // Charisma reduces shop prices: -2% per charisma modifier point (max 20% discount)
-    const charismaMod = getStatModifier(p.charisma);
-    const charismaDiscount = Math.min(0.20, Math.max(0, charismaMod * 0.02));
+    const presenceMod = getStatModifier(p.presence);
+    const charismaDiscount = Math.min(0.20, Math.max(0, presenceMod * 0.02));
     
     // Apply event shop discount
     const eventDiscount = getEventMultiplier('shopDiscount', 0);

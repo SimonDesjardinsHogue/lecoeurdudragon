@@ -5,22 +5,18 @@ export const characterSexes = {
     male: {
         name: 'Masculin',
         icon: '♂️',
-        strength: 15,      // FOR
-        dexterity: 16,     // DEX
-        constitution: 13,  // CON
-        intelligence: 18,  // INT
-        wisdom: 10,        // SAG
-        charisma: 11       // CHA
+        puissance: 14,     // PUI (average of old FOR 15 + CON 13)
+        adresse: 16,       // ADR (from old DEX)
+        esprit: 14,        // ESP (average of old INT 18 + SAG 10)
+        presence: 11       // PRE (from old CHA)
     },
     female: {
         name: 'Féminin',
         icon: '♀️',
-        strength: 14,      // FOR
-        dexterity: 16,     // DEX
-        constitution: 13,  // CON
-        intelligence: 18,  // INT
-        wisdom: 10,        // SAG
-        charisma: 12       // CHA
+        puissance: 13,     // PUI (average of old FOR 14 + CON 13)
+        adresse: 16,       // ADR (from old DEX)
+        esprit: 14,        // ESP (average of old INT 18 + SAG 10)
+        presence: 12       // PRE (from old CHA)
     }
 };
 
@@ -34,10 +30,8 @@ export function applySexBaseStats(player, sexKey) {
     }
     
     // Set base stats from sex
-    player.strength = sex.strength;
-    player.dexterity = sex.dexterity;
-    player.constitution = sex.constitution;
-    player.intelligence = sex.intelligence;
-    player.wisdom = sex.wisdom;
-    player.charisma = sex.charisma;
+    player.puissance = sex.puissance;
+    player.adresse = sex.adresse;
+    player.esprit = sex.esprit;
+    player.presence = sex.presence;
 }
