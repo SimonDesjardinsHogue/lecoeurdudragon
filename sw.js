@@ -1,11 +1,13 @@
 // Service Worker for Le Coeur du Dragon
 // Enables offline play and caching of game assets
 
-const CACHE_NAME = 'lecoeurdudragon-v1.0.2';
+const CACHE_NAME = 'lecoeurdudragon-v1.1.0';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
+  '/manifest.json',
+  // Core JavaScript files
   '/js/main.js',
   '/js/game-state.js',
   '/js/game-logic.js',
@@ -14,10 +16,50 @@ const urlsToCache = [
   '/js/save-load.js',
   '/js/character-classes.js',
   '/js/character-races.js',
+  '/js/character-sexes.js',
   '/js/audio.js',
   '/js/particles.js',
   '/js/keyboard-handler.js',
-  '/js/daily-quests.js'
+  '/js/daily-quests.js',
+  '/js/daily-rewards.js',
+  '/js/achievements.js',
+  '/js/skills.js',
+  '/js/network.js',
+  '/js/multiplayer-ui.js',
+  '/js/popup-queue.js',
+  '/js/scheduled-events.js',
+  '/js/mobile-help.js',
+  '/js/touch-gestures.js',
+  '/js/balance-tester.js',
+  // Combat system
+  '/js/combat/boss.js',
+  '/js/combat/events.js',
+  '/js/combat/initiative.js',
+  // Core systems
+  '/js/core/game-state.js',
+  // Data files
+  '/js/data/enemies.js',
+  '/js/data/events.js',
+  '/js/data/game-constants.js',
+  '/js/data/metals.js',
+  '/js/data/npcs.js',
+  '/js/data/shop-items.js',
+  // Game systems
+  '/js/systems/inventory.js',
+  '/js/systems/leaderboard.js',
+  '/js/systems/npc.js',
+  '/js/systems/player.js',
+  '/js/systems/shop.js',
+  // Balance analysis
+  '/js/balance/analysis.js',
+  '/js/balance/report-formatter.js',
+  '/js/balance/simulation.js',
+  // Icons - essential sizes for offline install
+  '/assets/icons/icon-192x192.png',
+  '/assets/icons/icon-512x512.png',
+  '/assets/icons/icon-192x192-maskable.png',
+  '/assets/icons/icon-512x512-maskable.png',
+  '/favicon.ico'
 ];
 
 // Install event - cache all assets
