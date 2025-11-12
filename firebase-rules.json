@@ -1,0 +1,58 @@
+{
+  "rules": {
+    "leaderboard": {
+      ".read": true,
+      ".indexOn": ["score", "level", "timestamp"],
+      "$scoreId": {
+        ".write": "newData.exists() && newData.hasChildren(['playerName', 'level', 'kills', 'score', 'timestamp'])",
+        ".validate": "newData.child('playerName').isString() && newData.child('playerName').val().length >= 1 && newData.child('playerName').val().length <= 50 && newData.child('level').isNumber() && newData.child('level').val() >= 1 && newData.child('level').val() <= 24 && newData.child('kills').isNumber() && newData.child('kills').val() >= 0 && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('timestamp').isNumber() && newData.child('timestamp').val() <= now + 60000",
+        "playerName": {
+          ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 50"
+        },
+        "level": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 24"
+        },
+        "kills": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "gold": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "xp": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "className": {
+          ".validate": "newData.isString()"
+        },
+        "race": {
+          ".validate": "newData.isString()"
+        },
+        "gender": {
+          ".validate": "newData.isString()"
+        },
+        "strength": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "defense": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "score": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "timestamp": {
+          ".validate": "newData.isNumber() && newData.val() <= now + 60000"
+        },
+        "date": {
+          ".validate": "newData.isString()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}

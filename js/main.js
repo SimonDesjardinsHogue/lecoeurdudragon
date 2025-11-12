@@ -1,6 +1,6 @@
 // Main Entry Point Module
 
-import { init, startGame, rest, resetGame, showStats, showStatsAndLeaderboard, showProgressionMenu, showOptionsMenu, showSaveOptions, showMain, restoreSaveFromStart, showSaveSelectionModal, showManualSaveModal, showAchievements, showBalanceTest, runBalanceTest, showAdminLogin, showAdminPanel, showServerHosting, deleteAllSaves, spendStatPoint, showLeaderboard, showDailyQuestsScreen, useInventoryItem, sellInventoryItem, visitVillage } from './game-logic.js';
+import { init, startGame, rest, resetGame, showStats, showStatsAndLeaderboard, showProgressionMenu, showOptionsMenu, showSaveOptions, showMain, restoreSaveFromStart, showSaveSelectionModal, showManualSaveModal, showAchievements, showBalanceTest, runBalanceTest, showAdminLogin, showAdminPanel, showServerHosting, deleteAllSaves, spendStatPoint, showLeaderboard, submitToGlobalLeaderboard, switchLeaderboardMode, showDailyQuestsScreen, useInventoryItem, sellInventoryItem, visitVillage } from './game-logic.js';
 import { showShop, buyItem, buyRareItem } from './systems/shop.js';
 import { meetNPC, meetJeweler, buyMetal, sellMetal } from './systems/npc.js';
 import { explore, attack, defend, flee, enemyAttack, useCombatPotion, skipDefendTurn } from './combat.js';
@@ -17,6 +17,7 @@ import * as scheduledEventsModule from './scheduled-events.js';
 import * as dailyRewardsModule from './daily-rewards.js';
 import { initI18n, setLanguage, getCurrentLanguage, getLanguageFlag } from './i18n/i18n.js';
 import { updateLanguageUI } from './i18n/language-ui.js';
+import { initializeFirebase } from './firebase-config.js';
 
 // Make scheduled events module available globally for UI updates
 window.scheduledEventsModule = scheduledEventsModule;
@@ -222,6 +223,15 @@ window.addEventListener('load', () => {
     
     init();
     
+    // Initialize Firebase for global leaderboard
+    initializeFirebase().then(success => {
+        if (success) {
+            console.log('✓ Firebase global leaderboard enabled');
+        } else {
+            console.log('ℹ️ Global leaderboard not available (Firebase not configured)');
+        }
+    });
+    
     // Initialize network module for LAN multiplayer
     initNetwork();
     
@@ -303,6 +313,8 @@ window.resetGame = resetGame;
 window.restoreSaveFromStart = restoreSaveFromStart;
 window.meetNPC = meetNPC;
 window.showLeaderboard = showLeaderboard;
+window.submitToGlobalLeaderboard = submitToGlobalLeaderboard;
+window.switchLeaderboardMode = switchLeaderboardMode;
 window.toggleAudio = toggleAudio;
 window.toggleLanguageMenu = toggleLanguageMenu;
 window.changeLanguage = changeLanguage;
