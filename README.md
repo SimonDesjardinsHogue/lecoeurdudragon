@@ -455,6 +455,39 @@ Ce guide explique :
 
 📖 **Documentation complète** : [MULTIPLAYER_GUIDE.md](MULTIPLAYER_GUIDE.md)
 
+### 🌍 Classement Mondial (Google Play Store)
+
+Pour les joueurs qui téléchargent le jeu sur Google Play Store, un **classement mondial** est disponible !
+
+#### Fonctionnalités
+
+- **🏆 Classement Global** : Comparez votre score avec des joueurs du monde entier
+- **⚡ Temps Réel** : Les scores sont synchronisés instantanément via Firebase
+- **🔒 Sécurisé** : Validation des scores avec règles anti-triche
+- **📊 Trois Modes** : Basculez entre classements Local, LAN et Mondial
+
+#### Comment ça Marche ?
+
+Le jeu utilise Firebase Realtime Database pour synchroniser les scores globalement :
+- Les scores sont automatiquement soumis quand vous montez de niveau ou battez un boss
+- Consultez le classement mondial dans **Statistiques** > **🏆 Classement** > **🌍 Mondial**
+- Les 50 meilleurs joueurs sont affichés en temps réel
+
+#### Configuration pour les Développeurs
+
+Si vous hébergez votre propre version du jeu :
+
+📖 **[FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)** - Guide complet de configuration (Français)  
+📖 **[FIREBASE_SETUP_GUIDE_EN.md](FIREBASE_SETUP_GUIDE_EN.md)** - Complete setup guide (English)
+
+Le guide explique :
+- Comment créer un projet Firebase (gratuit)
+- Configuration de la base de données en temps réel
+- Règles de sécurité pour éviter la triche
+- Intégration dans le jeu en 5 minutes
+
+**Note** : Le plan gratuit de Firebase supporte jusqu'à 3,3 millions de scores et 33 millions de lectures/mois - largement suffisant pour un jeu indie !
+
 ## 🛠️ Technologie
 
 Le jeu utilise une **architecture modulaire améliorée** basée sur des modules ES6 JavaScript pour une meilleure maintenabilité et évolutivité.
