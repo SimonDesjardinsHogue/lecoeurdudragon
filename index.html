@@ -132,6 +132,11 @@
                             <span class="char-label-small" id="equippedQuiverIconInline">🏹</span>
                             <span class="char-value-small" id="equippedQuiverNameInline">Aucun</span>
                         </div>
+                        <!-- Amulet for Enchanteur -->
+                        <div class="char-compact" id="equippedAmuletSlotInline" style="display: none;" title="Amulette équipée">
+                            <span class="char-label-small" id="equippedAmuletIconInline">📿</span>
+                            <span class="char-value-small" id="equippedAmuletNameInline">Aucun</span>
+                        </div>
                     </div>
                     <div style="margin-top: 5px; display: flex; align-items: center; gap: 5px;">
                         <div class="char-compact" onclick="toggleInventoryPanel()" style="cursor: pointer; display: inline-flex; align-items: center; gap: 3px; padding: 3px 6px; background: rgba(0,0,0,0.3); border-radius: 3px;" title="Ouvrir/Fermer le sac">
@@ -272,6 +277,15 @@
                                 <div id="equippedQuiverDesc" style="font-size: 0.85em; color: #999;"></div>
                             </div>
                         </div>
+                        <!-- Amulet for Enchanteur -->
+                        <div class="equipment-item" id="equippedAmuletSlot" style="display: none;">
+                            <div class="equipment-icon">📿</div>
+                            <div class="equipment-details">
+                                <div style="font-weight: bold; color: #DAA520;">Amulette</div>
+                                <div id="equippedAmuletName">Aucune amulette</div>
+                                <div id="equippedAmuletDesc" style="font-size: 0.85em; color: #999;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -341,7 +355,7 @@
                             <input type="radio" name="characterClass" value="guerrier" checked>
                             <span class="class-label">
                                 <strong>⚔️ Guerrier</strong><br>
-                                <small>PV: 120 | PUI: 14 | CA: 9</small><br>
+                                <small>PV: 148 | PUI: 15 | CA: 9</small><br>
                                 <small style="color: #999;">Robuste et résistant</small>
                             </span>
                         </label>
@@ -349,7 +363,7 @@
                             <input type="radio" name="characterClass" value="magicien">
                             <span class="class-label">
                                 <strong>🧙 Magicien</strong><br>
-                                <small>PV: 84 | ESP: 16 | CA: 3</small><br>
+                                <small>PV: 122 | ESP: 15 | CA: 6</small><br>
                                 <small style="color: #999;">Puissant mais fragile</small>
                             </span>
                         </label>
@@ -357,8 +371,16 @@
                             <input type="radio" name="characterClass" value="archer">
                             <span class="class-label">
                                 <strong>🏹 Archer</strong><br>
-                                <small>PV: 100 | ADR: 15 | CA: 6</small><br>
+                                <small>PV: 128 | ADR: 15 | CA: 8</small><br>
                                 <small style="color: #999;">Équilibré et précis</small>
+                            </span>
+                        </label>
+                        <label class="class-option">
+                            <input type="radio" name="characterClass" value="enchanteur">
+                            <span class="class-label">
+                                <strong>🌀 Enchanteur</strong><br>
+                                <small>PV: 125 | PRE: 15 | CA: 7</small><br>
+                                <small style="color: #999;">Manipulateur d'esprit</small>
                             </span>
                         </label>
 
