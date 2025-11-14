@@ -48,9 +48,11 @@ export const fr = {
     warrior: "Guerrier",
     mage: "Magicien",
     archer: "Archer",
+    enchanter: "Enchanteur",
     warriorDesc: "Robuste et résistant",
     mageDesc: "Puissant mais fragile",
     archerDesc: "Équilibré et précis",
+    enchanterDesc: "Manipulateur d'esprit",
     
     // Stats
     character: "Personnage",
@@ -67,20 +69,35 @@ export const fr = {
     shield: "Bouclier",
     book: "Livre",
     quiver: "Carquois",
+    amulet: "Amulette",
     noWeapon: "Aucune arme",
     noArmor: "Aucune armure",
     noShield: "Aucun bouclier",
     noBook: "Aucun livre",
     noQuiver: "Aucun carquois",
+    noAmulet: "Aucune amulette",
+    none: "Aucune",
+    noneM: "Aucun",
     equippedWeapon: "Arme équipée",
     equippedArmor: "Armure équipée",
+    equippedShield: "Bouclier équipé",
+    equippedBook: "Livre équipé",
+    equippedQuiver: "Carquois équipé",
+    equippedAmulet: "Amulette équipée",
     bag: "Sac d'Objets",
+    bagShort: "Sac",
+    noItems: "Aucun objet",
+    openCloseBag: "Ouvrir/Fermer le sac",
     
     // Attributes
     power: "Puissance",
     dexterity: "Adresse",
     spirit: "Esprit",
     presence: "Présence",
+    
+    // Combat stats labels
+    weaponLabel: "Arme:",
+    armorClass: "CA:",
     
     // Game actions
     actions: "Actions de Jeu",
@@ -144,5 +161,13 @@ export const fr = {
     // Event banner
     nextEvent: "Prochain événement dans",
     activeEvent: "ÉVÉNEMENT ACTIF !",
-    remaining: "restant"
+    remaining: "restant",
+    
+    // Equipment descriptions
+    visitMerchantWeapon: "Visitez le marchand pour acheter une arme",
+    visitMerchantArmor: "Visitez le marchand pour acheter une armure",
+    visitMerchantShield: "Visitez le marchand pour acheter un bouclier",
+    visitMerchantBook: "Visitez le marchand pour acheter un livre",
+    visitMerchantQuiver: "Visitez le marchand pour acheter un carquois",
+    visitMerchantAmulet: "Visitez le marchand pour acheter une amulette"
 };

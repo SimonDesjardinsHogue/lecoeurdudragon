@@ -48,9 +48,11 @@ export const es = {
     warrior: "Guerrero",
     mage: "Mago",
     archer: "Arquero",
+    enchanter: "Encantador",
     warriorDesc: "Robusto y resistente",
     mageDesc: "Poderoso pero frágil",
     archerDesc: "Equilibrado y preciso",
+    enchanterDesc: "Manipulador de mentes",
     
     // Stats
     character: "Personaje",
@@ -67,20 +69,35 @@ export const es = {
     shield: "Escudo",
     book: "Libro",
     quiver: "Carcaj",
+    amulet: "Amuleto",
     noWeapon: "Sin arma",
     noArmor: "Sin armadura",
     noShield: "Sin escudo",
     noBook: "Sin libro",
     noQuiver: "Sin carcaj",
+    noAmulet: "Sin amuleto",
+    none: "Ninguna",
+    noneM: "Ninguno",
     equippedWeapon: "Arma equipada",
     equippedArmor: "Armadura equipada",
+    equippedShield: "Escudo equipado",
+    equippedBook: "Libro equipado",
+    equippedQuiver: "Carcaj equipado",
+    equippedAmulet: "Amuleto equipado",
     bag: "Bolsa de Objetos",
+    bagShort: "Bolsa",
+    noItems: "Sin objetos",
+    openCloseBag: "Abrir/Cerrar bolsa",
     
     // Attributes
     power: "Poder",
     dexterity: "Destreza",
     spirit: "Espíritu",
     presence: "Presencia",
+    
+    // Combat stats labels
+    weaponLabel: "Arma:",
+    armorClass: "CA:",
     
     // Game actions
     actions: "Acciones del Juego",
@@ -144,5 +161,13 @@ export const es = {
     // Event banner
     nextEvent: "Próximo evento en",
     activeEvent: "¡EVENTO ACTIVO!",
-    remaining: "restante"
+    remaining: "restante",
+    
+    // Equipment descriptions
+    visitMerchantWeapon: "Visita al mercader para comprar un arma",
+    visitMerchantArmor: "Visita al mercader para comprar armadura",
+    visitMerchantShield: "Visita al mercader para comprar un escudo",
+    visitMerchantBook: "Visita al mercader para comprar un libro",
+    visitMerchantQuiver: "Visita al mercader para comprar un carcaj",
+    visitMerchantAmulet: "Visita al mercader para comprar un amuleto"
 };

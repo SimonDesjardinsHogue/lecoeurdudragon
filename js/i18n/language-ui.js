@@ -46,6 +46,9 @@ export function updateLanguageUI() {
     
     // Update menus
     updateMenuScreens();
+    
+    // Update HTML static texts
+    updateStaticTexts();
 }
 
 function updateConnectionBanner() {
@@ -79,10 +82,12 @@ function updateStartScreen() {
     }
     
     // Update gender section
-    const genderLabel = document.querySelector('#startScreen label[style*="Genre"]');
-    if (genderLabel) {
-        genderLabel.textContent = t('gender') + ' :';
-    }
+    const genderLabels = document.querySelectorAll('#startScreen label');
+    genderLabels.forEach(label => {
+        if (label.textContent.includes('Genre') || label.textContent.includes('Gender') || label.textContent.includes('Género')) {
+            label.textContent = t('gender') + ' :';
+        }
+    });
     
     // Update gender options
     const maleLabel = document.querySelector('input[value="male"] + .class-label strong');
@@ -96,10 +101,11 @@ function updateStartScreen() {
     }
     
     // Update race section
-    const raceLabel = document.querySelectorAll('#startScreen label[style*="Race"]')[0];
-    if (raceLabel) {
-        raceLabel.textContent = t('race') + ' :';
-    }
+    genderLabels.forEach(label => {
+        if (label.textContent.includes('Race') || label.textContent.includes('Raza')) {
+            label.textContent = t('race') + ' :';
+        }
+    });
     
     // Update race options
     updateRaceOption('humain', t('human'), t('balanced'));
@@ -107,15 +113,17 @@ function updateStartScreen() {
     updateRaceOption('nain', t('dwarf'));
     
     // Update class section
-    const classLabel = document.querySelector('#startScreen label[style*="Choisissez"]');
-    if (classLabel) {
-        classLabel.textContent = t('chooseClass');
-    }
+    genderLabels.forEach(label => {
+        if (label.textContent.includes('Choisissez') || label.textContent.includes('Choose') || label.textContent.includes('Elige')) {
+            label.textContent = t('chooseClass');
+        }
+    });
     
     // Update class options
     updateClassOption('guerrier', t('warrior'), t('warriorDesc'));
     updateClassOption('magicien', t('mage'), t('mageDesc'));
     updateClassOption('archer', t('archer'), t('archerDesc'));
+    updateClassOption('enchanteur', t('enchanter'), t('enchanterDesc'));
     
     // Update buttons
     const startBtn = document.querySelector('#startScreen button[onclick="startGame()"]');
@@ -324,4 +332,176 @@ function updateScreenButtons(screenId, buttons) {
             btn.innerHTML = btnConfig.text;
         }
     });
+}
+
+// Update all static HTML texts that need translation
+function updateStaticTexts() {
+    // Update equipment tooltips in inline display
+    const equippedWeaponTooltip = document.querySelector('[title="Arme équipée"]');
+    if (equippedWeaponTooltip) {
+        equippedWeaponTooltip.title = t('equippedWeapon');
+    }
+    
+    const equippedArmorTooltip = document.querySelector('[title="Armure équipée"]');
+    if (equippedArmorTooltip) {
+        equippedArmorTooltip.title = t('equippedArmor');
+    }
+    
+    const equippedShieldTooltip = document.getElementById('equippedShieldSlotInline');
+    if (equippedShieldTooltip) {
+        equippedShieldTooltip.title = t('equippedShield');
+    }
+    
+    const equippedBookTooltip = document.getElementById('equippedBookSlotInline');
+    if (equippedBookTooltip) {
+        equippedBookTooltip.title = t('equippedBook');
+    }
+    
+    const equippedQuiverTooltip = document.getElementById('equippedQuiverSlotInline');
+    if (equippedQuiverTooltip) {
+        equippedQuiverTooltip.title = t('equippedQuiver');
+    }
+    
+    const equippedAmuletTooltip = document.getElementById('equippedAmuletSlotInline');
+    if (equippedAmuletTooltip) {
+        equippedAmuletTooltip.title = t('equippedAmulet');
+    }
+    
+    // Update bag tooltip
+    const bagTooltip = document.querySelector('[title="Ouvrir/Fermer le sac"]');
+    if (bagTooltip) {
+        bagTooltip.title = t('openCloseBag');
+    }
+    
+    // Update inventory panel label
+    const inventoryPanelLabel = document.querySelector('#inventoryPanel [style*="color: #DAA520"]');
+    if (inventoryPanelLabel) {
+        inventoryPanelLabel.innerHTML = `🎒 ${t('bag')}`;
+    }
+    
+    // Update combat stat labels
+    const statLabelInlines = document.querySelectorAll('.stat-label-inline');
+    if (statLabelInlines.length >= 2) {
+        // First one is weapon label
+        statLabelInlines[0].textContent = t('weaponLabel');
+        // Second one is armor class label
+        statLabelInlines[1].textContent = t('armorClass');
+    }
+    
+    // Update attribute labels
+    const charLabels = document.querySelectorAll('.char-label-small');
+    if (charLabels.length >= 4) {
+        charLabels[0].textContent = t('power');
+        charLabels[1].textContent = t('dexterity');
+        charLabels[2].textContent = t('spirit');
+        charLabels[3].textContent = t('presence');
+    }
+    
+    // Update equipment modal labels
+    updateEquipmentModalLabels();
+    
+    // Update default equipment texts in modal
+    updateDefaultEquipmentTexts();
+    
+    // Update inline equipment default texts
+    updateInlineEquipmentTexts();
+}
+
+// Update equipment modal labels
+function updateEquipmentModalLabels() {
+    const equipmentLabels = document.querySelectorAll('#equipmentModal .equipment-details > div[style*="font-weight: bold"]');
+    if (equipmentLabels.length > 0) {
+        equipmentLabels[0].textContent = t('weapon');
+        if (equipmentLabels[1]) equipmentLabels[1].textContent = t('armor');
+    }
+    
+    // Update shield label
+    const shieldLabel = document.querySelector('#equippedShieldSlot .equipment-details > div[style*="font-weight: bold"]');
+    if (shieldLabel) {
+        shieldLabel.textContent = t('shield');
+    }
+    
+    // Update book label
+    const bookLabel = document.querySelector('#equippedBookSlot .equipment-details > div[style*="font-weight: bold"]');
+    if (bookLabel) {
+        bookLabel.textContent = t('book');
+    }
+    
+    // Update quiver label
+    const quiverLabel = document.querySelector('#equippedQuiverSlot .equipment-details > div[style*="font-weight: bold"]');
+    if (quiverLabel) {
+        quiverLabel.textContent = t('quiver');
+    }
+    
+    // Update amulet label
+    const amuletLabel = document.querySelector('#equippedAmuletSlot .equipment-details > div[style*="font-weight: bold"]');
+    if (amuletLabel) {
+        amuletLabel.textContent = t('amulet');
+    }
+}
+
+// Update default equipment texts in equipment modal
+function updateDefaultEquipmentTexts() {
+    const weaponName = document.getElementById('equippedWeaponName');
+    if (weaponName && (weaponName.textContent === 'Aucune arme' || weaponName.textContent === 'No weapon' || weaponName.textContent === 'Sin arma')) {
+        weaponName.textContent = t('noWeapon');
+    }
+    
+    const armorName = document.getElementById('equippedArmorName');
+    if (armorName && (armorName.textContent === 'Aucune armure' || armorName.textContent === 'No armor' || armorName.textContent === 'Sin armadura')) {
+        armorName.textContent = t('noArmor');
+    }
+    
+    const shieldName = document.getElementById('equippedShieldName');
+    if (shieldName && (shieldName.textContent === 'Aucun bouclier' || shieldName.textContent === 'No shield' || shieldName.textContent === 'Sin escudo')) {
+        shieldName.textContent = t('noShield');
+    }
+    
+    const bookName = document.getElementById('equippedBookName');
+    if (bookName && (bookName.textContent === 'Aucun livre' || bookName.textContent === 'No book' || bookName.textContent === 'Sin libro')) {
+        bookName.textContent = t('noBook');
+    }
+    
+    const quiverName = document.getElementById('equippedQuiverName');
+    if (quiverName && (quiverName.textContent === 'Aucun carquois' || quiverName.textContent === 'No quiver' || quiverName.textContent === 'Sin carcaj')) {
+        quiverName.textContent = t('noQuiver');
+    }
+    
+    const amuletName = document.getElementById('equippedAmuletName');
+    if (amuletName && (amuletName.textContent === 'Aucune amulette' || amuletName.textContent === 'No amulet' || amuletName.textContent === 'Sin amuleto')) {
+        amuletName.textContent = t('noAmulet');
+    }
+}
+
+// Update inline equipment default texts
+function updateInlineEquipmentTexts() {
+    const weaponNameInline = document.getElementById('equippedWeaponNameInline');
+    if (weaponNameInline && (weaponNameInline.textContent === 'Aucune' || weaponNameInline.textContent === 'None' || weaponNameInline.textContent === 'Ninguna')) {
+        weaponNameInline.textContent = t('none');
+    }
+    
+    const armorNameInline = document.getElementById('equippedArmorNameInline');
+    if (armorNameInline && (armorNameInline.textContent === 'Aucune' || armorNameInline.textContent === 'None' || armorNameInline.textContent === 'Ninguna')) {
+        armorNameInline.textContent = t('none');
+    }
+    
+    const shieldNameInline = document.getElementById('equippedShieldNameInline');
+    if (shieldNameInline && (shieldNameInline.textContent === 'Aucun' || shieldNameInline.textContent === 'None' || shieldNameInline.textContent === 'Ninguno')) {
+        shieldNameInline.textContent = t('noneM');
+    }
+    
+    const bookNameInline = document.getElementById('equippedBookNameInline');
+    if (bookNameInline && (bookNameInline.textContent === 'Aucun' || bookNameInline.textContent === 'None' || bookNameInline.textContent === 'Ninguno')) {
+        bookNameInline.textContent = t('noneM');
+    }
+    
+    const quiverNameInline = document.getElementById('equippedQuiverNameInline');
+    if (quiverNameInline && (quiverNameInline.textContent === 'Aucun' || quiverNameInline.textContent === 'None' || quiverNameInline.textContent === 'Ninguno')) {
+        quiverNameInline.textContent = t('noneM');
+    }
+    
+    const amuletNameInline = document.getElementById('equippedAmuletNameInline');
+    if (amuletNameInline && (amuletNameInline.textContent === 'Aucun' || amuletNameInline.textContent === 'None' || amuletNameInline.textContent === 'Ninguno')) {
+        amuletNameInline.textContent = t('noneM');
+    }
 }
