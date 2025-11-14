@@ -38,7 +38,27 @@ const GAME_DIR = join(__dirname, '..'); // Parent directory contains the game fi
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' })); // Limit JSON payload size
+
+// Security headers middleware
+app.use((req, res, next) => {
+    // Prevent clickjacking
+    res.setHeader('X-Frame-Options', 'DENY');
+    
+    // Prevent MIME type sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    
+    // Enable XSS protection (legacy browsers)
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    
+    // Referrer policy
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    // Permissions policy
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    
+    next();
+});
 
 // Serve static game files from the parent directory
 app.use(express.static(GAME_DIR));

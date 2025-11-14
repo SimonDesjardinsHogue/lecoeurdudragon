@@ -5,6 +5,7 @@ import { gameState } from '../game-state.js';
 import { showScreen } from '../ui.js';
 import { fetchLeaderboard, getNetworkState } from '../network.js';
 import { isFirebaseReady, fetchGlobalLeaderboard, submitGlobalScore } from '../firebase-config.js';
+import { escapeHtml } from '../security.js';
 
 // Calculate player score for leaderboard
 function calculatePlayerScore(player) {
@@ -196,10 +197,19 @@ async function displayLocalLeaderboard() {
             else medal = `${index + 1}. `;
             
             const nameSection = document.createElement('div');
-            nameSection.innerHTML = `
-                <strong>${medal}${player.name}</strong><br>
-                <small>Niveau ${player.level || 0} | ${player.kills || 0} victoires</small>
-            `;
+            
+            // Create safe content using textContent instead of innerHTML
+            const nameStrong = document.createElement('strong');
+            nameStrong.textContent = `${medal}${player.name}`;
+            
+            const nameBr = document.createElement('br');
+            
+            const nameSmall = document.createElement('small');
+            nameSmall.textContent = `Niveau ${player.level || 0} | ${player.kills || 0} victoires`;
+            
+            nameSection.appendChild(nameStrong);
+            nameSection.appendChild(nameBr);
+            nameSection.appendChild(nameSmall);
             
             // Provide default values for potentially missing fields
             const displayScore = player.score || ((player.level || 0) * 100) + ((player.kills || 0) * 50) + ((player.puissance || 10) * 10) + ((player.defense || 5) * 5);
@@ -208,10 +218,18 @@ async function displayLocalLeaderboard() {
             
             const statsSection = document.createElement('div');
             statsSection.style.textAlign = 'right';
-            statsSection.innerHTML = `
-                <div style="color: #DAA520; font-weight: bold;">${displayScore} pts</div>
-                <small>⚔️ ${displayStrength} | 🛡️ ${displayDefense}</small>
-            `;
+            
+            // Create safe content
+            const scoreDiv = document.createElement('div');
+            scoreDiv.style.color = '#DAA520';
+            scoreDiv.style.fontWeight = 'bold';
+            scoreDiv.textContent = `${displayScore} pts`;
+            
+            const statsSmall = document.createElement('small');
+            statsSmall.textContent = `⚔️ ${displayStrength} | 🛡️ ${displayDefense}`;
+            
+            statsSection.appendChild(scoreDiv);
+            statsSection.appendChild(statsSmall);
             
             playerDiv.appendChild(nameSection);
             playerDiv.appendChild(statsSection);
@@ -496,10 +514,19 @@ function updateLeaderboardDisplay(scores) {
             else medal = `${index + 1}. `;
             
             const nameSection = document.createElement('div');
-            nameSection.innerHTML = `
-                <strong>${medal}${score.playerName}</strong><br>
-                <small>Niveau ${score.level || 0} | ${score.kills || 0} victoires</small>
-            `;
+            
+            // Create safe content using textContent instead of innerHTML
+            const nameStrong = document.createElement('strong');
+            nameStrong.textContent = `${medal}${score.playerName}`;
+            
+            const nameBr = document.createElement('br');
+            
+            const nameSmall = document.createElement('small');
+            nameSmall.textContent = `Niveau ${score.level || 0} | ${score.kills || 0} victoires`;
+            
+            nameSection.appendChild(nameStrong);
+            nameSection.appendChild(nameBr);
+            nameSection.appendChild(nameSmall);
             
             // Provide default values for potentially missing fields
             const displayScore = score.score || ((score.level || 0) * 100) + ((score.kills || 0) * 50) + ((score.puissance || 10) * 10) + ((score.defense || 5) * 5);
@@ -508,10 +535,18 @@ function updateLeaderboardDisplay(scores) {
             
             const statsSection = document.createElement('div');
             statsSection.style.textAlign = 'right';
-            statsSection.innerHTML = `
-                <div style="color: #DAA520; font-weight: bold;">${displayScore} pts</div>
-                <small>⚔️ ${displayStrength} | 🛡️ ${displayDefense}</small>
-            `;
+            
+            // Create safe content
+            const scoreDiv = document.createElement('div');
+            scoreDiv.style.color = '#DAA520';
+            scoreDiv.style.fontWeight = 'bold';
+            scoreDiv.textContent = `${displayScore} pts`;
+            
+            const statsSmall = document.createElement('small');
+            statsSmall.textContent = `⚔️ ${displayStrength} | 🛡️ ${displayDefense}`;
+            
+            statsSection.appendChild(scoreDiv);
+            statsSection.appendChild(statsSmall);
             
             playerDiv.appendChild(nameSection);
             playerDiv.appendChild(statsSection);
