@@ -380,33 +380,22 @@ function updateStaticTexts() {
     }
     
     // Update combat stat labels
-    const weaponLabelEl = document.querySelector('.combat-stat-inline .stat-label-inline');
-    if (weaponLabelEl && (weaponLabelEl.textContent === 'Arme:' || weaponLabelEl.textContent === 'Weapon:' || weaponLabelEl.textContent === 'Arma:')) {
-        weaponLabelEl.textContent = t('weaponLabel');
-    }
-    
-    const armorClassLabels = document.querySelectorAll('.combat-stat-inline .stat-label-inline');
-    if (armorClassLabels.length > 1) {
-        const acLabel = armorClassLabels[1];
-        if (acLabel && (acLabel.textContent === 'CA:' || acLabel.textContent === 'AC:')) {
-            acLabel.textContent = t('armorClass');
-        }
+    const statLabelInlines = document.querySelectorAll('.stat-label-inline');
+    if (statLabelInlines.length >= 2) {
+        // First one is weapon label
+        statLabelInlines[0].textContent = t('weaponLabel');
+        // Second one is armor class label
+        statLabelInlines[1].textContent = t('armorClass');
     }
     
     // Update attribute labels
     const charLabels = document.querySelectorAll('.char-label-small');
-    charLabels.forEach(label => {
-        const text = label.textContent.trim();
-        if (text === 'Puissance' || text === 'Power' || text === 'Poder') {
-            label.textContent = t('power');
-        } else if (text === 'Adresse' || text === 'Dexterity' || text === 'Destreza') {
-            label.textContent = t('dexterity');
-        } else if (text === 'Esprit' || text === 'Spirit' || text === 'Espíritu') {
-            label.textContent = t('spirit');
-        } else if (text === 'Présence' || text === 'Presence' || text === 'Presencia') {
-            label.textContent = t('presence');
-        }
-    });
+    if (charLabels.length >= 4) {
+        charLabels[0].textContent = t('power');
+        charLabels[1].textContent = t('dexterity');
+        charLabels[2].textContent = t('spirit');
+        charLabels[3].textContent = t('presence');
+    }
     
     // Update equipment modal labels
     updateEquipmentModalLabels();
