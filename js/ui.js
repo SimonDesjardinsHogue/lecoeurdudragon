@@ -1,6 +1,7 @@
 // UI Management Module
 import { gameState, getStatModifier } from './game-state.js';
 import { getPlayerSkills, isSkillOnCooldown, getSkillCooldown } from './skills.js';
+import { t } from './i18n/i18n.js';
 
 // Store current event for the info popup
 let currentDisplayedEvent = null;
@@ -28,7 +29,7 @@ export function updateEventBanner() {
         const timeStr = formatTimeRemaining(timeRemaining);
         
         document.getElementById('eventBannerIcon').textContent = activeEvent.icon;
-        document.getElementById('eventBannerText').textContent = `🎉 ÉVÉNEMENT ACTIF ! ${timeStr} restant`;
+        document.getElementById('eventBannerText').textContent = `🎉 ${t('activeEvent')} ${timeStr} ${t('remaining')}`;
         document.getElementById('eventBannerDetails').textContent = `${activeEvent.name} - ${activeEvent.benefit}`;
         
         // Store the current event for the info popup
@@ -47,7 +48,7 @@ export function updateEventBanner() {
         const minutes = startTime.getMinutes().toString().padStart(2, '0');
         
         document.getElementById('eventBannerIcon').textContent = nextEvent.icon;
-        document.getElementById('eventBannerText').textContent = `Prochain événement dans ${timeStr}`;
+        document.getElementById('eventBannerText').textContent = `${t('nextEvent')} ${timeStr}`;
         document.getElementById('eventBannerDetails').textContent = `${nextEvent.name} à ${hours}:${minutes}`;
         
         // Store the current event for the info popup
@@ -235,7 +236,7 @@ export function updateUI() {
             weaponNameInlineEl.textContent = p.currentWeapon.name;
         } else {
             weaponIconInlineEl.textContent = '⚔️';
-            weaponNameInlineEl.textContent = 'Aucune';
+            weaponNameInlineEl.textContent = t('none');
         }
     }
     
@@ -256,7 +257,7 @@ export function updateUI() {
             armorNameInlineEl.textContent = p.currentArmor.name;
         } else {
             armorIconInlineEl.textContent = armorIcon;
-            armorNameInlineEl.textContent = 'Aucune';
+            armorNameInlineEl.textContent = t('none');
         }
     }
     
@@ -283,7 +284,7 @@ export function updateUI() {
                 shieldNameInlineEl.textContent = p.currentShield.name;
             } else {
                 shieldIconInlineEl.textContent = '🛡️';
-                shieldNameInlineEl.textContent = 'Aucun';
+                shieldNameInlineEl.textContent = t('noneM');
             }
         }
     } else if (p.class === 'magicien' && bookSlotInline) {
@@ -296,7 +297,7 @@ export function updateUI() {
                 bookNameInlineEl.textContent = p.currentBook.name;
             } else {
                 bookIconInlineEl.textContent = '📕';
-                bookNameInlineEl.textContent = 'Aucun';
+                bookNameInlineEl.textContent = t('noneM');
             }
         }
     } else if (p.class === 'archer' && quiverSlotInline) {
@@ -309,7 +310,7 @@ export function updateUI() {
                 quiverNameInlineEl.textContent = p.currentQuiver.name;
             } else {
                 quiverIconInlineEl.textContent = '🏹';
-                quiverNameInlineEl.textContent = 'Aucun';
+                quiverNameInlineEl.textContent = t('noneM');
             }
         }
     } else if (p.class === 'enchanteur' && amuletSlotInline) {
@@ -322,7 +323,7 @@ export function updateUI() {
                 amuletNameInlineEl.textContent = p.currentAmulet.name;
             } else {
                 amuletIconInlineEl.textContent = '📿';
-                amuletNameInlineEl.textContent = 'Aucun';
+                amuletNameInlineEl.textContent = t('noneM');
             }
         }
     }
@@ -592,7 +593,7 @@ export function updateCombatInventoryUI() {
     
     // When defending, show inventory
     if (currentSlots === 0) {
-        container.innerHTML = `<div style="margin-bottom: 10px; color: #DAA520; font-weight: bold;">🎒 Sac (0/4):</div><div style="color: #888; font-style: italic; font-size: 0.9em;">Aucun objet</div>`;
+        container.innerHTML = `<div style="margin-bottom: 10px; color: #DAA520; font-weight: bold;">🎒 ${t('bagShort')} (0/4):</div><div style="color: #888; font-style: italic; font-size: 0.9em;">${t('noItems')}</div>`;
         
         // Add skip button when no items
         const skipButton = document.createElement('button');
@@ -690,7 +691,7 @@ export function updateInventoryPanel() {
     
     const p = gameState.player;
     if (!p.inventory || p.inventory.length === 0) {
-        container.innerHTML = '<div style="color: #888; font-style: italic; font-size: 0.9em; text-align: center;">Aucun objet</div>';
+        container.innerHTML = '<div style="color: #888; font-style: italic; font-size: 0.9em; text-align: center;">' + t('noItems') + '</div>';
         return;
     }
     
@@ -760,8 +761,8 @@ export function updateEquipmentModal() {
         if (weaponDescEl) weaponDescEl.textContent = p.currentWeapon.description;
     } else {
         if (weaponIconEl) weaponIconEl.textContent = '⚔️';
-        if (weaponNameEl) weaponNameEl.textContent = 'Aucune arme';
-        if (weaponDescEl) weaponDescEl.textContent = 'Visitez le marchand pour acheter une arme';
+        if (weaponNameEl) weaponNameEl.textContent = t('noWeapon');
+        if (weaponDescEl) weaponDescEl.textContent = t('visitMerchantWeapon');
     }
     
     // Update armor info
@@ -772,8 +773,8 @@ export function updateEquipmentModal() {
         if (armorNameEl) armorNameEl.textContent = p.currentArmor.name;
         if (armorDescEl) armorDescEl.textContent = p.currentArmor.description;
     } else {
-        if (armorNameEl) armorNameEl.textContent = 'Aucune armure';
-        if (armorDescEl) armorDescEl.textContent = 'Visitez le marchand pour acheter une armure';
+        if (armorNameEl) armorNameEl.textContent = t('noArmor');
+        if (armorDescEl) armorDescEl.textContent = t('visitMerchantArmor');
     }
     
     // Update class-specific equipment slots
@@ -798,8 +799,8 @@ export function updateEquipmentModal() {
             if (shieldNameEl) shieldNameEl.textContent = p.currentShield.name;
             if (shieldDescEl) shieldDescEl.textContent = p.currentShield.description;
         } else {
-            if (shieldNameEl) shieldNameEl.textContent = 'Aucun bouclier';
-            if (shieldDescEl) shieldDescEl.textContent = 'Visitez le marchand pour acheter un bouclier';
+            if (shieldNameEl) shieldNameEl.textContent = t('noShield');
+            if (shieldDescEl) shieldDescEl.textContent = t('visitMerchantShield');
         }
     } else if (p.class === 'magicien' && bookSlot) {
         bookSlot.style.display = 'block';
@@ -810,8 +811,8 @@ export function updateEquipmentModal() {
             if (bookNameEl) bookNameEl.textContent = p.currentBook.name;
             if (bookDescEl) bookDescEl.textContent = p.currentBook.description;
         } else {
-            if (bookNameEl) bookNameEl.textContent = 'Aucun livre';
-            if (bookDescEl) bookDescEl.textContent = 'Visitez le marchand pour acheter un livre';
+            if (bookNameEl) bookNameEl.textContent = t('noBook');
+            if (bookDescEl) bookDescEl.textContent = t('visitMerchantBook');
         }
     } else if (p.class === 'archer' && quiverSlot) {
         quiverSlot.style.display = 'block';
@@ -822,8 +823,8 @@ export function updateEquipmentModal() {
             if (quiverNameEl) quiverNameEl.textContent = p.currentQuiver.name;
             if (quiverDescEl) quiverDescEl.textContent = p.currentQuiver.description;
         } else {
-            if (quiverNameEl) quiverNameEl.textContent = 'Aucun carquois';
-            if (quiverDescEl) quiverDescEl.textContent = 'Visitez le marchand pour acheter un carquois';
+            if (quiverNameEl) quiverNameEl.textContent = t('noQuiver');
+            if (quiverDescEl) quiverDescEl.textContent = t('visitMerchantQuiver');
         }
     } else if (p.class === 'enchanteur' && amuletSlot) {
         amuletSlot.style.display = 'block';
@@ -834,8 +835,8 @@ export function updateEquipmentModal() {
             if (amuletNameEl) amuletNameEl.textContent = p.currentAmulet.name;
             if (amuletDescEl) amuletDescEl.textContent = p.currentAmulet.description;
         } else {
-            if (amuletNameEl) amuletNameEl.textContent = 'Aucune amulette';
-            if (amuletDescEl) amuletDescEl.textContent = 'Visitez le marchand pour acheter une amulette';
+            if (amuletNameEl) amuletNameEl.textContent = t('noAmulet');
+            if (amuletDescEl) amuletDescEl.textContent = t('visitMerchantAmulet');
         }
     }
 }

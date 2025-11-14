@@ -67,14 +67,25 @@ export const en = {
     shield: "Shield",
     book: "Book",
     quiver: "Quiver",
+    amulet: "Amulet",
     noWeapon: "No weapon",
     noArmor: "No armor",
     noShield: "No shield",
     noBook: "No book",
     noQuiver: "No quiver",
+    noAmulet: "No amulet",
+    none: "None",
+    noneM: "None",
     equippedWeapon: "Equipped weapon",
     equippedArmor: "Equipped armor",
+    equippedShield: "Equipped shield",
+    equippedBook: "Equipped book",
+    equippedQuiver: "Equipped quiver",
+    equippedAmulet: "Equipped amulet",
     bag: "Item Bag",
+    bagShort: "Bag",
+    noItems: "No items",
+    openCloseBag: "Open/Close bag",
     
     // Attributes
     power: "Power",
@@ -144,5 +155,13 @@ export const en = {
     // Event banner
     nextEvent: "Next event in",
     activeEvent: "ACTIVE EVENT!",
-    remaining: "remaining"
+    remaining: "remaining",
+    
+    // Equipment descriptions
+    visitMerchantWeapon: "Visit the merchant to buy a weapon",
+    visitMerchantArmor: "Visit the merchant to buy armor",
+    visitMerchantShield: "Visit the merchant to buy a shield",
+    visitMerchantBook: "Visit the merchant to buy a book",
+    visitMerchantQuiver: "Visit the merchant to buy a quiver",
+    visitMerchantAmulet: "Visit the merchant to buy an amulet"
 };
