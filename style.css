@@ -368,6 +368,7 @@ body {
     overflow: hidden;
     margin-top: 5px;
     border: 1px solid #8B4513;
+    position: relative;
 }
 
 .health-fill {
@@ -380,6 +381,44 @@ body {
     height: 100%;
     background: linear-gradient(90deg, #4169E1 0%, #1E90FF 100%);
     transition: width 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.xp-markers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.xp-marker {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.xp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 
+        -1px -1px 2px rgba(0, 0, 0, 0.8),
+        1px -1px 2px rgba(0, 0, 0, 0.8),
+        -1px 1px 2px rgba(0, 0, 0, 0.8),
+        1px 1px 2px rgba(0, 0, 0, 0.8);
+    z-index: 3;
+    pointer-events: none;
 }
 
 .game-content {
