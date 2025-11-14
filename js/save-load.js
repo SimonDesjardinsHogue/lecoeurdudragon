@@ -2,6 +2,7 @@
 import { gameState } from './game-state.js';
 import { updateUI, showSaveIndicator } from './ui.js';
 import { validateSaveData, addIntegrityMetadata, VALIDATION_RANGES } from './anti-cheat.js';
+import { sanitizePlayerName } from './security.js';
 
 // Constants for save slots
 const SAVE_SLOTS_KEY = 'lecoeurdudragon_saves';
@@ -383,6 +384,9 @@ export function importSave() {
             typeof loadedState.player.maxEnergy !== 'number') {
             throw new Error('Invalid player data types');
         }
+        
+        // Sanitize player name to prevent XSS
+        loadedState.player.name = sanitizePlayerName(loadedState.player.name, 20);
         
         // Validate required state properties and their types
         if (typeof loadedState.inCombat !== 'boolean' || 

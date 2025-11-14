@@ -27,6 +27,23 @@ function validateScoreData(scoreData) {
         throw new Error('playerId and playerName are required');
     }
     
+    // Sanitize playerName - remove HTML tags and limit length
+    if (typeof playerName !== 'string') {
+        throw new Error('playerName must be a string');
+    }
+    
+    const sanitizedName = playerName.replace(/<[^>]*>/g, '').trim();
+    if (sanitizedName.length === 0) {
+        throw new Error('playerName cannot be empty');
+    }
+    
+    if (sanitizedName.length > 20) {
+        throw new Error('playerName too long (max 20 characters)');
+    }
+    
+    // Update the playerName in scoreData to the sanitized version
+    scoreData.playerName = sanitizedName;
+    
     // Type validation
     if (typeof level !== 'number' || typeof kills !== 'number' || typeof gold !== 'number') {
         throw new Error('level, kills, and gold must be numbers');

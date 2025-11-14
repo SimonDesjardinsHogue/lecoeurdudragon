@@ -20,6 +20,7 @@ import { healPlayer, restoreEnergy, restoreMana, addExperience, checkLevelUp, sp
 import { useInventoryItem, sellInventoryItem } from './systems/inventory.js';
 import { showLeaderboard, submitToGlobalLeaderboard, submitPlayerToGlobalLeaderboard, switchLeaderboardMode } from './systems/leaderboard.js';
 import { checkDailyRewardReset } from './daily-rewards.js';
+import { sanitizePlayerName } from './security.js';
 
 // Helper function to get class display name
 function getClassDisplayName(classKey) {
@@ -88,11 +89,14 @@ export function init() {
 
 // Start new game
 export function startGame() {
-    const name = document.getElementById('nameInput').value.trim();
-    if (!name) {
+    const nameInput = document.getElementById('nameInput').value.trim();
+    if (!nameInput) {
         alert('Veuillez entrer un nom pour votre héros !');
         return;
     }
+    
+    // Sanitize the player name to prevent XSS
+    const name = sanitizePlayerName(nameInput, 20);
     
     // Get selected character gender
     const selectedGender = document.querySelector('input[name="characterGender"]:checked');
