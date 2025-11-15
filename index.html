@@ -161,6 +161,10 @@
             <div class="stat-box stat-group-combat">
                 <div class="stat-label">Combat</div>
                 <div class="combat-stats-compact">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span style="font-size: 0.85em;">Niv. <strong id="playerLevel">1</strong></span>
+                        <span style="font-size: 0.85em;" id="playerGold">0 💰</span>
+                    </div>
                     <div class="combat-stat-row">
                         <span class="combat-icon-small">❤️</span>
                         <div class="health-bar-small">
@@ -206,17 +210,6 @@
                         <span class="combat-icon-small">🛡️</span>
                         <span class="stat-label-inline">CA:</span>
                         <span class="stat-value-small" id="playerDefense">5</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Groupe 3: Progression et Caractéristiques combinées -->
-            <div class="stat-box stat-group-progression-combined">
-                <div class="stat-label">Progression</div>
-                <div class="progression-compact">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <span style="font-size: 0.85em;">Niv. <strong id="playerLevel">1</strong></span>
-                        <span style="font-size: 0.85em;" id="playerGold">0 💰</span>
                     </div>
                     <div id="statPointsAvailable" style="display: none; text-align: center; margin: 5px 0; font-size: 0.85em; color: #DAA520; font-weight: bold;">
                         ✨ Points disponibles: <span id="statPointsCount">0</span>
