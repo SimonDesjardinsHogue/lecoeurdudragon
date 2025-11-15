@@ -46,16 +46,16 @@ body {
     font-style: italic;
 }
 
-/* Header Button Styles - Unified style for all three buttons */
+/* Header Button Styles - Compact circular buttons matching admin section */
 .header-button {
     position: absolute;
     top: 10px;
     background: rgba(0, 0, 0, 0.5);
     border: 2px solid #DAA520;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -79,13 +79,13 @@ body {
     left: 10px;
 }
 
-/* Right side container for language and audio */
+/* Right side container for language and audio - grouped together */
 .header-right-buttons {
     position: absolute;
     top: 10px;
     right: 10px;
     display: flex;
-    gap: 10px;
+    gap: 8px;
     z-index: 10;
 }
 
@@ -99,8 +99,8 @@ body {
 
 .language-menu {
     position: absolute;
-    top: 55px;
-    right: 55px;
+    top: 50px;
+    right: 50px;
     background: rgba(0, 0, 0, 0.95);
     border: 2px solid #DAA520;
     border-radius: 8px;
@@ -993,9 +993,9 @@ input[type="text"]:focus {
     }
 
     .header-button {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
         top: 8px;
     }
 
@@ -1006,12 +1006,12 @@ input[type="text"]:focus {
     .header-right-buttons {
         top: 8px;
         right: 8px;
-        gap: 6px;
+        gap: 5px;
     }
 
     .language-menu {
-        top: 52px;
-        right: 48px;
+        top: 47px;
+        right: 45px;
         min-width: 120px;
     }
 
@@ -1158,21 +1158,21 @@ input[type="text"]:focus {
     }
 
     .header-button {
-        width: 38px;
-        height: 38px;
-        font-size: 17px;
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
         top: 9px;
     }
 
     .header-right-buttons {
         top: 9px;
         right: 9px;
-        gap: 7px;
+        gap: 6px;
     }
 
     .language-menu {
-        top: 56px;
-        right: 51px;
+        top: 49px;
+        right: 48px;
     }
 
     /* Removed grid-template-columns override to let auto-fit work naturally */
@@ -1243,9 +1243,9 @@ input[type="text"]:focus {
     }
 
     .header-button {
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
         top: 15px;
     }
 
@@ -1256,7 +1256,12 @@ input[type="text"]:focus {
     .header-right-buttons {
         top: 15px;
         right: 15px;
-        gap: 10px;
+        gap: 8px;
+    }
+
+    .language-menu {
+        top: 55px;
+        right: 52px;
     }
 
     .game-stats {
