@@ -102,10 +102,27 @@ export function showScreen(screenId) {
 // Update UI with current game state
 export function updateUI() {
     const p = gameState.player;
-    document.getElementById('playerName').textContent = p.name || '---';
-    document.getElementById('playerLevel').textContent = `${p.level}/20`;
-    document.getElementById('playerGold').textContent = p.gold + ' 💰';
-    document.getElementById('playerHealth').textContent = `${p.health}/${p.maxHealth}`;
+    
+    // Update player name label (replacing "Personnage")
+    const playerNameLabelEl = document.getElementById('playerNameLabel');
+    if (playerNameLabelEl) {
+        playerNameLabelEl.textContent = p.name || '---';
+    }
+    
+    const playerLevelEl = document.getElementById('playerLevel');
+    if (playerLevelEl) {
+        playerLevelEl.textContent = `${p.level}/20`;
+    }
+    
+    const playerGoldEl = document.getElementById('playerGold');
+    if (playerGoldEl) {
+        playerGoldEl.textContent = p.gold + ' 💰';
+    }
+    
+    const playerHealthEl = document.getElementById('playerHealth');
+    if (playerHealthEl) {
+        playerHealthEl.textContent = `${p.health}/${p.maxHealth}`;
+    }
     
     // Display stats with modifiers
     const puissanceMod = getStatModifier(p.puissance);
@@ -179,8 +196,74 @@ export function updateUI() {
     const raceDisplay = p.raceIcon ? `${p.raceIcon} ${translatedRaceName}` : translatedRaceName;
     document.getElementById('playerRace').textContent = raceDisplay;
     
-    const genderDisplay = p.gender === 'female' ? `♀️ ${t('female')}` : `♂️ ${t('male')}`;
-    document.getElementById('playerGender').textContent = genderDisplay;
+    // Update gender display - symbol only
+    const genderSymbol = p.gender === 'female' ? '♀️' : '♂️';
+    document.getElementById('playerGender').textContent = genderSymbol;
+    
+    // Update inline health bar in character panel
+    const playerHealthInlineEl = document.getElementById('playerHealthInline');
+    const healthFillInlineEl = document.getElementById('healthFillInline');
+    if (playerHealthInlineEl && healthFillInlineEl) {
+        playerHealthInlineEl.textContent = `${p.health}/${p.maxHealth}`;
+        const healthPercentInline = (p.health / p.maxHealth) * 100;
+        healthFillInlineEl.style.width = healthPercentInline + '%';
+    }
+    
+    // Update inline mana bar in character panel
+    const manaRowInline = document.getElementById('manaRowInline');
+    if (manaRowInline) {
+        if (p.class === 'magicien' || p.class === 'enchanteur') {
+            manaRowInline.style.display = 'flex';
+            const playerManaInlineEl = document.getElementById('playerManaInline');
+            const manaFillInlineEl = document.getElementById('manaFillInline');
+            if (playerManaInlineEl && manaFillInlineEl) {
+                playerManaInlineEl.textContent = `${p.mana}/${p.maxMana}`;
+                const manaPercentInline = (p.mana / p.maxMana) * 100;
+                manaFillInlineEl.style.width = manaPercentInline + '%';
+            }
+        } else {
+            manaRowInline.style.display = 'none';
+        }
+    }
+    
+    // Update inline energy bar in character panel
+    const playerEnergyInlineEl = document.getElementById('playerEnergyInline');
+    const energyFillInlineEl = document.getElementById('energyFillInline');
+    if (playerEnergyInlineEl && energyFillInlineEl) {
+        playerEnergyInlineEl.textContent = `${p.energy}/${p.maxEnergy}`;
+        const energyPercentInline = (p.energy / p.maxEnergy) * 100;
+        energyFillInlineEl.style.width = energyPercentInline + '%';
+    }
+    
+    // Update inline weapon damage
+    const playerWeaponDamageInlineEl = document.getElementById('playerWeaponDamageInline');
+    const weaponIconInlineStatEl = document.getElementById('weaponIconInline');
+    if (playerWeaponDamageInlineEl) {
+        const weaponDamageInline = p.weaponDamage || 0;
+        const totalDamageInline = weaponDamageInline + puissanceMod;
+        playerWeaponDamageInlineEl.textContent = totalDamageInline;
+    }
+    if (weaponIconInlineStatEl) {
+        let weaponIconInline = '⚔️'; // default
+        if (p.currentWeapon && p.currentWeapon.icon) {
+            weaponIconInline = p.currentWeapon.icon;
+        } else {
+            // Use class-specific weapon icon
+            switch(p.class) {
+                case 'guerrier': weaponIconInline = '⚔️'; break;
+                case 'archer': weaponIconInline = '🏹'; break;
+                case 'magicien': weaponIconInline = '🔱'; break;
+                case 'enchanteur': weaponIconInline = '🌀'; break;
+            }
+        }
+        weaponIconInlineStatEl.textContent = weaponIconInline;
+    }
+    
+    // Update inline defense
+    const playerDefenseInlineEl = document.getElementById('playerDefenseInline');
+    if (playerDefenseInlineEl) {
+        playerDefenseInlineEl.textContent = p.defense;
+    }
     
     // Update health bar
     const healthPercent = (p.health / p.maxHealth) * 100;
