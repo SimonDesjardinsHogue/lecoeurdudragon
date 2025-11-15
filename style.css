@@ -777,7 +777,7 @@ input[type="text"]:focus {
 
 .class-option {
     background: rgba(0, 0, 0, 0.5);
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     border: 2px solid #8B4513;
     cursor: pointer;
@@ -819,7 +819,7 @@ input[type="text"]:focus {
 .class-label strong {
     font-size: 1.1em;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 /* Characteristics Group Styling */
