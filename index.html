@@ -41,20 +41,22 @@
         <div class="game-header">
             <h1>⚔️ Le Coeur du Dragon ⚔️</h1>
             <div class="subtitle">Une quête légendaire de courage et d'honneur</div>
-            <button id="languageToggle" class="language-toggle" onclick="toggleLanguageMenu()" title="Changer la langue / Change language">
-                🌐
+            <button id="infoButton" class="header-button info-button" onclick="window.location.href='marketing.html'" title="En savoir plus sur le jeu">
+                ℹ️
             </button>
-            <div id="languageMenu" class="language-menu" style="display: none;">
-                <button onclick="changeLanguage('fr')" data-lang="fr">🇫🇷 Français</button>
-                <button onclick="changeLanguage('en')" data-lang="en">🇬🇧 English</button>
-                <button onclick="changeLanguage('es')" data-lang="es">🇪🇸 Español</button>
+            <div class="header-right-buttons">
+                <button id="languageToggle" class="header-button language-toggle" onclick="toggleLanguageMenu()" title="Changer la langue / Change language">
+                    🌐
+                </button>
+                <div id="languageMenu" class="language-menu" style="display: none;">
+                    <button onclick="changeLanguage('fr')" data-lang="fr">🇫🇷 Français</button>
+                    <button onclick="changeLanguage('en')" data-lang="en">🇬🇧 English</button>
+                    <button onclick="changeLanguage('es')" data-lang="es">🇪🇸 Español</button>
+                </div>
+                <button id="audioToggle" class="header-button audio-toggle" onclick="toggleAudio()" title="Activer/Désactiver le son">
+                    🔊
+                </button>
             </div>
-            <button id="audioToggle" class="audio-toggle" onclick="toggleAudio()" title="Activer/Désactiver le son">
-                🔊
-            </button>
-            <a href="marketing.html" class="marketing-link" title="En savoir plus sur le jeu">
-                ℹ️ Info
-            </a>
         </div>
 
         <!-- Connection Notification Banner -->
@@ -813,13 +815,15 @@
         </div>
 
         <div class="game-footer">
-            <div style="display: flex; flex-direction: column; gap: 3px;">
-                <span>Le Coeur du Dragon - Une pensée pour mes enfants les M&M</span>
-                <span style="font-size: 0.8em; opacity: 0.7;" id="gameVersion">Version 1.1.0</span>
-            </div>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <span class="save-indicator" id="saveIndicator">💾 Sauvegardé</span>
-                <button onclick="showAdminLogin()" style="padding: 5px 10px; font-size: 0.9em;">🔐 Admin</button>
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span>Le Coeur du Dragon - Une pensée pour mes enfants les M&M</span>
+                    <span style="font-size: 0.8em; opacity: 0.7;" id="gameVersion">Version 1.1.0</span>
+                </div>
+                <div class="footer-actions">
+                    <span class="save-indicator" id="saveIndicator">💾 Sauvegardé</span>
+                    <button onclick="showAdminLogin()" class="admin-button">🔐</button>
+                </div>
             </div>
         </div>
     </div>

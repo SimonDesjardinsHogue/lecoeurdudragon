@@ -46,16 +46,16 @@ body {
     font-style: italic;
 }
 
-.audio-toggle {
+/* Header Button Styles - Unified style for all three buttons */
+.header-button {
     position: absolute;
     top: 10px;
-    right: 10px;
     background: rgba(0, 0, 0, 0.5);
     border: 2px solid #DAA520;
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -65,83 +65,42 @@ body {
     z-index: 10;
 }
 
-.audio-toggle:hover {
+.header-button:hover {
     background: rgba(218, 165, 32, 0.3);
     transform: scale(1.1);
 }
 
-.audio-toggle:active {
+.header-button:active {
     transform: scale(0.95);
+}
+
+/* Info Button - Left side */
+.info-button {
+    left: 10px;
+}
+
+/* Right side container for language and audio */
+.header-right-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.header-right-buttons .header-button {
+    position: static;
 }
 
 .audio-toggle.muted {
     opacity: 0.5;
 }
 
-.marketing-link {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
-    border: 2px solid #5B9EFF;
-    border-radius: 8px;
-    padding: 8px 16px;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    z-index: 10;
-    box-shadow: 0 2px 10px rgba(65, 105, 225, 0.3);
-}
-
-.marketing-link:hover {
-    background: linear-gradient(135deg, #5B9EFF 0%, #4169E1 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(65, 105, 225, 0.5);
-}
-
-.marketing-link:active {
-    transform: translateY(0);
-}
-
-/* Language Toggle Styles */
-.language-toggle {
-    position: absolute;
-    top: 10px;
-    left: 150px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid #DAA520;
-    border-radius: 8px;
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    z-index: 11;
-}
-
-.language-toggle:hover {
-    background: rgba(218, 165, 32, 0.3);
-    transform: scale(1.1);
-}
-
-.language-toggle:active {
-    transform: scale(0.95);
-}
-
 .language-menu {
     position: absolute;
-    top: 60px;
-    left: 150px;
+    top: 55px;
+    right: 55px;
     background: rgba(0, 0, 0, 0.95);
     border: 2px solid #DAA520;
     border-radius: 8px;
@@ -699,13 +658,49 @@ input[type="text"]:focus {
 .game-footer {
     background: rgba(139, 69, 19, 0.2);
     padding: 15px;
-    text-align: center;
     border-top: 2px solid #8B4513;
     font-size: 0.8em;
     color: #999;
+}
+
+.footer-content {
+    max-width: 900px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
+}
+
+.footer-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: center;
+    flex: 1;
+}
+
+.footer-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.admin-button {
+    padding: 4px 8px;
+    font-size: 0.85em;
+    min-width: 30px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-button:hover {
+    transform: scale(1.1);
 }
 
 .save-indicator {
@@ -997,38 +992,32 @@ input[type="text"]:focus {
         font-size: 0.75em;
     }
 
-    .audio-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
+    .header-button {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
         top: 8px;
-        right: 8px;
     }
 
-    .language-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-        top: 8px;
+    .info-button {
         left: 8px;
+    }
+
+    .header-right-buttons {
+        top: 8px;
+        right: 8px;
+        gap: 6px;
     }
 
     .language-menu {
         top: 52px;
-        left: 8px;
+        right: 48px;
         min-width: 120px;
     }
 
     .language-menu button {
         padding: 8px 12px;
         font-size: 13px;
-    }
-
-    .marketing-link {
-        top: 56px;
-        left: 8px;
-        padding: 6px 12px;
-        font-size: 12px;
     }
 
     .game-stats {
@@ -1134,10 +1123,27 @@ input[type="text"]:focus {
 
     /* Footer */
     .game-footer {
+        padding: 10px;
+        font-size: 0.75em;
+    }
+
+    .footer-content {
         flex-direction: column;
         gap: 8px;
-        font-size: 0.75em;
-        padding: 10px;
+    }
+
+    .footer-text {
+        text-align: center;
+    }
+
+    .footer-actions {
+        justify-content: center;
+    }
+
+    .admin-button {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8em;
     }
 }
 
@@ -1151,17 +1157,22 @@ input[type="text"]:focus {
         font-size: 1.6em;
     }
 
-    .language-toggle {
-        width: 42px;
-        height: 42px;
-        font-size: 19px;
+    .header-button {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
         top: 9px;
-        left: 120px;
+    }
+
+    .header-right-buttons {
+        top: 9px;
+        right: 9px;
+        gap: 7px;
     }
 
     .language-menu {
         top: 56px;
-        left: 120px;
+        right: 51px;
     }
 
     /* Removed grid-template-columns override to let auto-fit work naturally */
@@ -1231,12 +1242,21 @@ input[type="text"]:focus {
         font-size: 1.1em;
     }
 
-    .audio-toggle {
-        width: 55px;
-        height: 55px;
-        font-size: 24px;
+    .header-button {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+        top: 15px;
+    }
+
+    .info-button {
+        left: 15px;
+    }
+
+    .header-right-buttons {
         top: 15px;
         right: 15px;
+        gap: 10px;
     }
 
     .game-stats {
