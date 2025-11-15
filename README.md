@@ -50,7 +50,7 @@
 🌐 **Mode Multijoueur** • Jouez en LAN avec votre famille  
 📱 **Multi-Plateformes** • Jouez où vous voulez, quand vous voulez
 
-[📖 Documentation](CONTRIBUTING.md) | [📝 Changelog](CHANGELOG.md) | [🐛 Reporter un Bug](https://github.com/SimonDesjardinsHogue/lecoeurdudragon/issues) | [🎬 Page Marketing](marketing.html)
+[📖 Documentation](CONTRIBUTING.md) | [📝 Changelog](CHANGELOG.md) | [🐛 Reporter un Bug](https://github.com/SimonDesjardinsHogue/lecoeurdudragon/issues) | [🤖 Custom Agents](CUSTOM_AGENTS.md) | [🎬 Page Marketing](marketing.html)
 
 </div>
 
@@ -644,6 +644,25 @@ Ces documents comprennent des suggestions organisées par catégorie (UX, Perfor
 ## 🤝 Contribuer
 
 Nous accueillons les contributions de la communauté ! Que vous souhaitiez corriger un bug, ajouter une fonctionnalité, ou améliorer la documentation, votre aide est la bienvenue.
+
+### 🤖 Custom Agents - Assistants IA pour le Développement
+
+Le projet dispose de **6 agents IA spécialisés** pour vous assister :
+
+- **🎮 Dragon Heart Agent** - Expert général du jeu et architecture
+- **💻 JavaScript Expert** - Spécialiste ES6 modules et performance
+- **🇫🇷 French Localization** - Expert en français et contenu de jeu
+- **⚖️ Game Balance Expert** - Équilibrage et mécaniques RPG
+- **📚 Documentation Writer** - Rédaction technique et guides
+- **🔍 Code Review Expert** - Qualité de code et sécurité
+
+**Exemple d'utilisation dans une issue ou PR** :
+```markdown
+@javascript-expert Comment refactoriser cette fonction pour améliorer la performance ?
+@game-balance-expert Quelles statistiques pour un boss de niveau 16 ?
+```
+
+📖 **Guide complet** : Consultez [CUSTOM_AGENTS.md](CUSTOM_AGENTS.md) pour apprendre à utiliser efficacement les agents.
 
 ### Comment Contribuer
 
