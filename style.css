@@ -90,14 +90,18 @@ body {
 .header-right-buttons {
     position: absolute;
     top: 10px;
-    right: 5px;
+    right: 3px;
     display: flex;
-    gap: 8px;
+    gap: 5px;
+    align-items: center;
+    padding: 0;
+    margin: 0;
     z-index: 10;
 }
 
 .header-right-buttons .header-button {
     position: static;
+    margin: 0;
 }
 
 .audio-toggle.muted {
@@ -107,7 +111,7 @@ body {
 .language-menu {
     position: absolute;
     top: 35px;
-    right: 5px;
+    right: 3px;
     background: rgba(0, 0, 0, 0.95);
     border: 2px solid #DAA520;
     border-radius: 8px;
@@ -1057,13 +1061,13 @@ input[type="text"]:focus {
 
     .header-right-buttons {
         top: 8px;
-        right: 5px;
-        gap: 5px;
+        right: 3px;
+        gap: 4px;
     }
 
     .language-menu {
         top: 33px;
-        right: 5px;
+        right: 3px;
         min-width: 120px;
     }
 
@@ -1220,13 +1224,13 @@ input[type="text"]:focus {
 
     .header-right-buttons {
         top: 9px;
-        right: 5px;
-        gap: 6px;
+        right: 3px;
+        gap: 5px;
     }
 
     .language-menu {
         top: 34px;
-        right: 5px;
+        right: 3px;
     }
 
     /* Removed grid-template-columns override to let auto-fit work naturally */
@@ -1311,13 +1315,13 @@ input[type="text"]:focus {
 
     .header-right-buttons {
         top: 15px;
-        right: 5px;
-        gap: 8px;
+        right: 3px;
+        gap: 6px;
     }
 
     .language-menu {
         top: 42px;
-        right: 5px;
+        right: 3px;
     }
 
     .game-stats {
