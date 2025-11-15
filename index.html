@@ -101,14 +101,52 @@
         <div class="game-stats" id="gameStats" style="display: none;">
             <!-- Groupe 1: Informations personnelles (Nom, Classe, Race, Sexe) -->
             <div class="stat-box stat-group-character">
-                <div class="stat-label">Personnage</div>
+                <div class="stat-label" id="playerNameLabel">---</div>
                 <div class="character-info-compact">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                    <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px;">
                         <div id="characterAvatarInline" style="font-size: 2em; line-height: 1;">🧙</div>
                         <div style="flex: 1;">
-                            <div><strong id="playerName">---</strong></div>
-                            <div style="font-size: 0.75em;"><span id="playerClass">⚔️ Guerrier</span> | <span id="playerRace">👤 Humain</span></div>
-                            <div style="font-size: 0.75em;" id="playerGender">♂️ Masculin</div>
+                            <div style="font-size: 0.75em; margin-bottom: 3px;"><span id="playerClass">⚔️ Guerrier</span> | <span id="playerRace">👤 Humain</span> | <span id="playerGender">♂️</span></div>
+                            <div class="combat-stat-row" style="margin-bottom: 3px;">
+                                <span class="combat-icon-small">❤️</span>
+                                <div class="health-bar-small">
+                                    <div class="health-fill" id="healthFillInline" style="width: 100%;"></div>
+                                    <div class="xp-markers">
+                                        <div class="xp-marker" style="left: 25%;"></div>
+                                        <div class="xp-marker" style="left: 50%;"></div>
+                                        <div class="xp-marker" style="left: 75%;"></div>
+                                    </div>
+                                    <span class="xp-text" id="playerHealthInline">100/100</span>
+                                </div>
+                            </div>
+                            <div class="combat-stat-row" id="manaRowInline" style="display: none; margin-bottom: 3px;">
+                                <span class="combat-icon-small">🔮</span>
+                                <div class="health-bar-small">
+                                    <div class="health-fill" id="manaFillInline" style="width: 100%; background: linear-gradient(90deg, #4169E1 0%, #1E90FF 100%);"></div>
+                                    <div class="xp-markers">
+                                        <div class="xp-marker" style="left: 25%;"></div>
+                                        <div class="xp-marker" style="left: 50%;"></div>
+                                        <div class="xp-marker" style="left: 75%;"></div>
+                                    </div>
+                                    <span class="xp-text" id="playerManaInline">100/100</span>
+                                </div>
+                            </div>
+                            <div class="combat-stat-row" style="margin-bottom: 3px;">
+                                <span class="combat-icon-small">⚡</span>
+                                <div class="health-bar-small">
+                                    <div class="health-fill" id="energyFillInline" style="width: 100%; background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);"></div>
+                                    <div class="xp-markers">
+                                        <div class="xp-marker" style="left: 25%;"></div>
+                                        <div class="xp-marker" style="left: 50%;"></div>
+                                        <div class="xp-marker" style="left: 75%;"></div>
+                                    </div>
+                                    <span class="xp-text" id="playerEnergyInline">100/100</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px; font-size: 0.85em; margin-top: 3px;">
+                                <span><span class="combat-icon-small" id="weaponIconInline">⚔️</span> <span id="playerWeaponDamageInline">0</span></span>
+                                <span><span class="combat-icon-small">🛡️</span> <span id="playerDefenseInline">5</span></span>
+                            </div>
                         </div>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px;">
