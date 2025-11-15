@@ -238,6 +238,7 @@ aux débutants.
 ## 🎯 Cas d'Usage Spécifiques
 
 ### Développement de Fonctionnalités
+
 1. **Planification**: @dragon-heart-agent pour la conception globale
 2. **Implémentation**: @javascript-expert pour le code
 3. **Équilibrage**: @game-balance-expert pour les stats
@@ -246,12 +247,14 @@ aux débutants.
 6. **Revue**: @code-review-expert pour la qualité
 
 ### Résolution de Bugs
+
 1. **Diagnostic**: @javascript-expert pour identifier le problème
 2. **Solution**: @dragon-heart-agent ou @javascript-expert
 3. **Revue**: @code-review-expert pour validation
 4. **Documentation**: @documentation-writer si changement important
 
 ### Ajout de Contenu
+
 1. **Design**: @game-balance-expert pour les stats
 2. **Texte**: @french-localization-expert pour descriptions
 3. **Implémentation**: @javascript-expert pour le code
@@ -269,11 +272,13 @@ Les agents sont configurés dans `.github/agents/`. Pour créer ou modifier un a
 ## 📖 Documentation des Agents
 
 Chaque fichier d'agent contient:
+
 - **name**: Nom de l'agent
 - **description**: Courte description de l'expertise
 - **instructions**: Instructions détaillées pour l'agent
 
 Exemple de structure:
+
 ```yaml
 name: Mon Agent
 description: Expert en quelque chose
@@ -288,6 +293,7 @@ instructions: |
   - Situation 1
   - Situation 2
 ```
+
 
 ## 🤝 Contribuer aux Agents
 
