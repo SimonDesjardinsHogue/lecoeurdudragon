@@ -231,6 +231,31 @@ location.reload();
 - [JavaScript Best Practices](https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide)
 - [localStorage API](https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage)
 
+## 🤖 Utiliser les Custom Agents
+
+Le projet dispose de plusieurs **agents IA spécialisés** pour vous aider dans le développement :
+
+### Agents Disponibles
+
+1. **🎮 Dragon Heart Agent** - Expert général du jeu
+2. **💻 JavaScript Expert** - Spécialiste ES6 et modules
+3. **🇫🇷 French Localization** - Expert en français et localisation
+4. **⚖️ Game Balance Expert** - Équilibrage et mécaniques
+5. **📚 Documentation Writer** - Rédaction de documentation
+6. **🔍 Code Review Expert** - Qualité et revue de code
+
+### Comment les utiliser
+
+Dans les issues et Pull Requests, mentionnez un agent pour obtenir de l'aide :
+
+```markdown
+@javascript-expert Comment puis-je refactoriser cette fonction ?
+@game-balance-expert Quelles stats pour un boss niveau 12 ?
+@french-localization-expert Peux-tu réviser ce texte ?
+```
+
+📖 **Guide complet**: Consultez [CUSTOM_AGENTS.md](CUSTOM_AGENTS.md) pour plus de détails.
+
 ## ❓ Questions Fréquentes
 
 **Q: Pourquoi utiliser des modules ES6?**  
@@ -244,6 +269,9 @@ R: Consultez `audio.js` et ajoutez votre son dans la structure `sounds`.
 
 **Q: Puis-je utiliser jQuery ou d'autres librairies?**  
 R: Le jeu utilise du JavaScript vanilla pour rester léger. Préférez cette approche.
+
+**Q: Comment utiliser les custom agents?**  
+R: Consultez [CUSTOM_AGENTS.md](CUSTOM_AGENTS.md) pour un guide complet sur l'utilisation des agents IA.
 
 ---
 
