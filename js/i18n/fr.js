@@ -29,7 +29,7 @@ export const fr = {
     enterName: "Nom de votre caractère :",
     heroName: "Nom du héros",
     randomName: "Aléatoire",
-    chooseClass: "Choisissez votre classe :",
+    chooseClass: "Classe:",
     startAdventure: "Commencer l'Aventure",
     restoreSave: "Restaurer une Partie",
     
