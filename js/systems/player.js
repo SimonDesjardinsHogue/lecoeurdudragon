@@ -9,6 +9,15 @@ import { audioManager } from '../audio.js';
 import { particleSystem } from '../particles.js';
 import { checkAchievements } from '../achievements.js';
 
+// Anti-cheat: Ensure gold never goes negative
+export function ensureValidGold() {
+    const p = gameState.player;
+    if (p.gold < 0) {
+        console.error('Negative gold detected! Resetting to 0.');
+        p.gold = 0;
+    }
+}
+
 // Heal player by a specific amount
 export function healPlayer(amount) {
     const p = gameState.player;
