@@ -5,6 +5,7 @@ import { particleSystem } from './particles.js';
 import { addCombatLog } from './ui.js';
 import { saveGame } from './save-load.js';
 import { trackAchievementProgress } from './achievements.js';
+import { rollDamage, formatDiceRoll } from './dice.js';
 
 // Skill cooldown tracker
 const skillCooldowns = {};
@@ -22,9 +23,12 @@ export const skills = {
             effect: (player, enemy) => {
                 const puissanceMod = getStatModifier(player.puissance);
                 const enemyDefenseMod = getStatModifier(enemy.defense);
-                const damage = Math.max(1, (player.puissance * 2) + (puissanceMod * 2) - (enemy.defense + enemyDefenseMod) + Math.floor(Math.random() * 10));
+                // Charge uses 3d6 with double strength modifier
+                const damageRoll = rollDamage(3, puissanceMod * 2);
+                const damage = Math.max(1, damageRoll.total - (enemy.defense + enemyDefenseMod));
                 enemy.health -= damage;
-                addCombatLog(`💥 Charge Puissante ! Vous infligez ${damage} dégâts massifs !`, 'special');
+                addCombatLog(`💥 Charge Puissante !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} - ${enemy.defense + enemyDefenseMod} défense = ${damage} dégâts massifs !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'damage' };
             }
@@ -39,12 +43,15 @@ export const skills = {
             effect: (player, enemy) => {
                 const puissanceMod = getStatModifier(player.puissance);
                 const enemyDefenseMod = getStatModifier(enemy.defense);
-                const damage = Math.max(1, player.puissance + puissanceMod - (enemy.defense + enemyDefenseMod) + Math.floor(Math.random() * 5));
+                // Shield bash uses 2d6 with strength modifier
+                const damageRoll = rollDamage(2, puissanceMod);
+                const damage = Math.max(1, damageRoll.total - (enemy.defense + enemyDefenseMod));
                 enemy.health -= damage;
                 player.defense += 5;
                 gameState.skillBuffs = gameState.skillBuffs || {};
                 gameState.skillBuffs.shieldBash = 2;
-                addCombatLog(`🛡️ Coup de Bouclier ! ${damage} dégâts et +5 défense pour 2 tours !`, 'special');
+                addCombatLog(`🛡️ Coup de Bouclier !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} - ${enemy.defense + enemyDefenseMod} défense = ${damage} dégâts et +5 défense pour 2 tours !`, 'special');
                 audioManager.playSound('defend');
                 return { damage, type: 'damage_buff' };
             }
@@ -60,9 +67,12 @@ export const skills = {
             cooldown: 3,
             effect: (player, enemy) => {
                 const espritMod = getStatModifier(player.esprit);
-                const damage = Math.floor(player.esprit * 1.5) + Math.floor(espritMod * 1.5) + Math.floor(Math.random() * 15);
+                // Fireball uses 4d6 with spirit modifier (ignores defense)
+                const damageRoll = rollDamage(4, Math.floor(espritMod * 1.5));
+                const damage = damageRoll.total; // Ignores defense
                 enemy.health -= damage;
-                addCombatLog(`🔥 Boule de Feu ! Dégâts magiques de ${damage} !`, 'special');
+                addCombatLog(`🔥 Boule de Feu !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} (ignore la défense) = ${damage} dégâts magiques !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'magic' };
             }
@@ -78,8 +88,11 @@ export const skills = {
                 const espritMod = getStatModifier(player.esprit);
                 gameState.skillBuffs = gameState.skillBuffs || {};
                 gameState.skillBuffs.manaShield = 3;
-                gameState.skillBuffs.manaShieldAmount = Math.floor(player.esprit * 2) + (espritMod * 2);
-                addCombatLog(`✨ Bouclier de Mana activé ! Absorbe jusqu'à ${gameState.skillBuffs.manaShieldAmount} dégâts.`, 'special');
+                // Shield absorbs 3d6 + spirit modifier
+                const shieldRoll = rollDamage(3, espritMod * 2);
+                gameState.skillBuffs.manaShieldAmount = shieldRoll.total;
+                addCombatLog(`✨ Bouclier de Mana activé !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(shieldRoll)} = absorbe jusqu'à ${gameState.skillBuffs.manaShieldAmount} dégâts.`, 'special');
                 audioManager.playSound('defend');
                 return { type: 'shield' };
             }
@@ -93,9 +106,12 @@ export const skills = {
             cooldown: 2,
             effect: (player, enemy) => {
                 const espritMod = getStatModifier(player.esprit);
-                const damage = Math.floor(player.esprit * 1.8) + Math.floor(espritMod * 2) + Math.floor(Math.random() * 12);
+                // Lightning bolt uses 5d6 with double spirit modifier (ignores defense)
+                const damageRoll = rollDamage(5, espritMod * 2);
+                const damage = damageRoll.total; // Ignores defense
                 enemy.health -= damage;
-                addCombatLog(`⚡ Éclair Foudroyant ! Dégâts électriques de ${damage} !`, 'special');
+                addCombatLog(`⚡ Éclair Foudroyant !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} (ignore la défense) = ${damage} dégâts électriques !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'magic' };
             }
@@ -109,10 +125,12 @@ export const skills = {
             cooldown: 3,
             effect: (player, enemy) => {
                 const espritMod = getStatModifier(player.esprit);
-                const wisdomMod = getStatModifier(player.wisdom);
-                const damage = Math.floor(player.esprit * 1.6) + Math.floor(espritMod * 1.5) + Math.floor(wisdomMod * 1.5) + Math.floor(Math.random() * 18);
+                // Ice lance uses 4d6 with spirit modifier (ignores defense)
+                const damageRoll = rollDamage(4, Math.floor(espritMod * 1.5));
+                const damage = damageRoll.total; // Ignores defense
                 enemy.health -= damage;
-                addCombatLog(`❄️ Lance de Glace ! Dégâts glacials de ${damage} !`, 'special');
+                addCombatLog(`❄️ Lance de Glace !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} (ignore la défense) = ${damage} dégâts glacials !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'magic' };
             }
@@ -127,15 +145,21 @@ export const skills = {
             energyCost: 25,
             cooldown: 3,
             effect: (player, enemy) => {
-                const puissanceMod = getStatModifier(player.puissance);
+                const adresseMod = getStatModifier(player.adresse);
                 const enemyDefenseMod = getStatModifier(enemy.defense);
                 let totalDamage = 0;
+                const rolls = [];
+                // Each arrow is 1d6 + dexterity modifier
                 for (let i = 0; i < 3; i++) {
-                    const damage = Math.max(1, Math.floor(player.puissance * 0.6) + Math.floor(puissanceMod * 0.6) - (Math.floor(enemy.defense * 0.5) + Math.floor(enemyDefenseMod * 0.5)) + Math.floor(Math.random() * 5));
+                    const arrowRoll = rollDamage(1, Math.floor(adresseMod * 0.5));
+                    const damage = Math.max(1, arrowRoll.total - Math.floor((enemy.defense + enemyDefenseMod) * 0.5));
                     totalDamage += damage;
+                    rolls.push(`Flèche ${i + 1}: ${formatDiceRoll(arrowRoll)} - ${Math.floor((enemy.defense + enemyDefenseMod) * 0.5)} = ${damage}`);
                 }
                 enemy.health -= totalDamage;
-                addCombatLog(`🏹 Tir Multiple ! 3 flèches pour ${totalDamage} dégâts totaux !`, 'special');
+                addCombatLog(`🏹 Tir Multiple ! 3 flèches tirées !`, 'special');
+                rolls.forEach(roll => addCombatLog(`🎲 ${roll}`, 'special'));
+                addCombatLog(`Total: ${totalDamage} dégâts`, 'special');
                 audioManager.playSound('attack');
                 return { damage: totalDamage, type: 'damage' };
             }
@@ -148,12 +172,14 @@ export const skills = {
             energyCost: 30,
             cooldown: 4,
             effect: (player, enemy) => {
-                const puissanceMod = getStatModifier(player.puissance);
                 const adresseMod = getStatModifier(player.adresse);
                 const enemyDefenseMod = getStatModifier(enemy.defense);
-                const damage = Math.max(1, (player.puissance + puissanceMod + player.adresse + adresseMod) - (enemy.defense + enemyDefenseMod) + Math.floor(Math.random() * 15));
+                // Aimed shot uses 4d6 with double dexterity modifier (critical hit)
+                const damageRoll = rollDamage(4, adresseMod * 2);
+                const damage = Math.max(1, damageRoll.total - (enemy.defense + enemyDefenseMod));
                 enemy.health -= damage;
-                addCombatLog(`🎯 Tir Visé critique ! ${damage} dégâts précis !`, 'special');
+                addCombatLog(`🎯 Tir Visé critique !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} - ${enemy.defense + enemyDefenseMod} défense = ${damage} dégâts précis !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'critical' };
             }
@@ -170,9 +196,12 @@ export const skills = {
             effect: (player, enemy) => {
                 const espritMod = getStatModifier(player.esprit);
                 const presenceMod = getStatModifier(player.presence);
-                const damage = Math.floor(player.esprit * 1.4) + Math.floor(espritMod * 1.3) + Math.floor(presenceMod * 1.2) + Math.floor(Math.random() * 14);
+                // Illusion uses 4d6 with spirit and presence modifiers (ignores defense)
+                const damageRoll = rollDamage(4, Math.floor(espritMod * 1.3) + Math.floor(presenceMod * 1.2));
+                const damage = damageRoll.total; // Psychic damage ignores defense
                 enemy.health -= damage;
-                addCombatLog(`🌀 Illusion Persuasive ! L'ennemi subit ${damage} dégâts psychiques !`, 'special');
+                addCombatLog(`🌀 Illusion Persuasive !`, 'special');
+                addCombatLog(`🎲 ${formatDiceRoll(damageRoll)} (ignore la défense) = ${damage} dégâts psychiques !`, 'special');
                 audioManager.playSound('attack');
                 return { damage, type: 'magic' };
             }
