@@ -32,20 +32,20 @@ export const enemies = [
     { name: 'Chevalier Noir', icon: '⚔️', health: 200, strength: 35, defense: 20, gold: 283, xp: 258, level: 22 },
     { name: 'Archer Maudit', icon: '🏹👻', health: 185, strength: 34, defense: 18, gold: 271, xp: 248, isRanged: true, level: 23 },
     
-    // Elite enemies (levels 16-20)
+    // Elite enemies (levels 16-24) - multiple enemies per level for variety
     { name: 'Démon Mineur', icon: '😈', health: 220, strength: 38, defense: 22, gold: 324, xp: 294, level: 24 },
-    { name: 'Dragon de Glace', icon: '🐲', health: 250, strength: 40, defense: 24, gold: 364, xp: 331, isRanged: true, level: 25 },
-    { name: 'Liche Ancestrale', icon: '☠️', health: 240, strength: 42, defense: 23, gold: 405, xp: 368, isRanged: true, level: 26 },
-    { name: 'Gardien Ancien de la Forêt', icon: '🛡️🌲', health: 270, strength: 44, defense: 27, gold: 430, xp: 391, level: 27 },
-    { name: 'Titan de Fer', icon: '🤖', health: 280, strength: 45, defense: 26, gold: 455, xp: 414, level: 28 },
-    { name: 'Tireur d\'Élite Démoniaque', icon: '🎯😈', health: 265, strength: 46, defense: 24, gold: 478, xp: 442, isRanged: true, level: 29 },
-    { name: 'Archidémon', icon: '👿', health: 300, strength: 48, defense: 28, gold: 506, xp: 460, level: 30 },
+    { name: 'Dragon de Glace', icon: '🐲', health: 250, strength: 40, defense: 24, gold: 364, xp: 331, isRanged: true, level: 24 },
+    { name: 'Liche Ancestrale', icon: '☠️', health: 240, strength: 42, defense: 23, gold: 405, xp: 368, isRanged: true, level: 24 },
+    { name: 'Gardien Ancien de la Forêt', icon: '🛡️🌲', health: 270, strength: 44, defense: 27, gold: 430, xp: 391, level: 24 },
+    { name: 'Titan de Fer', icon: '🤖', health: 280, strength: 45, defense: 26, gold: 455, xp: 414, level: 24 },
+    { name: 'Tireur d\'Élite Démoniaque', icon: '🎯😈', health: 265, strength: 46, defense: 24, gold: 478, xp: 442, isRanged: true, level: 24 },
+    { name: 'Archidémon', icon: '👿', health: 300, strength: 48, defense: 28, gold: 506, xp: 460, level: 24 },
     
-    // Legendary enemies (levels 21-24)
-    { name: 'Seigneur des Ombres', icon: '🌑', health: 320, strength: 50, defense: 30, gold: 531, xp: 483, level: 31 },
-    { name: 'Golem Titanesque', icon: '🗿', health: 340, strength: 52, defense: 32, gold: 556, xp: 506, isRanged: false, level: 32 },
-    { name: 'Dragon Noir Ancestral', icon: '🐲', health: 360, strength: 54, defense: 34, gold: 582, xp: 529, isRanged: true, level: 33 },
-    { name: 'Champion du Chaos', icon: '⚔️👿', health: 380, strength: 56, defense: 36, gold: 607, xp: 552, level: 34 }
+    // Legendary enemies (level 24) - top tier enemies available at max level
+    { name: 'Seigneur des Ombres', icon: '🌑', health: 320, strength: 50, defense: 30, gold: 531, xp: 483, level: 24 },
+    { name: 'Golem Titanesque', icon: '🗿', health: 340, strength: 52, defense: 32, gold: 556, xp: 506, isRanged: false, level: 24 },
+    { name: 'Dragon Noir Ancestral', icon: '🐲', health: 360, strength: 54, defense: 34, gold: 582, xp: 529, isRanged: true, level: 24 },
+    { name: 'Champion du Chaos', icon: '⚔️👿', health: 380, strength: 56, defense: 36, gold: 607, xp: 552, level: 24 }
 ];
 
 // Boss templates - appear at levels 6, 12, 18, and 24
