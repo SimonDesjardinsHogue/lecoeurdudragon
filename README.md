@@ -203,6 +203,24 @@ Pour arrêter le serveur: Ctrl+C
 
 ![Combat Screenshot](https://github.com/user-attachments/assets/e4fb88ef-63e4-46f8-b7e4-5f9c2339a699)
 
+#### 🎲 Système de Dés à 6 Faces
+
+Le jeu utilise un système de **dés à 6 faces (d6)** pour tous les calculs de combat et de compétences, en harmonie avec les **24 niveaux (4×6=24)** :
+
+- **Initiative** : 2d6 + modificateur d'Adresse détermine qui attaque en premier
+- **Dégâts du Joueur** : Xd6 + modificateur de Puissance (X augmente avec le niveau)
+  - Niveau 1-4 : 1d6
+  - Niveau 5-8 : 2d6
+  - Niveau 9-12 : 3d6
+  - Niveau 13-16 : 4d6
+  - Niveau 17-20 : 5d6
+  - Niveau 21-24 : 6d6
+- **Dégâts des Ennemis** : Xd6 + modificateur de Force (X basé sur la force)
+- **Transparence Totale** : Tous les jets de dés sont affichés dans le journal de combat
+  - Exemple : `🎲 Attaque: 3d6 (4+5+2) +2 = 13 - 8 défense = 5 dégâts`
+
+📖 **[Documentation complète du système de dés](DICE_SYSTEM.md)**
+
 #### ⚔️ Système de Combat Avancé
 - **Attaquer** : Infligez des dégâts à l'ennemi en fonction de votre force
 - **Défendre** : Doublez votre défense pour le prochain tour
