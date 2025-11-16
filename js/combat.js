@@ -17,6 +17,7 @@ import { determineInitiative } from './combat/initiative.js';
 import { shouldFaceBoss, createBossEnemy } from './combat/boss.js';
 import { triggerRandomEvent } from './combat/events.js';
 import { showTouchHint } from './touch-gestures.js';
+import { rollDamage, getDamageDiceForLevel, getDamageDiceForEnemy, formatDiceRoll } from './dice.js';
 export { triggerRandomEvent };
 
 // Start exploring the dungeon
@@ -254,16 +255,22 @@ export function attack() {
         setTimeout(() => enemyInfoElement.classList.remove('shake'), 500);
     }
     
-    // Player attacks
+    // Player attacks with dice-based damage
     const puissanceMod = getStatModifier(p.puissance);
     const enemyDefenseMod = getStatModifier(e.defense);
     
     // Apply event strength multiplier
     const eventStrengthMultiplier = getEventMultiplier('strengthMultiplier', 1);
     
-    // Calculate base damage with increased randomness: -3 to +10
-    const damageVariance = Math.floor(Math.random() * 14) - 3;
-    let playerDamage = Math.max(1, Math.floor((p.puissance + puissanceMod) * eventStrengthMultiplier) - (e.defense + enemyDefenseMod) + damageVariance);
+    // Calculate damage using dice system
+    // Number of damage dice based on player level
+    const numDamageDice = getDamageDiceForLevel(p.level);
+    
+    // Roll damage dice with strength modifier as bonus
+    const damageRoll = rollDamage(numDamageDice, Math.floor(puissanceMod * eventStrengthMultiplier));
+    
+    // Subtract enemy defense
+    let playerDamage = Math.max(1, damageRoll.total - (e.defense + enemyDefenseMod));
     
     // Critical hit chance (10% base + event bonus)
     const baseCriticalChance = 0.10;
@@ -277,10 +284,12 @@ export function attack() {
     
     e.health -= playerDamage;
     
+    // Display damage with dice roll details
     if (isCritical) {
-        addCombatLog(`💥 COUP CRITIQUE ! Vous infligez ${playerDamage} dégâts au ${e.name} !`, 'victory');
+        addCombatLog(`💥 COUP CRITIQUE !`, 'victory');
+        addCombatLog(`🎲 Dégâts: ${formatDiceRoll(damageRoll)} - ${e.defense + enemyDefenseMod} défense × 1.5 = ${playerDamage}`, 'player-damage');
     } else {
-        addCombatLog(`Vous infligez ${playerDamage} dégâts au ${e.name} !`, 'player-damage');
+        addCombatLog(`🎲 ${formatDiceRoll(damageRoll, 'Attaque')} - ${e.defense + enemyDefenseMod} défense = ${playerDamage} dégâts`, 'player-damage');
     }
     
     if (e.health <= 0) {
@@ -429,9 +438,10 @@ export function enemyApproachOrAttack() {
                 gameState.defending = false;
             }
             
-            // Ranged attack - slightly reduced damage
-            const damageVariance = Math.floor(Math.random() * 10) - 2;
-            let rangedDamage = Math.max(1, Math.floor(e.strength * 0.8) + Math.floor(enemyStrengthMod * 0.8) - (defense + playerDefenseMod) + damageVariance);
+            // Ranged attack - uses dice but with reduced damage (80% of dice count, min 1)
+            const numDamageDice = Math.max(1, Math.floor(getDamageDiceForEnemy(e.strength) * 0.8));
+            const rangedRoll = rollDamage(numDamageDice, Math.floor(enemyStrengthMod * 0.8));
+            let rangedDamage = Math.max(1, rangedRoll.total - (defense + playerDefenseMod));
             
             // Apply mana shield buff if active
             rangedDamage = applyShieldBuff(rangedDamage);
@@ -454,7 +464,7 @@ export function enemyApproachOrAttack() {
             }
             
             p.health -= rangedDamage;
-            addCombatLog(`Vous subissez ${rangedDamage} dégâts à distance !`, 'damage');
+            addCombatLog(`🎲 Tir à distance: ${formatDiceRoll(rangedRoll)} - ${defense + playerDefenseMod} défense = ${rangedDamage} dégâts`, 'damage');
             
             // Play hit sound and show particles
             audioManager.playSound('hit');
@@ -514,19 +524,21 @@ export function enemyAttack() {
     if (e.isBoss && e.ability) {
         switch (e.ability) {
             case 'regeneration':
-                // Troll regenerates 4-7 HP each turn (reduced from 8-15)
-                const regenAmount = 4 + Math.floor(Math.random() * 4);
+                // Troll regenerates using dice (1d6+1 HP each turn)
+                const regenRoll = rollDamage(1, 1);
+                const regenAmount = regenRoll.total;
                 e.health = Math.min(e.maxHealth, e.health + regenAmount);
-                addCombatLog(`${e.name} se régénère de ${regenAmount} HP !`, 'info');
+                addCombatLog(`🎲 ${e.name} se régénère: ${formatDiceRoll(regenRoll)} HP !`, 'info');
                 updateEnemyUI();
                 break;
             
             case 'life_drain':
-                // Liche drains life (12-20 HP)
-                const drainAmount = 12 + Math.floor(Math.random() * 9);
+                // Liche drains life using dice (2d6+3 HP)
+                const drainRoll = rollDamage(2, 3);
+                const drainAmount = drainRoll.total;
                 p.health -= drainAmount;
                 e.health = Math.min(e.maxHealth, e.health + drainAmount);
-                addCombatLog(`${e.name} vous draine de ${drainAmount} HP et se soigne !`, 'damage');
+                addCombatLog(`🎲 ${e.name} draine: ${formatDiceRoll(drainRoll)} HP et se soigne !`, 'damage');
                 updateEnemyUI();
                 updateUI();
                 
@@ -537,14 +549,15 @@ export function enemyAttack() {
                 break;
             
             case 'triple_attack':
-                // Hydra attacks three times
+                // Hydra attacks three times with dice
                 addCombatLog(`${e.name} attaque avec ses trois têtes !`, 'info');
                 const enemyStrengthMod = getStatModifier(e.strength);
                 for (let i = 0; i < 3; i++) {
-                    const damageVariance = Math.floor(Math.random() * 10) - 2;
-                    const damage = Math.max(1, Math.floor(e.strength / 2) + Math.floor(enemyStrengthMod / 2) - (defense + playerDefenseMod) + damageVariance);
+                    // Each head does reduced damage: 1d6 + half strength mod
+                    const headDamageRoll = rollDamage(1, Math.floor(enemyStrengthMod / 2));
+                    const damage = Math.max(1, headDamageRoll.total - (defense + playerDefenseMod));
                     p.health -= damage;
-                    addCombatLog(`Tête ${i + 1} inflige ${damage} dégâts !`, 'damage');
+                    addCombatLog(`🎲 Tête ${i + 1}: ${formatDiceRoll(headDamageRoll)} - ${defense + playerDefenseMod} défense = ${damage} dégâts`, 'damage');
                     
                     if (p.health <= 0) {
                         handleDefeat();
@@ -562,14 +575,16 @@ export function enemyAttack() {
                 return;
             
             case 'fire_burst':
-                // Demon ignores 50% of defense
+                // Demon ignores 50% of defense with fire burst
                 const reducedDefense = Math.floor(defense * 0.5);
                 const reducedDefenseMod = Math.floor(playerDefenseMod * 0.5);
                 const enemyStrengthModFire = getStatModifier(e.strength);
-                const fireDamageVariance = Math.floor(Math.random() * 16) - 3;
-                const fireDamage = Math.max(1, e.strength + enemyStrengthModFire - (reducedDefense + reducedDefenseMod) + fireDamageVariance);
+                // Fire burst uses 3d6 + strength mod
+                const fireRoll = rollDamage(3, enemyStrengthModFire);
+                const fireDamage = Math.max(1, fireRoll.total - (reducedDefense + reducedDefenseMod));
                 p.health -= fireDamage;
-                addCombatLog(`${e.name} lance une explosion de flammes ! ${fireDamage} dégâts !`, 'damage');
+                addCombatLog(`🔥 ${e.name} lance une explosion de flammes !`, 'damage');
+                addCombatLog(`🎲 ${formatDiceRoll(fireRoll)} - ${reducedDefense + reducedDefenseMod} défense réduite = ${fireDamage} dégâts`, 'damage');
                 
                 audioManager.playSound('hit');
                 const playerStatsElement2 = document.getElementById('gameStats');
@@ -586,12 +601,13 @@ export function enemyAttack() {
                 return;
             
             case 'breath_weapon':
-                // Dragon breath massive damage
+                // Dragon breath massive damage using 4d6
                 const enemyStrengthModBreath = getStatModifier(e.strength);
-                const breathDamageVariance = Math.floor(Math.random() * 20) - 5;
-                const breathDamage = Math.max(1, Math.floor(e.strength * 1.5) + Math.floor(enemyStrengthModBreath * 1.5) - (defense + playerDefenseMod) + breathDamageVariance);
+                const breathRoll = rollDamage(4, Math.floor(enemyStrengthModBreath * 1.5));
+                const breathDamage = Math.max(1, breathRoll.total - (defense + playerDefenseMod));
                 p.health -= breathDamage;
-                addCombatLog(`${e.name} crache son souffle destructeur ! ${breathDamage} dégâts !`, 'damage');
+                addCombatLog(`🐉 ${e.name} crache son souffle destructeur !`, 'damage');
+                addCombatLog(`🎲 ${formatDiceRoll(breathRoll)} - ${defense + playerDefenseMod} défense = ${breathDamage} dégâts`, 'damage');
                 
                 audioManager.playSound('hit');
                 const playerStatsElement3 = document.getElementById('gameStats');
@@ -609,12 +625,18 @@ export function enemyAttack() {
         }
     }
     
-    // Normal attack
+    // Normal attack with dice-based damage
     const enemyStrengthMod = getStatModifier(e.strength);
     
-    // Calculate base damage with increased randomness: -3 to +10
-    const damageVariance = Math.floor(Math.random() * 14) - 3;
-    let enemyDamage = Math.max(1, e.strength + enemyStrengthMod - (defense + playerDefenseMod) + damageVariance);
+    // Calculate damage using dice system
+    // Number of damage dice based on enemy strength
+    const numDamageDice = getDamageDiceForEnemy(e.strength);
+    
+    // Roll damage dice with strength modifier as bonus
+    const damageRoll = rollDamage(numDamageDice, enemyStrengthMod);
+    
+    // Subtract player defense
+    let enemyDamage = Math.max(1, damageRoll.total - (defense + playerDefenseMod));
     
     // Apply mana shield buff if active
     enemyDamage = applyShieldBuff(enemyDamage);
@@ -639,7 +661,7 @@ export function enemyAttack() {
     }
     
     p.health -= enemyDamage;
-    addCombatLog(`Le ${e.name} vous inflige ${enemyDamage} dégâts !`, 'damage');
+    addCombatLog(`🎲 ${e.name}: ${formatDiceRoll(damageRoll, 'Attaque')} - ${defense + playerDefenseMod} défense = ${enemyDamage} dégâts`, 'damage');
     
     // Play hit sound and show particles
     audioManager.playSound('hit');

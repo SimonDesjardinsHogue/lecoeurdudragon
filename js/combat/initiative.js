@@ -3,11 +3,11 @@
 
 import { gameState, getStatModifier } from '../game-state.js';
 import { addCombatLog } from '../ui.js';
+import { rollInitiative as rollInitiativeDice, formatDiceRoll } from '../dice.js';
 
 // Roll initiative for combat
-// Returns the initiative roll (d10 + adresse modifier)
+// Returns the initiative roll result object (2d6 + adresse modifier)
 export function rollInitiative(character) {
-    const d10Roll = Math.floor(Math.random() * 10) + 1; // Roll 1d10
     // Use character's adresse if available, otherwise estimate based on enemy type
     let adresse = character.adresse;
     if (adresse === undefined && character.name) {
@@ -24,7 +24,15 @@ export function rollInitiative(character) {
         adresse = 10; // Fallback default
     }
     const dexMod = getStatModifier(adresse);
-    return d10Roll + dexMod;
+    
+    // Roll 2d6 + dexterity modifier for initiative
+    const rollResult = rollInitiativeDice(dexMod);
+    
+    // Store the roll details for display
+    rollResult.adresse = adresse;
+    rollResult.modifier = dexMod;
+    
+    return rollResult;
 }
 
 // Determine who goes first in combat and display initiative results
@@ -33,39 +41,28 @@ export function determineInitiative() {
     const enemy = gameState.currentEnemy;
     
     // Roll initiative for both combatants
-    const playerInitiative = rollInitiative(player);
-    const enemyInitiative = rollInitiative(enemy);
+    const playerInitiativeRoll = rollInitiative(player);
+    const enemyInitiativeRoll = rollInitiative(enemy);
     
-    // Store initiative results
-    gameState.playerInitiative = playerInitiative;
-    gameState.enemyInitiative = enemyInitiative;
+    // Store initiative results (store the total for compatibility)
+    gameState.playerInitiative = playerInitiativeRoll.total;
+    gameState.enemyInitiative = enemyInitiativeRoll.total;
     
-    // Display initiative rolls
-    const playerAdresseMod = getStatModifier(player.adresse);
+    // Store full roll details for potential future use
+    gameState.playerInitiativeRoll = playerInitiativeRoll;
+    gameState.enemyInitiativeRoll = enemyInitiativeRoll;
     
-    // Calculate enemy adresse for display
-    let enemyAdresse = enemy.adresse;
-    if (enemyAdresse === undefined) {
-        if (enemy.isRanged) {
-            enemyAdresse = 14;
-        } else if (enemy.name.includes('Golem') || enemy.name.includes('Titan')) {
-            enemyAdresse = 8;
-        } else {
-            enemyAdresse = 10;
-        }
-    }
-    const enemyAdresseMod = getStatModifier(enemyAdresse);
-    
+    // Display initiative rolls with dice details
     addCombatLog(`⚡ Jets d'initiative !`, 'info');
-    addCombatLog(`Vous : ${playerInitiative} (Bonus DEX: ${playerAdresseMod >= 0 ? '+' : ''}${playerAdresseMod})`, 'player-damage');
-    addCombatLog(`${enemy.name} : ${enemyInitiative} (Bonus DEX: ${enemyAdresseMod >= 0 ? '+' : ''}${enemyAdresseMod})`, 'damage');
+    addCombatLog(`🎲 Vous : ${formatDiceRoll(playerInitiativeRoll)}`, 'player-damage');
+    addCombatLog(`🎲 ${enemy.name} : ${formatDiceRoll(enemyInitiativeRoll)}`, 'damage');
     
     // Determine who goes first
-    if (playerInitiative > enemyInitiative) {
+    if (playerInitiativeRoll.total > enemyInitiativeRoll.total) {
         gameState.playerHasInitiative = true;
         addCombatLog(`✨ Vous agissez en premier !`, 'special');
         return true; // Player goes first
-    } else if (enemyInitiative > playerInitiative) {
+    } else if (enemyInitiativeRoll.total > playerInitiativeRoll.total) {
         gameState.playerHasInitiative = false;
         addCombatLog(`⚠️ ${enemy.name} agit en premier !`, 'damage');
         return false; // Enemy goes first
