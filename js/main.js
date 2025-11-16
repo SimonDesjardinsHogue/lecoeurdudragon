@@ -1,6 +1,6 @@
 // Main Entry Point Module
 
-import { init, startGame as startGameLogic, rest as restLogic, resetGame as resetGameLogic, showStats, showStatsAndLeaderboard, showProgressionMenu, showOptionsMenu, showSaveOptions, showMain, restoreSaveFromStart, showSaveSelectionModal, showManualSaveModal, showAchievements, showBalanceTest, runBalanceTest, showAdminLogin, showAdminPanel, showServerHosting, deleteAllSaves, spendStatPoint, showLeaderboard, submitToGlobalLeaderboard, submitPlayerToGlobalLeaderboard, switchLeaderboardMode, showDailyQuestsScreen, useInventoryItem, sellInventoryItem, visitVillage as visitVillageLogic } from './game-logic.js';
+import { init, startGame as startGameLogic, rest as restLogic, resetGame as resetGameLogic, showStats, showStatsAndLeaderboard, showProgressionMenu, showOptionsMenu, showSaveOptions, showMain, restoreSaveFromStart, showSaveSelectionModal, showManualSaveModal, showAchievements, showBalanceTest, runBalanceTest, showAdminLogin, showAdminPanel, showServerHosting, deleteAllSaves, spendStatPoint, showLeaderboard, submitToGlobalLeaderboard, submitPlayerToGlobalLeaderboard, switchLeaderboardMode, showDailyQuestsScreen, useInventoryItem, sellInventoryItem, visitVillage as visitVillageLogic, randomizeCharacter as randomizeCharacterLogic } from './game-logic.js';
 import { showShop, buyItem, buyRareItem } from './systems/shop.js';
 import { meetNPC, meetJeweler, buyMetal, sellMetal } from './systems/npc.js';
 import { explore as exploreLogic, attack as attackLogic, defend as defendLogic, flee as fleeLogic, enemyAttack, useCombatPotion, skipDefendTurn } from './combat.js';
@@ -501,4 +501,10 @@ window.randomizeName = function() {
         const randomIndex = Math.floor(Math.random() * medievalNames.length);
         nameInput.value = medievalNames[randomIndex];
     }
+};
+
+// Randomize character selection (gender, race, class)
+window.randomizeCharacter = function() {
+    initAudio();
+    randomizeCharacterLogic();
 };

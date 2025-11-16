@@ -105,6 +105,37 @@ export function init() {
     }
 }
 
+// Randomize character selection (gender, race, class)
+export function randomizeCharacter() {
+    // Available options
+    const genders = ['male', 'female'];
+    const races = ['humain', 'elfe', 'nain'];
+    const classes = ['guerrier', 'archer', 'magicien', 'enchanteur'];
+    
+    // Select random options
+    const randomGender = genders[Math.floor(Math.random() * genders.length)];
+    const randomRace = races[Math.floor(Math.random() * races.length)];
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
+    
+    // Update gender radio buttons
+    const genderRadio = document.querySelector(`input[name="characterGender"][value="${randomGender}"]`);
+    if (genderRadio) {
+        genderRadio.checked = true;
+    }
+    
+    // Update race radio buttons
+    const raceRadio = document.querySelector(`input[name="characterRace"][value="${randomRace}"]`);
+    if (raceRadio) {
+        raceRadio.checked = true;
+    }
+    
+    // Update class radio buttons
+    const classRadio = document.querySelector(`input[name="characterClass"][value="${randomClass}"]`);
+    if (classRadio) {
+        classRadio.checked = true;
+    }
+}
+
 // Start new game
 export function startGame() {
     const nameInput = document.getElementById('nameInput').value.trim();
