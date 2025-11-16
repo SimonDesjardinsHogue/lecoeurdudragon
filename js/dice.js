@@ -213,7 +213,8 @@ export function rollSelect(array) {
 
 /**
  * Roll for percentage chance (0-100%)
- * Uses dice for probability checks instead of Math.random()
+ * Uses a single d6 repeatedly to build up a percentage roll
+ * This gives a more uniform distribution than using many dice
  * @param {number} chance - Chance percentage (0-100)
  * @returns {boolean} - True if successful, false otherwise
  */
@@ -221,9 +222,16 @@ export function rollChance(chance) {
     if (chance <= 0) return false;
     if (chance >= 100) return true;
     
-    // Use 2d6 for percentages (gives 2-12 range)
-    // Map this to 0-100 range with some granularity
-    const result = rollDice(6); // 6d6 gives good distribution for percentages
-    const percentage = ((result.diceTotal - 6) / 30) * 100; // 6-36 -> 0-100
+    // Roll a d6 and map 1-6 to percentage ranges
+    // We'll use multiple d6 rolls to get finer granularity
+    // First d6: determines 0-16%, 17-33%, 34-50%, 51-66%, 67-83%, 84-100%
+    // Second d6: refines within that range
+    const firstRoll = Math.floor(Math.random() * 6) + 1; // 1-6
+    const secondRoll = Math.floor(Math.random() * 6) + 1; // 1-6
+    
+    // Map to 0-100 range: ((first-1) * 16.67 + (second-1) * 2.78)
+    // This gives us 36 possible outcomes distributed across 0-100
+    const percentage = ((firstRoll - 1) * 16.67) + ((secondRoll - 1) * 2.78);
+    
     return percentage < chance;
 }
