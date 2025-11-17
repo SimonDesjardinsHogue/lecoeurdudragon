@@ -2,6 +2,7 @@
 // Responsibility: Handle main combat actions (attack, defend, flee)
 
 import { gameState, enemies, legendaryItems, getStatModifier, shopItems } from './game-state.js';
+import { ENERGY_COSTS, ENCOUNTER_CHANCES } from './data/game-constants.js';
 import { updateUI, updateEnemyUI, addCombatLog, showScreen, updateCombatInventoryUI, updateSkillsUI } from './ui.js';
 import { saveGame } from './save-load.js';
 import { checkLevelUp, meetNPC } from './game-logic.js';
@@ -20,24 +21,68 @@ import { showTouchHint } from './touch-gestures.js';
 import { rollDamage, getDamageDiceForLevel, getDamageDiceForEnemy, formatDiceRoll, rollChance, rollSelect, rollRange } from './dice.js';
 export { triggerRandomEvent };
 
-// Start exploring the dungeon
+/**
+ * Starts exploring the dungeon, consuming energy and triggering encounters
+ * May result in boss fights, random events, NPC encounters, or monster battles
+ */
 export function explore() {
+    const p = gameState.player;
+    
     // Check if player has enough energy to explore
-    if (gameState.player.energy < 10) {
+    if (p.energy < ENERGY_COSTS.EXPLORE) {
         alert('Vous êtes trop fatigué pour explorer la forêt ! Allez dormir à l\'auberge pour récupérer votre énergie.');
         return;
     }
     
-    // Consume energy for exploring
-    gameState.player.energy = Math.max(0, gameState.player.energy - 10);
-    
-    // Update quest progress for exploring
-    updateQuestProgress('explore', 1);
-    // Track exploration for achievements
-    trackAchievementProgress('exploration', 1);
-    
-    // Check for boss encounter first
-    if (shouldFaceBoss()) {
+    try {
+        // Consume energy for exploring
+        p.energy = Math.max(0, p.energy - ENERGY_COSTS.EXPLORE);
+        
+        // Update quest progress for exploring
+        updateQuestProgress('explore', 1);
+        // Track exploration for achievements
+        trackAchievementProgress('exploration', 1);
+        
+        // Check for boss encounter first
+        if (shouldFaceBoss()) {
+            initiateBossFight();
+            return;
+        }
+        
+        // Random encounter - 20% random event, 20% NPC, 60% monster
+        const encounterRoll = rollChance(ENCOUNTER_CHANCES.FOREST_EVENT) ? 0.1 : 
+                             (rollChance(ENCOUNTER_CHANCES.FOREST_NPC) ? 0.3 : 0.5);
+        
+        if (encounterRoll < 0.2) {
+            // Random event (forest-specific)
+            triggerRandomEvent('forest');
+        } else if (encounterRoll < 0.4) {
+            // NPC encounter (forest-specific)
+            meetNPC('forest');
+        } else {
+            // Monster encounter - 7% chance for dual monsters
+            const dualMonsterChance = rollChance(ENCOUNTER_CHANCES.DUAL_MONSTER);
+            
+            if (dualMonsterChance) {
+                initiateDualCombat();
+            } else {
+                initiateSingleCombat();
+            }
+        }
+    } catch (error) {
+        console.error('Error in explore:', error);
+        // Restore energy on error to prevent unfair consumption
+        p.energy = Math.min(p.maxEnergy, p.energy + ENERGY_COSTS.EXPLORE);
+        alert('Une erreur est survenue pendant l\'exploration. Veuillez réessayer.');
+    }
+}
+
+/**
+ * Initiates a boss fight encounter
+ * Sets up boss-specific game state and UI
+ */
+function initiateBossFight() {
+    try {
         gameState.currentEnemy = createBossEnemy();
         gameState.currentEnemies = null;
         gameState.isDualCombat = false;
@@ -59,7 +104,10 @@ export function explore() {
         audioManager.startMusic('combat');
         
         showScreen('combatScreen');
-        document.getElementById('combatLog').innerHTML = '';
+        const combatLog = document.getElementById('combatLog');
+        if (combatLog) {
+            combatLog.innerHTML = '';
+        }
         addCombatLog(`🔥 COMBAT DE BOSS ! 🔥`, 'victory');
         addCombatLog(`${gameState.currentEnemy.name} apparaît devant vous !`, 'info');
         addCombatLog(`${gameState.currentEnemy.description}`, 'info');
@@ -81,145 +129,170 @@ export function explore() {
                 enemyAttack();
             }, 2000);
         }
-        return;
+    } catch (error) {
+        console.error('Error initiating boss fight:', error);
+        gameState.inCombat = false;
+        gameState.inBossCombat = false;
+        alert('Une erreur est survenue lors de l\'initialisation du combat de boss.');
     }
-    
-    // Random encounter - 20% random event, 20% NPC, 60% monster
-    const encounterRoll = rollChance(20) ? 0.1 : (rollChance(20) ? 0.3 : 0.5); // Dice-based encounter type
-    
-    if (encounterRoll < 0.2) {
-        // Random event (forest-specific)
-        triggerRandomEvent('forest');
-    } else if (encounterRoll < 0.4) {
-        // NPC encounter (forest-specific)
-        meetNPC('forest');
-    } else {
-        // Monster encounter - 7% chance for dual monsters
-        const dualMonsterChance = rollChance(7);
-        
-        if (dualMonsterChance) {
-            // Dual monster encounter - select two different enemies
-            const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
-            
-            // Get two different random indices using dice
-            const availableEnemies = enemies.slice(0, maxEnemyIndex + 1);
-            const enemy1Template = rollSelect(availableEnemies);
-            let enemy2Template = rollSelect(availableEnemies);
-            // Ensure we get different enemies if possible
-            let attempts = 0;
-            while (enemy2Template === enemy1Template && availableEnemies.length > 1 && attempts < 5) {
-                enemy2Template = rollSelect(availableEnemies);
-                attempts++;
-            }
-            
-            // Create enemy objects
-            const enemy1 = {
-                ...enemy1Template,
-                maxHealth: enemy1Template.health,
-                isBoss: false,
-                distance: enemy1Template.isRanged ? 1 : 0 // Ranged enemies start at distance 1
-            };
-            const enemy2 = {
-                ...enemy2Template,
-                maxHealth: enemy2Template.health,
-                isBoss: false,
-                distance: enemy2Template.isRanged ? 1 : 0 // Ranged enemies start at distance 1
-            };
-            
-            // Sort by strength - stronger on left (index 0)
-            const sortedEnemies = [enemy1, enemy2].sort((a, b) => b.strength - a.strength);
-            
-            // Store both enemies
-            gameState.currentEnemies = sortedEnemies;
-            gameState.currentEnemy = sortedEnemies[0]; // Primary target
-            gameState.isDualCombat = true;
-            
-            gameState.inCombat = true;
-            gameState.defending = false;
-            
-            // Switch to combat music for monster encounter
-            audioManager.startMusic('combat');
-            
-            showScreen('combatScreen');
-            document.getElementById('combatLog').innerHTML = '';
-            addCombatLog(`Vous rencontrez ${sortedEnemies[0].name} et ${sortedEnemies[1].name} !`, 'info');
-            // Show distance info for ranged enemies
-            if (sortedEnemies[0].isRanged || sortedEnemies[1].isRanged) {
-                addCombatLog(`⚠️ Certains ennemis sont à distance et doivent s'approcher pour attaquer au corps à corps !`, 'info');
-            }
-            
-            // Roll initiative
-            const playerGoesFirst = determineInitiative();
-            
-            updateEnemyUI();
-            
-            // Show touch hint for mobile users
-            showTouchHint('💡 Balayez ← pour défendre, → pour fuir');
-            
-            // If enemy won initiative, they attack first
-            if (!playerGoesFirst) {
-                setTimeout(() => {
-                    enemyApproachOrAttack();
-                }, 2000);
-            }
-        } else {
-            // Single monster encounter - select enemy based on player level but ensure we don't exceed array bounds
-            const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
-            const availableEnemies = enemies.slice(0, maxEnemyIndex + 1);
-            const enemyTemplate = rollSelect(availableEnemies);
-            
-            gameState.currentEnemy = {
-                ...enemyTemplate,
-                maxHealth: enemyTemplate.health,
-                isBoss: false,
-                distance: enemyTemplate.isRanged ? 1 : 0 // Ranged enemies start at distance 1
-            };
-            gameState.currentEnemies = null;
-            gameState.isDualCombat = false;
-            
-            gameState.inCombat = true;
-            gameState.defending = false;
-            
-            // Switch to combat music for monster encounter
-            audioManager.startMusic('combat');
-            
-            showScreen('combatScreen');
-            document.getElementById('combatLog').innerHTML = '';
-            addCombatLog(`Vous rencontrez un ${gameState.currentEnemy.name} !`, 'info');
-            // Show distance info for ranged enemies
-            if (gameState.currentEnemy.isRanged) {
-                addCombatLog(`⚠️ L'ennemi est à distance et doit s'approcher pour attaquer au corps à corps !`, 'info');
-                if (gameState.player.class === 'guerrier') {
-                    addCombatLog(`⚔️ En tant que Guerrier, vous ne pouvez pas attaquer pendant son approche.`, 'info');
-                } else if (gameState.player.class === 'magicien') {
-                    addCombatLog(`🧙 En tant que Magicien, vous pouvez lancer des sorts pendant son approche !`, 'special');
-                } else if (gameState.player.class === 'archer') {
-                    addCombatLog(`🏹 En tant qu'Archer, vous pouvez tirer pendant son approche !`, 'special');
-                }
-            }
-            
-            // Roll initiative
-            const playerGoesFirst = determineInitiative();
-            
-            updateEnemyUI();
-            
-            // Show touch hint for mobile users
-            showTouchHint('💡 Balayez ← pour défendre, → pour fuir');
-            
-            // If enemy won initiative, they attack first
-            if (!playerGoesFirst) {
-                setTimeout(() => {
-                    enemyApproachOrAttack();
-                }, 2000);
-            }
-        }
-    }
-    
-    saveGame();
-    updateUI();
 }
 
-// Player attacks enemy
+/**
+ * Initiates a dual monster combat encounter
+ * Sets up state for fighting two enemies simultaneously
+ */
+function initiateDualCombat() {
+    try {
+        // Dual monster encounter - select two different enemies
+        const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
+        
+        // Get two different random indices using dice
+        const availableEnemies = enemies.slice(0, maxEnemyIndex + 1);
+        const enemy1Template = rollSelect(availableEnemies);
+        let enemy2Template = rollSelect(availableEnemies);
+        
+        // Ensure we get different enemies if possible
+        let attempts = 0;
+        while (enemy2Template === enemy1Template && availableEnemies.length > 1 && attempts < 5) {
+            enemy2Template = rollSelect(availableEnemies);
+            attempts++;
+        }
+        
+        // Create enemy objects
+        const enemy1 = {
+            ...enemy1Template,
+            maxHealth: enemy1Template.health,
+            isBoss: false,
+            distance: enemy1Template.isRanged ? 1 : 0 // Ranged enemies start at distance 1
+        };
+        const enemy2 = {
+            ...enemy2Template,
+            maxHealth: enemy2Template.health,
+            isBoss: false,
+            distance: enemy2Template.isRanged ? 1 : 0 // Ranged enemies start at distance 1
+        };
+        
+        // Sort by strength - stronger on left (index 0)
+        const sortedEnemies = [enemy1, enemy2].sort((a, b) => b.strength - a.strength);
+        
+        // Store both enemies
+        gameState.currentEnemies = sortedEnemies;
+        gameState.currentEnemy = sortedEnemies[0]; // Primary target
+        gameState.isDualCombat = true;
+        
+        gameState.inCombat = true;
+        gameState.defending = false;
+        
+        // Switch to combat music for monster encounter
+        audioManager.startMusic('combat');
+        
+        showScreen('combatScreen');
+        const combatLog = document.getElementById('combatLog');
+        if (combatLog) {
+            combatLog.innerHTML = '';
+        }
+        addCombatLog(`Vous rencontrez ${sortedEnemies[0].name} et ${sortedEnemies[1].name} !`, 'info');
+        
+        // Show distance info for ranged enemies
+        if (sortedEnemies[0].isRanged || sortedEnemies[1].isRanged) {
+            addCombatLog(`⚠️ Certains ennemis sont à distance et doivent s'approcher pour attaquer au corps à corps !`, 'info');
+        }
+        
+        // Roll initiative
+        const playerGoesFirst = determineInitiative();
+        
+        updateEnemyUI();
+        saveGame();
+        updateUI();
+        
+        // Show touch hint for mobile users
+        showTouchHint('💡 Balayez ← pour défendre, → pour fuir');
+        
+        // If enemy won initiative, they attack first
+        if (!playerGoesFirst) {
+            setTimeout(() => {
+                enemyApproachOrAttack();
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Error initiating dual combat:', error);
+        gameState.inCombat = false;
+        alert('Une erreur est survenue lors de l\'initialisation du combat double.');
+    }
+}
+
+/**
+ * Initiates a single monster combat encounter
+ * Sets up state for fighting one enemy
+ */
+function initiateSingleCombat() {
+    try {
+        // Single monster encounter - select enemy based on player level but ensure we don't exceed array bounds
+        const maxEnemyIndex = Math.min(enemies.length - 1, gameState.player.level);
+        const availableEnemies = enemies.slice(0, maxEnemyIndex + 1);
+        const enemyTemplate = rollSelect(availableEnemies);
+        
+        gameState.currentEnemy = {
+            ...enemyTemplate,
+            maxHealth: enemyTemplate.health,
+            isBoss: false,
+            distance: enemyTemplate.isRanged ? 1 : 0 // Ranged enemies start at distance 1
+        };
+        gameState.currentEnemies = null;
+        gameState.isDualCombat = false;
+        
+        gameState.inCombat = true;
+        gameState.defending = false;
+        
+        // Switch to combat music for monster encounter
+        audioManager.startMusic('combat');
+        
+        showScreen('combatScreen');
+        const combatLog = document.getElementById('combatLog');
+        if (combatLog) {
+            combatLog.innerHTML = '';
+        }
+        addCombatLog(`Vous rencontrez un ${gameState.currentEnemy.name} !`, 'info');
+        
+        // Show distance info for ranged enemies
+        if (gameState.currentEnemy.isRanged) {
+            addCombatLog(`⚠️ L'ennemi est à distance et doit s'approcher pour attaquer au corps à corps !`, 'info');
+            if (gameState.player.class === 'guerrier') {
+                addCombatLog(`⚔️ En tant que Guerrier, vous ne pouvez pas attaquer pendant son approche.`, 'info');
+            } else if (gameState.player.class === 'magicien') {
+                addCombatLog(`🧙 En tant que Magicien, vous pouvez lancer des sorts pendant son approche !`, 'special');
+            } else if (gameState.player.class === 'archer') {
+                addCombatLog(`🏹 En tant qu'Archer, vous pouvez tirer pendant son approche !`, 'special');
+            }
+        }
+        
+        // Roll initiative
+        const playerGoesFirst = determineInitiative();
+        
+        updateEnemyUI();
+        saveGame();
+        updateUI();
+        
+        // Show touch hint for mobile users
+        showTouchHint('💡 Balayez ← pour défendre, → pour fuir');
+        
+        // If enemy won initiative, they attack first
+        if (!playerGoesFirst) {
+            setTimeout(() => {
+                enemyApproachOrAttack();
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Error initiating single combat:', error);
+        gameState.inCombat = false;
+        alert('Une erreur est survenue lors de l\'initialisation du combat.');
+    }
+}
+
+/**
+ * Player attacks the current enemy
+ * Handles attack validation, damage calculation, and combat flow
+ */
 export function attack() {
     if (!gameState.inCombat) return;
     

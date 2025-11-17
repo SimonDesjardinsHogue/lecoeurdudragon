@@ -5,6 +5,39 @@ export const GAME_VERSION = '1.1.0';
 // Maximum level constant
 export const MAX_LEVEL = 24;
 
+// Energy and rest costs
+export const ENERGY_COSTS = {
+    EXPLORE: 10,
+    VISIT_VILLAGE: 5
+};
+
+export const REST_COST = 20;
+
+// Default player values
+export const DEFAULT_PLAYER_VALUES = {
+    ENERGY: 100,
+    MAX_ENERGY: 100,
+    MANA: 100,
+    MAX_MANA: 100,
+    HEALTH: 100,
+    MAX_HEALTH: 100,
+    GOLD: 50,
+    STAT: 10,
+    DEFENSE: 5
+};
+
+// Encounter probabilities (for dice-based encounters)
+export const ENCOUNTER_CHANCES = {
+    FOREST_EVENT: 20,
+    FOREST_NPC: 20,
+    VILLAGE_EVENT: 20,
+    VILLAGE_NPC: 30,
+    DUAL_MONSTER: 7
+};
+
+// Player name validation
+export const PLAYER_NAME_MAX_LENGTH = 20;
+
 // Rarity system definitions
 export const rarities = {
     commun: { name: 'Commun', color: '#9CA3AF', statBonus: 0 },

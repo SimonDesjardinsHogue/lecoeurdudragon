@@ -1,6 +1,6 @@
 // Game Logic Module
 import { gameState, shopItems, rareItems, npcs, rarities, generateRandomStats, statNames, hasRandomStats, metals, getStatModifier } from './game-state.js';
-import { MAX_LEVEL } from './data/game-constants.js';
+import { MAX_LEVEL, ENERGY_COSTS, REST_COST, ENCOUNTER_CHANCES, DEFAULT_PLAYER_VALUES, PLAYER_NAME_MAX_LENGTH } from './data/game-constants.js';
 import { updateUI, addCombatLog, showScreen } from './ui.js';
 import { saveGame, loadGame, getAllSaveSlots, loadFromSlot, deleteSaveSlot, saveToSlot } from './save-load.js';
 import { characterClasses, applyCharacterClass } from './character-classes.js';
@@ -28,7 +28,10 @@ function getClassDisplayName(classKey) {
     return characterClasses[classKey]?.name || classKey;
 }
 
-// Check energy regeneration (6:00 AM Toronto time)
+/**
+ * Checks if player needs energy regeneration at 6:00 AM Toronto time
+ * Includes anti-cheat protection against clock manipulation
+ */
 export function checkEnergyRegeneration() {
     const p = gameState.player;
     
@@ -37,116 +40,139 @@ export function checkEnergyRegeneration() {
         return;
     }
     
-    // Get current time in Toronto timezone (EST/EDT - UTC-5 or UTC-4)
-    const now = new Date();
-    const currentTime = now.getTime();
-    const torontoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
-    const lastSleep = new Date(p.lastSleepTime);
-    
-    // Anti-cheat: Verify that time hasn't moved backward (clock manipulation)
-    // Allow 60 seconds of tolerance for small clock adjustments
-    if (p.lastGameTime && currentTime < p.lastGameTime - 60000) {
-        console.warn('⚠️ Time anomaly detected - possible clock manipulation');
-        // Don't regenerate energy if time moved backward
-        return;
-    }
-    
-    // Update last game time
-    p.lastGameTime = currentTime;
-    
-    // Calculate the next 6 AM after last sleep
-    const nextRegeneration = new Date(lastSleep);
-    nextRegeneration.setHours(6, 0, 0, 0);
-    
-    // If last sleep was after 6 AM, add one day
-    if (lastSleep.getHours() >= 6) {
-        nextRegeneration.setDate(nextRegeneration.getDate() + 1);
-    }
-    
-    // Check if current time is past the regeneration time
-    if (torontoTime >= nextRegeneration) {
-        // Regenerate energy and mana to full
-        p.energy = p.maxEnergy;
-        p.mana = p.maxMana;
-        p.lastSleepTime = torontoTime.toISOString();
-        saveGame();
-        updateUI();
+    try {
+        // Get current time in Toronto timezone (EST/EDT - UTC-5 or UTC-4)
+        const now = new Date();
+        const currentTime = now.getTime();
+        const torontoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
+        const lastSleep = new Date(p.lastSleepTime);
+        
+        // Anti-cheat: Verify that time hasn't moved backward (clock manipulation)
+        // Allow 60 seconds of tolerance for small clock adjustments
+        if (p.lastGameTime && currentTime < p.lastGameTime - 60000) {
+            console.warn('⚠️ Time anomaly detected - possible clock manipulation');
+            // Don't regenerate energy if time moved backward
+            return;
+        }
+        
+        // Update last game time
+        p.lastGameTime = currentTime;
+        
+        // Calculate the next 6 AM after last sleep
+        const nextRegeneration = new Date(lastSleep);
+        nextRegeneration.setHours(6, 0, 0, 0);
+        
+        // If last sleep was after 6 AM, add one day
+        if (lastSleep.getHours() >= 6) {
+            nextRegeneration.setDate(nextRegeneration.getDate() + 1);
+        }
+        
+        // Check if current time is past the regeneration time
+        if (torontoTime >= nextRegeneration) {
+            // Regenerate energy and mana to full
+            p.energy = p.maxEnergy;
+            p.mana = p.maxMana;
+            p.lastSleepTime = torontoTime.toISOString();
+            saveGame();
+            updateUI();
+        }
+    } catch (error) {
+        console.error('Error in checkEnergyRegeneration:', error);
+        // Don't regenerate on error to prevent exploits
     }
 }
 
-// Initialize game
+/**
+ * Initializes the game state and loads saved data
+ * Called once on application load
+ */
 export function init() {
-    loadGame();
-    initializeShopItems();
-    initializeShopAvailability();
-    initializeDailyQuests();
-    initAchievements();
-    checkEnergyRegeneration();
-    checkDailyReset();
-    checkAchievements();
-    updateUI();
-    
-    // Check for daily rewards only if a character exists (has a name and has played at least once)
-    if (gameState.player.name && gameState.player.gamesPlayed > 0) {
-        checkDailyRewardReset();
-    }
-    
-    // Show restore button if any saves exist
-    const slots = getAllSaveSlots();
-    const hasSaves = Object.keys(slots).length > 0 || localStorage.getItem('lecoeurdudragon_save');
-    const restoreBtn = document.getElementById('restoreSaveBtn');
-    if (hasSaves && restoreBtn) {
-        restoreBtn.style.display = 'inline-block';
-    }
-    
-    // Automatically generate a random name if on start screen and no name exists
-    const nameInput = document.getElementById('nameInput');
-    if (nameInput && !nameInput.value.trim() && !gameState.player.name && window.randomizeName) {
-        window.randomizeName();
+    try {
+        loadGame();
+        initializeShopItems();
+        initializeShopAvailability();
+        initializeDailyQuests();
+        initAchievements();
+        checkEnergyRegeneration();
+        checkDailyReset();
+        checkAchievements();
+        updateUI();
+        
+        // Check for daily rewards only if a character exists (has a name and has played at least once)
+        if (gameState.player.name && gameState.player.gamesPlayed > 0) {
+            checkDailyRewardReset();
+        }
+        
+        // Show restore button if any saves exist
+        const slots = getAllSaveSlots();
+        const hasSaves = Object.keys(slots).length > 0 || localStorage.getItem('lecoeurdudragon_save');
+        const restoreBtn = document.getElementById('restoreSaveBtn');
+        if (hasSaves && restoreBtn) {
+            restoreBtn.style.display = 'inline-block';
+        }
+        
+        // Automatically generate a random name if on start screen and no name exists
+        const nameInput = document.getElementById('nameInput');
+        if (nameInput && !nameInput.value.trim() && !gameState.player.name && window.randomizeName) {
+            window.randomizeName();
+        }
+    } catch (error) {
+        console.error('Error during game initialization:', error);
+        // Continue with default game state if initialization fails
     }
 }
 
-// Randomize character selection (gender, race, class)
+/**
+ * Randomizes character selection (gender, race, class)
+ * Uses dice-based random selection for fair distribution
+ */
 export function randomizeCharacter() {
-    // Available options
-    const genders = ['male', 'female'];
-    const races = ['humain', 'elfe', 'nain'];
-    const classes = ['guerrier', 'archer', 'magicien', 'enchanteur'];
-    
-    // Select random options using dice-based selection
-    const randomGender = rollSelect(genders);
-    const randomRace = rollSelect(races);
-    const randomClass = rollSelect(classes);
-    
-    // Update gender radio buttons
-    const genderRadio = document.querySelector(`input[name="characterGender"][value="${randomGender}"]`);
-    if (genderRadio) {
-        genderRadio.checked = true;
-    }
-    
-    // Update race radio buttons
-    const raceRadio = document.querySelector(`input[name="characterRace"][value="${randomRace}"]`);
-    if (raceRadio) {
-        raceRadio.checked = true;
-    }
-    
-    // Update class radio buttons
-    const classRadio = document.querySelector(`input[name="characterClass"][value="${randomClass}"]`);
-    if (classRadio) {
-        classRadio.checked = true;
+    try {
+        // Available options
+        const genders = ['male', 'female'];
+        const races = ['humain', 'elfe', 'nain'];
+        const classes = ['guerrier', 'archer', 'magicien', 'enchanteur'];
+        
+        // Select random options using dice-based selection
+        const randomGender = rollSelect(genders);
+        const randomRace = rollSelect(races);
+        const randomClass = rollSelect(classes);
+        
+        // Update gender radio buttons
+        const genderRadio = document.querySelector(`input[name="characterGender"][value="${randomGender}"]`);
+        if (genderRadio) {
+            genderRadio.checked = true;
+        }
+        
+        // Update race radio buttons
+        const raceRadio = document.querySelector(`input[name="characterRace"][value="${randomRace}"]`);
+        if (raceRadio) {
+            raceRadio.checked = true;
+        }
+        
+        // Update class radio buttons
+        const classRadio = document.querySelector(`input[name="characterClass"][value="${randomClass}"]`);
+        if (classRadio) {
+            classRadio.checked = true;
+        }
+    } catch (error) {
+        console.error('Error in randomizeCharacter:', error);
     }
 }
 
-// Start new game
+/**
+ * Starts a new game with selected character options
+ * Validates inputs and initializes player state
+ */
 export function startGame() {
-    const nameInput = document.getElementById('nameInput').value.trim();
-    if (!nameInput) {
+    const nameInput = document.getElementById('nameInput');
+    if (!nameInput || !nameInput.value.trim()) {
         alert('Veuillez entrer un nom pour votre héros !');
         return;
     }
     
     // Sanitize the player name to prevent XSS
-    const name = sanitizePlayerName(nameInput, 20);
+    const name = sanitizePlayerName(nameInput.value.trim(), PLAYER_NAME_MAX_LENGTH);
     
     // Get selected character gender
     const selectedGender = document.querySelector('input[name="characterGender"]:checked');
@@ -169,126 +195,152 @@ export function startGame() {
         return;
     }
     
-    gameState.player.name = name;
-    gameState.player.gender = selectedGender.value;
-    gameState.player.gamesPlayed++;
-    
-    // Apply character stats in correct order:
-    // 1. Class sets base stats
-    applyCharacterClass(gameState.player, selectedClass.value);
-    
-    // 2. Sex modifies stats
-    applySexModifiers(gameState.player, selectedGender.value);
-    
-    // 3. Race modifies stats
-    applyRaceModifiers(gameState.player, selectedRace.value);
-    
-    saveGame();
-    showScreen('mainScreen');
-    updateUI();
-    
-    // Check for daily rewards after character is created
-    checkDailyRewardReset();
+    try {
+        gameState.player.name = name;
+        gameState.player.gender = selectedGender.value;
+        gameState.player.gamesPlayed++;
+        
+        // Apply character stats in correct order:
+        // 1. Class sets base stats
+        applyCharacterClass(gameState.player, selectedClass.value);
+        
+        // 2. Sex modifies stats
+        applySexModifiers(gameState.player, selectedGender.value);
+        
+        // 3. Race modifies stats
+        applyRaceModifiers(gameState.player, selectedRace.value);
+        
+        saveGame();
+        showScreen('mainScreen');
+        updateUI();
+        
+        // Check for daily rewards after character is created
+        checkDailyRewardReset();
+    } catch (error) {
+        console.error('Error starting new game:', error);
+        alert('Une erreur est survenue lors de la création du personnage. Veuillez réessayer.');
+    }
 }
 
 // Re-export system functions
 export { healPlayer, restoreEnergy, restoreMana, addExperience, checkLevelUp, spendStatPoint };
 export { meetNPC, meetJeweler, buyMetal, sellMetal };
 
-// Rest at the inn
+/**
+ * Rests at the inn, restoring health and consuming energy
+ * Handles event-based free rest and healing bonuses
+ */
 export function rest() {
     const p = gameState.player;
     
     // Check if there's a free rest event active
     const hasFreeRest = hasEventEffect('freeRest');
-    const cost = hasFreeRest ? 0 : 20;
+    const cost = hasFreeRest ? 0 : REST_COST;
     
     if (!hasFreeRest && p.gold < cost) {
-        alert('Vous n\'avez pas assez d\'or pour dormir à l\'auberge ! (Coût: 20 or)');
+        alert(`Vous n'avez pas assez d'or pour dormir à l'auberge ! (Coût: ${REST_COST} or)`);
         return;
     }
     
-    // Build confirmation message
-    let confirmMessage = hasFreeRest 
-        ? 'Le Sanctuaire de Guérison vous offre un repos gratuit !\n\n'
-        : 'Voulez-vous dormir à l\'auberge pour 20 or ?\n\n';
-    confirmMessage += 'Vos points de vie seront restaurés.\n';
-    
-    // Add warning if player still has energy
-    if (p.energy > 0) {
-        confirmMessage += `\n⚠️ Attention : Vous avez encore ${p.energy} points d'énergie. Ils seront perdus si vous dormez maintenant.`;
+    try {
+        // Build confirmation message
+        let confirmMessage = hasFreeRest 
+            ? 'Le Sanctuaire de Guérison vous offre un repos gratuit !\n\n'
+            : `Voulez-vous dormir à l'auberge pour ${REST_COST} or ?\n\n`;
+        confirmMessage += 'Vos points de vie seront restaurés.\n';
+        
+        // Add warning if player still has energy
+        if (p.energy > 0) {
+            confirmMessage += `\n⚠️ Attention : Vous avez encore ${p.energy} points d'énergie. Ils seront perdus si vous dormez maintenant.`;
+        }
+        
+        // Ask for confirmation
+        if (!confirm(confirmMessage)) {
+            return;  // User cancelled
+        }
+        
+        // Proceed with sleep
+        if (!hasFreeRest) {
+            p.gold -= cost;
+        }
+        
+        // Apply healing bonus from event if active
+        const healingBonus = getEventMultiplier('healingBonus', 1);
+        p.health = Math.min(p.maxHealth, Math.floor(p.maxHealth * healingBonus));
+        p.energy = 0;  // Set energy to 0 - player must wait until 6 AM Toronto time
+        
+        // Set last sleep time to current Toronto time
+        const now = new Date();
+        const torontoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
+        p.lastSleepTime = torontoTime.toISOString();
+        
+        saveGame();
+        updateUI();
+        
+        // Calculate next 6 AM
+        const next6AM = new Date(torontoTime);
+        next6AM.setHours(6, 0, 0, 0);
+        if (torontoTime.getHours() >= 6) {
+            next6AM.setDate(next6AM.getDate() + 1);
+        }
+        
+        const options = { 
+            timeZone: 'America/Toronto',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        };
+        const next6AMString = next6AM.toLocaleString('fr-FR', options);
+        
+        const costMessage = hasFreeRest ? '' : ` (-${REST_COST} or)`;
+        const bonusMessage = healingBonus > 1 ? ' 🎉 (Bonus de guérison événement)' : '';
+        alert(`Vous dormez à l'auberge jusqu'à demain 6h00 du matin (heure de Toronto). Vos points de vie sont restaurés !${bonusMessage} Vous pourrez reprendre l'aventure à ${next6AMString}.${costMessage}`);
+    } catch (error) {
+        console.error('Error in rest function:', error);
+        alert('Une erreur est survenue. Veuillez réessayer.');
     }
-    
-    // Ask for confirmation
-    if (!confirm(confirmMessage)) {
-        return;  // User cancelled
-    }
-    
-    // Proceed with sleep
-    if (!hasFreeRest) {
-        p.gold -= cost;
-    }
-    
-    // Apply healing bonus from event if active
-    const healingBonus = getEventMultiplier('healingBonus', 1);
-    p.health = Math.min(p.maxHealth, Math.floor(p.maxHealth * healingBonus));
-    p.energy = 0;  // Set energy to 0 - player must wait until 6 AM Toronto time
-    
-    // Set last sleep time to current Toronto time
-    const now = new Date();
-    const torontoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
-    p.lastSleepTime = torontoTime.toISOString();
-    
-    saveGame();
-    updateUI();
-    
-    // Calculate next 6 AM
-    const next6AM = new Date(torontoTime);
-    next6AM.setHours(6, 0, 0, 0);
-    if (torontoTime.getHours() >= 6) {
-        next6AM.setDate(next6AM.getDate() + 1);
-    }
-    
-    const options = { 
-        timeZone: 'America/Toronto',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    };
-    const next6AMString = next6AM.toLocaleString('fr-FR', options);
-    
-    const costMessage = hasFreeRest ? '' : ' (-20 or)';
-    const bonusMessage = healingBonus > 1 ? ' 🎉 (Bonus de guérison événement)' : '';
-    alert(`Vous dormez à l'auberge jusqu'à demain 6h00 du matin (heure de Toronto). Vos points de vie sont restaurés !${bonusMessage} Vous pourrez reprendre l'aventure à ${next6AMString}.${costMessage}`);
 }
 
-// Visit the village
+/**
+ * Visits the village for shopping and random encounters
+ * Consumes energy and may trigger events, NPCs, or go to shop
+ */
 export function visitVillage() {
+    const p = gameState.player;
+    
     // Check if player has enough energy to visit the village
-    if (gameState.player.energy < 5) {
+    if (p.energy < ENERGY_COSTS.VISIT_VILLAGE) {
         alert('Vous êtes trop fatigué pour visiter le village ! Allez dormir à l\'auberge pour récupérer votre énergie.');
         return;
     }
     
-    // Consume energy for visiting the village
-    gameState.player.energy = Math.max(0, gameState.player.energy - 5);
-    
-    // Random encounter - 20% random event, 30% NPC, 50% go directly to shop
-    const encounterRoll = rollChance(20) ? 0.1 : (rollChance(30) ? 0.35 : 0.6); // Dice-based encounter type
-    
-    if (encounterRoll < 0.2) {
-        // Random event (village-specific)
-        triggerRandomEvent('village');
-    } else if (encounterRoll < 0.5) {
-        // NPC encounter (village-specific)
-        meetNPC('village');
-    } else {
-        // Go directly to the shop
-        showShop();
+    try {
+        // Consume energy for visiting the village
+        p.energy = Math.max(0, p.energy - ENERGY_COSTS.VISIT_VILLAGE);
+        
+        // Random encounter - 20% random event, 30% NPC, 50% go directly to shop
+        const encounterRoll = rollChance(ENCOUNTER_CHANCES.VILLAGE_EVENT) ? 0.1 : 
+                             (rollChance(ENCOUNTER_CHANCES.VILLAGE_NPC) ? 0.35 : 0.6);
+        
+        if (encounterRoll < 0.2) {
+            // Random event (village-specific)
+            triggerRandomEvent('village');
+        } else if (encounterRoll < 0.5) {
+            // NPC encounter (village-specific)
+            meetNPC('village');
+        } else {
+            // Go directly to the shop
+            showShop();
+        }
+        
+        saveGame();
+        updateUI();
+    } catch (error) {
+        console.error('Error in visitVillage:', error);
+        // Restore energy on error to prevent unfair consumption
+        p.energy = Math.min(p.maxEnergy, p.energy + ENERGY_COSTS.VISIT_VILLAGE);
+        alert('Une erreur est survenue. Veuillez réessayer.');
     }
-    
-    saveGame();
-    updateUI();
 }
 
 // Show stats
@@ -327,8 +379,6 @@ export function showStats() {
     leftColumn.appendChild(createStatParagraph('Classe d\'armure', p.defense));
     leftColumn.appendChild(createStatParagraph('Puissance', p.puissance));
     leftColumn.appendChild(createStatParagraph('Adresse', p.adresse));
-    leftColumn.appendChild(createStatParagraph('Puissance', p.puissance));
-    leftColumn.appendChild(createStatParagraph('Esprit', p.esprit));
     leftColumn.appendChild(createStatParagraph('Esprit', p.esprit));
     leftColumn.appendChild(createStatParagraph('Présence', p.presence));
     
