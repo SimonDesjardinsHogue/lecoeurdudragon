@@ -122,7 +122,12 @@ export function updateUI() {
     
     const playerGoldEl = document.getElementById('playerGold');
     if (playerGoldEl) {
-        playerGoldEl.textContent = p.gold + ' 💰';
+        let goldText = p.gold + ' 💰';
+        // Add combo indicator if player has an active combo
+        if (p.victoryCombo && p.victoryCombo > 1) {
+            goldText += ` 🔥x${p.victoryCombo}`;
+        }
+        playerGoldEl.textContent = goldText;
     }
     
     const playerHealthEl = document.getElementById('playerHealth');
