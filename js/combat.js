@@ -228,12 +228,13 @@ function initiateDualCombat() {
 function initiateSingleCombat() {
     try {
         // 15% chance for elite enemy encounter (better loot)
-        const isEliteEncounter = rollChance(0.15);
+        const isEliteEncounter = rollChance(15);
+        const ELITE_LEVEL_DIVISOR = 3; // Controls how elite enemy level scales with player level
         let enemyTemplate;
         
         if (isEliteEncounter) {
             // Elite enemy - filter by player level
-            const maxEnemyIndex = Math.min(eliteEnemies.length - 1, Math.floor(gameState.player.level / 3));
+            const maxEnemyIndex = Math.min(eliteEnemies.length - 1, Math.floor(gameState.player.level / ELITE_LEVEL_DIVISOR));
             const availableElites = eliteEnemies.slice(0, maxEnemyIndex + 1);
             enemyTemplate = rollSelect(availableElites);
         } else {

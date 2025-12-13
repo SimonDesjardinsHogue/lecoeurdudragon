@@ -242,6 +242,13 @@ export const achievements = [
     }
 ];
 
+// Ensure backward compatibility for new stats
+function ensureStatExists(stats, statName, defaultValue = 0) {
+    if (stats[statName] === undefined) {
+        stats[statName] = defaultValue;
+    }
+}
+
 // Initialize achievement tracking in game state
 export function initAchievements() {
     if (!gameState.achievements) {
@@ -261,12 +268,8 @@ export function initAchievements() {
         };
     }
     // Ensure new stats exist for older saves
-    if (!gameState.achievements.stats.max_combo) {
-        gameState.achievements.stats.max_combo = 0;
-    }
-    if (!gameState.achievements.stats.elite_kills) {
-        gameState.achievements.stats.elite_kills = 0;
-    }
+    ensureStatExists(gameState.achievements.stats, 'max_combo');
+    ensureStatExists(gameState.achievements.stats, 'elite_kills');
 }
 
 // Check if achievement is unlocked

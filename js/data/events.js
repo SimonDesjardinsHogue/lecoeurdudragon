@@ -1,7 +1,7 @@
 // Game Events Data Module
 // Random events
 
-import { rollGold, rollXP, rollRange, rollHealing } from '../dice.js';
+import { rollGold, rollXP, rollRange, rollHealing, rollChance } from '../dice.js';
 
 export const randomEvents = [
     {
@@ -693,8 +693,8 @@ export const randomEvents = [
         effect: (p) => {
             const xpBonus = rollXP(80, 100);
             p.xp += xpBonus;
-            // Small chance for extra bonus
-            if (rollRange(1, 100) <= 25) {
+            // 25% chance for extra bonus
+            if (rollChance(25)) {
                 p.maxHealth += 5;
                 return `Votre vœu est exaucé ! Vous gagnez ${xpBonus} XP et +5 HP max !`;
             }
