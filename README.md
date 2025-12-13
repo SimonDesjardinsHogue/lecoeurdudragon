@@ -11,7 +11,7 @@
 
 **Une quête légendaire de courage et d'honneur inspirée par Legend of the Red Dragon**
 
-**🎯 Un RPG complet avec 12-18 heures de gameplay | 24 niveaux | 4 Boss épiques | 4 Classes uniques**
+**🎯 Un RPG complet avec 12-18 heures de gameplay | 24 niveaux | 6 Boss épiques | 4 Classes uniques**
 
 ### 🎮 Téléchargez Maintenant
 
@@ -45,7 +45,9 @@
 
 🎯 **Gameplay Complet** • 12-18 heures d'aventure épique  
 ⚔️ **Combat Tactique** • Stratégie, compétences spéciales et timing  
-🏆 **Boss Légendaires** • 4 combats épiques avec récompenses uniques  
+🏆 **Boss Légendaires** • 6 combats épiques avec récompenses uniques  
+👑 **Ennemis Élites** • Rencontres rares avec meilleures récompenses  
+🔥 **Système de Combo** • Bonus pour victoires consécutives  
 💎 **Sans Publicité** • Pas d'achats in-app, pas d'abonnement  
 🌐 **Mode Multijoueur** • Jouez en LAN avec votre famille  
 📱 **Multi-Plateformes** • Jouez où vous voulez, quand vous voulez
@@ -108,12 +110,12 @@ Selon les anciennes légendes, Valéria était autrefois un royaume prospère, p
 
 De mystérieux explorateurs, des frères et sœurs connus sous le nom des M&M, parcourent maintenant les ruines du royaume. Ils déchiffrent les inscriptions anciennes et découvrent les secrets perdus de Valéria, aidant les héros courageux dans leur quête pour restaurer la lumière.
 
-**Votre mission** : Atteindre le niveau 24, vaincre les 4 Boss légendaires et restaurer le Cœur du Dragon pour sauver Valéria !
+**Votre mission** : Atteindre le niveau 24, vaincre les 6 Boss légendaires et restaurer le Cœur du Dragon pour sauver Valéria !
 
 ### ✨ Caractéristiques Principales
 - 🎮 **Gameplay Riche** : 12-18 heures pour compléter la quête principale
 - ⚔️ **Combat Tactique** : Système de combat avec compétences spéciales et stratégie
-- 🏆 **4 Boss Épiques** : Chacun avec des capacités uniques et des récompenses légendaires
+- 🏆 **6 Boss Épiques** : Chacun avec des capacités uniques et des récompenses légendaires
 - 👥 **4 Classes Jouables** : Guerrier, Magicien, Archer - chacune avec son propre style de jeu
 - 🧝 **3 Races** : Humain, Elfe, Nain - chacune avec des modificateurs de stats uniques
 - 📈 **Progression Profonde** : 24 niveaux, 7 statistiques, système de points de stats
@@ -179,15 +181,15 @@ Pour arrêter le serveur: Ctrl+C
 ## 🎯 Objectifs et Portée du Jeu
 
 ### Objectif Principal
-**Atteindre le niveau 24 et vaincre les 4 Boss légendaires pour restaurer le Cœur du Dragon et sauver le royaume de Valéria !**
+**Atteindre le niveau 24 et vaincre les 6 Boss légendaires pour restaurer le Cœur du Dragon et sauver le royaume de Valéria !**
 
 ### Statistiques de Jeu
 - **Niveau Maximum** : 24
-- **Nombre d'Ennemis** : 30 types différents (+ 4 Boss uniques)
+- **Nombre d'Ennemis** : 34 types différents (+ 8 Élites + 6 Boss uniques)
 - **Temps de Jeu Estimé** : ~18 heures pour atteindre le niveau maximum
 - **Classes de Personnages** : 4 classes uniques (Guerrier, Magicien, Archer)
 - **Races de Personnages** : 3 races (Humain, Elfe, Nain)
-- **Boss à Vaincre** : 4 Boss légendaires avec capacités spéciales
+- **Boss à Vaincre** : 6 Boss légendaires avec capacités spéciales (niveaux 4, 8, 12, 16, 20, 24)
 - **Objets Légendaires** : 8+ objets légendaires à débloquer
 - **Succès à Débloquer** : Système de succès pour récompenser vos exploits
 
@@ -229,11 +231,15 @@ Le jeu utilise un système de **dés à 6 faces (d6)** pour tous les calculs de 
   - Magicien : Boule de Feu, Bouclier de Mana, Éclair Foudroyant, Lance de Glace
   - Archer : Tir Multiple, Tir Visé
 - **Fuir** : Tentez d'échapper au combat (50% de chance)
-- **Boss Combats** : Affrontez 4 Boss épiques avec des capacités spéciales
-  - Troll des Cavernes (Niv. 5) - Régénération
-  - Seigneur Liche (Niv. 10) - Vol de vie
-  - Hydre à Trois Têtes (Niv. 15) - Triple attaque
-  - Dragon Ancien (Niv. 24) - Souffle de dragon dévastateur
+- **Système de Combo** 🔥 : Gagnez +5% bonus par victoire consécutive (max +50%)
+- **Ennemis Élites** 👑 : 15% de chance de rencontrer un ennemi puissant (1.5x stats, 2x récompenses)
+- **Boss Combats** : Affrontez 6 Boss épiques avec des capacités spéciales
+  - Roi Gobelin (Niv. 4) - Horde de Gobelins
+  - Hydre à Trois Têtes (Niv. 8) - Triple attaque
+  - Seigneur Liche (Niv. 12) - Vol de vie
+  - Démon des Flammes (Niv. 16) - Explosion de feu
+  - Dragon de Ténèbres (Niv. 20) - Souffle d'ombre
+  - Le Cœur du Dragon Corrompu (Niv. 24) - Vague de corruption
 
 #### 🏪 Le Marchand et l'Économie
 Achetez des améliorations et des potions avec votre or :
@@ -267,14 +273,17 @@ Les objets rares+ peuvent avoir des bonus sur 7 stats différentes :
 - **Bijoutier** : Commerce de métaux précieux
 
 #### 🎲 Événements Aléatoires et Choix
+Le jeu propose plus de 30 événements aléatoires variés :
 - **Énigmes** : Résolvez des énigmes pour gagner de l'or et de l'XP
 - **Choix Moraux** : Vos décisions affectent vos statistiques
   - Aider un mendiant (+Charisme)
   - Respecter les morts (+Sagesse, +XP)
-- **Trésors** : Coffres au trésor, gemmes magiques
-- **Pièges** : Pièges à pointes, gaz toxique
-- **Lieux Spéciaux** : Fontaines de guérison, sanctuaires anciens
-- **Découvertes** : Inscriptions mystérieuses, passages secrets
+- **Trésors** : Coffres au trésor, gemmes magiques, trésor du dragon (jackpot!)
+- **Pièges** : Pièges à pointes, gaz toxique, collets
+- **Lieux Spéciaux** : Fontaines de guérison, sanctuaires anciens, sources magiques
+- **Rencontres Spéciales** : Sage mystérieux, marchand généreux, arbre ancien
+- **Événements Cosmiques** : Étoile filante, aurore mystique
+- **Découvertes** : Cercles de champignons magiques, inscriptions mystérieuses
 
 #### 🛌 Se Reposer à l'Auberge
 - **Coût** : 20 or
@@ -294,12 +303,18 @@ Les objets rares+ peuvent avoir des bonus sur 7 stats différentes :
 - **Progression** : Suivez vos kills, boss vaincus, or total, parties jouées
 
 #### 🏆 Système de Succès
-Débloquez des succès en accomplissant des exploits :
-- Tuer un certain nombre d'ennemis
-- Vaincre tous les boss
-- Accumuler de l'or
-- Atteindre des niveaux élevés
-- Et bien plus !
+Débloquez plus de 20 succès en accomplissant des exploits :
+- **Combat** : Tuer des ennemis, vaincre des boss, atteindre des combos
+  - Débutant Combo (5 victoires consécutives)
+  - Maître du Combo (10 victoires consécutives)
+  - Légende du Combo (20 victoires consécutives)
+- **Élites** : Chasser et vaincre des ennemis élites
+  - Chasseur d'Élites (5 élites vaincus)
+  - Tueur d'Élites (20 élites vaincus)
+- **Richesse** : Accumuler de l'or (jusqu'à 10000 pièces!)
+- **Progression** : Atteindre des niveaux élevés
+- **Défis** : Speedrun, guerrier parfait (90%+ victoires)
+- Chaque succès vous récompense avec de l'or, XP, ou bonus de stats!
 
 ### Ennemis et Boss
 
@@ -322,7 +337,7 @@ Débloquez des succès en accomplissant des exploits :
 16. **Dragon Mineur** 🐉 - Très Difficile (150 HP, 23 Force)
 17-30. **Et 14 ennemis avancés** pour les niveaux 11-20, incluant l'Esprit de la Forêt Corrompu et le Gardien Ancien de la Forêt !
 
-#### 4 Boss Légendaires
+#### 6 Boss Légendaires
 Chaque boss a des capacités spéciales uniques et récompense un objet légendaire !
 
 1. **Troll des Cavernes** 👹 (Niv. 5) - Régénération 4-7 HP/tour
